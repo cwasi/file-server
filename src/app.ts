@@ -1,27 +1,23 @@
-import express, { Express, Request, Response, NextFunction } from "express";
+import express from "express";
 import morgan from "morgan";
-
-const app: Express = express();
-
-// Development logging
-// if (process.env.NODE_ENV === "development") {
-// }
-app.use(morgan("dev"));
-
+const app = express();
 
 // Body passer, reading data from body
 app.use(express.json());
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
-// Testing Middleware
-app.use((req: Request, res: Response, next: NextFunction) => {
-  req.requestTime = new Date().toISOString();
+console.log("📍📍📍📍📍📍", process.env.NODE_ENV);
+
+// Test MiddlewarE
+app.use((req, res, next) => {
+  console.log("MIDDLEWARE");
   next();
 });
 
-
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (req, res, next) => {
   res.send("FILE SERVER");
 });
-
 
 export default app;
