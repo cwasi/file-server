@@ -12,7 +12,6 @@ db.sequelize
 
 
 const port = process.env.PORT || 4040;
-console.log(port)
 app.listen(port, () => {
   console.log(`App listenin on port ${port}`);
 });
