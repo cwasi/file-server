@@ -1,6 +1,24 @@
-// import User from './../models/userModel';
 import db from './../models';
+import bcrypt from 'bcryptjs';
 
+export const User = db.User;
+
+// Hooks
+User.beforeSave(async (user: any) => {
+  if (!user.changed('password')) {
+    return;
+  }
+  user.password = await bcrypt.hash(user.password, 12);
+});
+
+User.beforeSave(async (user: any) => {
+  if (!user.changed('password')) {
+    return;
+  }
+  user.passwordChangedAt = Date.now() - 1000;
+});
+
+// ROUTES HANDLERS
 export const signup = async (req: any, res: any, next: any) => {
   try {
     console.log(req.body);

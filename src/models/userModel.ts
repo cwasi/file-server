@@ -50,7 +50,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: 'default.jpg',
       },
       role: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM,
+        values: ['user', 'admin'],
         defaultValue: 'user',
       },
       name: {
@@ -96,6 +97,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       passwordResetToken: DataTypes.STRING,
       passwordResetExpires: DataTypes.DATE,
     },
+
     {
       sequelize,
       modelName: 'User',
