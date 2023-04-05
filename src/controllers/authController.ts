@@ -18,6 +18,11 @@ User.beforeSave(async (user: any) => {
   user.passwordChangedAt = Date.now() - 1000;
 });
 
+// FUNCTIONS
+const comparePasswords = (candidatePassword: string, userPassword: string) => {
+  return bcrypt.compare(candidatePassword, userPassword);
+};
+
 // ROUTES HANDLERS
 export const signup = async (req: any, res: any, next: any) => {
   try {
@@ -41,4 +46,40 @@ export const signup = async (req: any, res: any, next: any) => {
       },
     });
   }
+};
+
+export const login = async (req: any, res: any, next: any) => {
+  const { email, password } = req.body;
+
+  // STEP: chech if email and password is not empty
+  if (!email || !password) {
+    throw new Error('Please provide email or password');
+  }
+
+  const user = await User.findOne({
+    where: { email },
+    attributes: {
+      exclude: [
+        'passwordConfirm',
+        'createdAt',
+        'passwordChangedAt',
+        'passwordResetToken',
+        'passwordResetExpires',
+        'updatedAt',
+      ],
+    },
+  });
+
+  // STEP: check if user exist && password is correct
+  const passwords = await comparePasswords(password, user.password);
+  if (!email || !passwords) {
+    throw new Error('incorrect email or password');
+  }
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  });
 };
