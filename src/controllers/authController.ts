@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 
+import crypto from 'crypto';
 import db from './../models';
 import bcrypt from 'bcryptjs';
+import sendEmail from './../utils/email';
 
 export const User = db.User;
 
@@ -21,6 +23,20 @@ User.beforeSave(async (user: any) => {
 });
 
 // FUNCTIONS
+
+const correctPasswordResetToken = (user: any) => {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  user.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
+
 const comparePasswords = (candidatePassword: string, userPassword: string) => {
   return bcrypt.compare(candidatePassword, userPassword);
 };
@@ -110,4 +126,45 @@ export const login = async (req: any, res: any, next: any) => {
 
   // STEP: send token
   createAndSendToken(user, 200, res);
+};
+
+export const forgotPassword = async (req: any, res: any, next: any) => {
+  // STEP: Get user based on posted email
+  const email = req.body.email;
+  const user = await User.findOne({ where: { email } });
+
+  if (!user) {
+    throw new Error(`There is no user with the email address ${email}`);
+  }
+
+  // STEP: Generate a random reset token
+  const resetToken = correctPasswordResetToken(user);
+  await user.save();
+
+  // STEP:  send it to use's  email
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/users/resetPassword/${resetToken}`;
+
+  const message = `Forgort your password?. Submit a PATCH request with you new password and passwordConfirm to ${resetURL}.
+  \nIf your didn't forget your password, please ignore this email;`;
+
+  try {
+    sendEmail({
+      email,
+      subject: 'Your password reset token (valid for 10 minutes)',
+      message,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email',
+    });
+  } catch (err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    throw new Error('There was an error sending the email. Try again later');
+  }
 };
