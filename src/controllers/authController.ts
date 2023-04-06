@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 import db from './../models';
 import bcrypt from 'bcryptjs';
 
@@ -21,6 +23,36 @@ User.beforeSave(async (user: any) => {
 // FUNCTIONS
 const comparePasswords = (candidatePassword: string, userPassword: string) => {
   return bcrypt.compare(candidatePassword, userPassword);
+};
+
+const signToken = (id: string) => {
+  const JWT_SECRET: any = process.env.JWT_SECRET;
+  return jwt.sign({ id }, JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
+const createAndSendToken = (user: any, statusCode: number, res: any) => {
+  const token = signToken(user.id);
+  const JWT_COOKIE_EXPIRES_IN: any = process.env.JWT_COOKIE_EXPIRES_IN;
+  const cookieOption: any = {
+    expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+  };
+
+  // secure cookie http in production
+  if (process.env.NODE_ENV) {
+    cookieOption.secure = true;
+  }
+
+  // send cookie
+  res.cookie('jwt', token, cookieOption);
+
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: { user },
+  });
 };
 
 // ROUTES HANDLERS
@@ -76,10 +108,6 @@ export const login = async (req: any, res: any, next: any) => {
     throw new Error('incorrect email or password');
   }
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      user,
-    },
-  });
+  // STEP: send token
+  createAndSendToken(user, 200, res);
 };
