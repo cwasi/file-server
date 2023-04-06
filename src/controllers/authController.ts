@@ -74,7 +74,6 @@ const createAndSendToken = (user: any, statusCode: number, res: any) => {
 // ROUTES HANDLERS
 export const signup = async (req: any, res: any, next: any) => {
   try {
-    console.log(req.body);
     const newUser = await db.User.create({
       name: req.body.name,
       email: req.body.email,
@@ -168,3 +167,5 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
     throw new Error('There was an error sending the email. Try again later');
   }
 };
+
+
