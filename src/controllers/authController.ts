@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { Op } from 'sequelize';
 
 import crypto from 'crypto';
 import db from './../models';
@@ -143,7 +144,7 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   // STEP:  send it to use's  email
   const resetURL = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/resetPassword/${resetToken}`;
+  )}/auth/resetPassword/${resetToken}`;
 
   const message = `Forgort your password?. Submit a PATCH request with you new password and passwordConfirm to ${resetURL}.
   \nIf your didn't forget your password, please ignore this email;`;
@@ -168,4 +169,32 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   }
 };
 
+export const resetPassword = async (req: any, res: any, next: any) => {
+  // STEP: Get token from URL
+  const hashToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
 
+  const user = await User.findOne({
+    where: {
+      passwordResetToken: hashToken,
+      passwordResetExpires: { [Op.gt]: Date.now() },
+    },
+  });
+
+  // STEP:  If token has not expired, and there is a user, set the new password
+  if (!user) {
+    throw new Error('Token is invalid or has expired');
+  }
+
+  // STEP: 3) Update password propety for the user
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetToken = null;
+  user.passwordResetExpires = null;
+  await user.save();
+
+  // STEP:  log the user in, send jwt
+  createAndSendToken(user, 200, res);
+};
