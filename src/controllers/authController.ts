@@ -24,6 +24,17 @@ User.beforeSave(async (user: any) => {
 });
 
 // FUNCTIONS
+const changePasswordAfter = function (JWTTimestamp: any, user: any) {
+  const passwordChangedAt: any = user.passwordChangedAt.getTime() / 1000;
+  console.log('🍉🍉🍉🍉🍉🍉', passwordChangedAt, ' ', JWTTimestamp);
+  if (user.passwordChangedAt) {
+    const changeTimeStamp = parseInt(passwordChangedAt, 10);
+    return JWTTimestamp < changeTimeStamp;
+  }
+  // NOTE: if FALSE means password was NOT change
+  return false;
+};
+
 
 const correctPasswordResetToken = (user: any) => {
   const resetToken = crypto.randomBytes(32).toString('hex');
@@ -71,6 +82,47 @@ const createAndSendToken = (user: any, statusCode: number, res: any) => {
     data: { user },
   });
 };
+
+// MIDDLWARES
+export const protect = async (req: any, res: any, next: any) => {
+  // STEP:  Getting the token and checking if it exist
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    throw new Error('You are not logged in.  Please login to get access');
+  }
+
+  // STEP:  Verification token
+  // NOTE: We verfiy if the data was modified and if the token is expired
+  const JWT_SECRET: any = process.env.JWT_SECRET;
+  const decoded: any = jwt.verify(token, JWT_SECRET);
+
+  console.log('😁😁😁😁😁', decoded.id);
+  const currentUser = await User.findByPk(decoded.id);
+
+  // STEP:  Check if user still exist
+  if (!currentUser) {
+    throw new Error('The user belonging to this token does not exits');
+  }
+
+  console.log('💥💥💥💥💥💥💥');
+  // STEP:  Check user change password after the token was issued
+  if (changePasswordAfter(decoded.iat, currentUser)) {
+    throw new Error('user recenty changed password!. Please log in again');
+  }
+
+  // STEP: GRANT ACCESS TO PROTECT ROUTE
+  req.user = currentUser;
+
+  next();
+};
+
 
 // ROUTES HANDLERS
 export const signup = async (req: any, res: any, next: any) => {
@@ -197,4 +249,11 @@ export const resetPassword = async (req: any, res: any, next: any) => {
 
   // STEP:  log the user in, send jwt
   createAndSendToken(user, 200, res);
+};
+
+export const updateMe = (req: any, res: any, next: any) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Not implemenet',
+  });
 };
