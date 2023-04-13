@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
+    "start:sass": "node-sass src/public/sass/main.scss src/public/css/style.css -w",
     "start": "tsnd --respawn src/server.ts",
     "build": "rimraf dist && npx tsc",
     "dev": "concurrently \"npx tsc --watch\" \"node dist/server.js\""
@@ -18,6 +19,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
+    "node-sass": "^8.0.0",
     "nodemailer": "^6.9.1",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
