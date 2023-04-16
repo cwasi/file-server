@@ -2,6 +2,7 @@ import express from 'express';
 // Developer Modules
 import morgan from 'morgan';
 import userRouter from './routes/userRoutes';
+import fileRouter from './routes/fileRouter';
 
 // Start express app
 const app = express();
@@ -34,5 +35,6 @@ app.use((req:any, res:any, next:any) => {
 });
 
 app.use('/auth', userRouter);
+app.use('/api/file', fileRouter);
 
 export default app;
