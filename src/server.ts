@@ -1,15 +1,14 @@
-import db from "./models";
-import app from "./app";
+import db from './models';
+import app from './app';
 
 db.sequelize
   .sync()
   .then(() => {
-    console.log("Connection has been established successfully.");
+    console.log('Connection has been established successfully.');
   })
   .catch((err: any) => {
-    console.error("Unable to connect to the database:", err);
+    console.error('Unable to connect to the database:', err);
   });
-
 
 const port = process.env.PORT || 4040;
 app.listen(port, () => {
