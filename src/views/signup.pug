@@ -1,0 +1,28 @@
+extends base
+
+block content
+    main.book__layout
+        .sign-in
+            .sign-in__container
+                .sign-in__text--content
+                    h1.heading-4.heading-4--w-400.mb-16 Sign up to
+                    p.text-16 Please enter your detials.
+                form.form(action='#', method='post')
+                    .form__group
+                        label.form__label(for='name') Name
+                        input.form__input(type='text', placeholder='Name')
+                    .form__group
+                        label.form__label(for='email') Email
+                        input.form__input(type='text', placeholder='Email')
+                    .form__group
+                        label.form__label(for='password') Password
+                        input.form__input(type='password', placeholder='Password')
+                    .form__group
+                        label.form__label(for='password')
+                            | Confirm Password
+                        input.form__input(type='password', placeholder='Confirm Password')
+                    .form__group
+                        button.btn.btn__primary
+                            .icon
+                            p Sign in
+        .sign-in__img--box adfadfafa

@@ -1,0 +1,24 @@
+extends base 
+
+block content
+    main.book__layout
+        .sign-up
+            .sign-up__container
+                .sign-up__text--content
+                    h1.heading-4.heading-4--w-400.mb-16 Sign in to
+                    p.text-16 Please enter your detials.
+                form.form.signin__form(action='#', method='post')
+                    .form__group
+                        label.form__label(for='email') Email
+                        input#email.form__input(type='text', placeholder='Email', autocomplete='false', required,='', minlength='8')
+                    .form__group
+                        label.form__label(for='password') Password
+                        input#password.form__input(type='password', placeholder='Password', required,='', minlength='8')
+                    .form__group
+                        p.text-16.text-color-primary-75.text-16__w-500.align-left
+                            | Forgot password
+                    .form__group
+                        button.btn.btn__primary
+                            .icon
+                            p Sign in
+        .sign-up__img--box adfadfafa

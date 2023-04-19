@@ -35,7 +35,6 @@ const changePasswordAfter = function (JWTTimestamp: any, user: any) {
   return false;
 };
 
-
 const correctPasswordResetToken = (user: any) => {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
@@ -49,8 +48,8 @@ const correctPasswordResetToken = (user: any) => {
   return resetToken;
 };
 
-const comparePasswords = (candidatePassword: string, userPassword: string) => {
-  return bcrypt.compare(candidatePassword, userPassword);
+const comparePasswords = async (candidatePassword: string, userPassword: string) => {
+  return   await bcrypt.compare(candidatePassword, userPassword);
 };
 
 const signToken = (id: string) => {
@@ -122,7 +121,6 @@ export const protect = async (req: any, res: any, next: any) => {
 
   next();
 };
-
 
 // ROUTES HANDLERS
 export const signup = async (req: any, res: any, next: any) => {
