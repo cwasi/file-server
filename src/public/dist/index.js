@@ -576,7 +576,6 @@ var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alertsJs = require("./alerts.js");
 const signin = async (email, password)=>{
     try {
-        console.log(email, password);
         const res = await (0, _axiosDefault.default)({
             method: "POST",
             url: "http://127.0.0.1:5050/auth/signin",
@@ -585,18 +584,9 @@ const signin = async (email, password)=>{
                 password
             }
         });
-        console.log(res);
-        if (res.data.status === "success") {
-            console.log("login is true");
-            (0, _alertsJs.showAlert)("success", "Signed in successfully!");
-        // window.setTimeout(() => {
-        //   location.assign('/');
-        // }, 1500);
-        }
+        if (res.data.status === "success") (0, _alertsJs.showAlert)("success", "Signed in successfully!");
     } catch (err) {
-        console.log(err);
-        console.log(err.response.data.message);
-    // showAlert('error', err.response.data.message);
+        (0, _alertsJs.showAlert)("error", err.response.data.message);
     }
 };
 

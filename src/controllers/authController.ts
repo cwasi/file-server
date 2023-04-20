@@ -5,6 +5,8 @@ import crypto from 'crypto';
 import db from './../models';
 import bcrypt from 'bcryptjs';
 import sendEmail from './../utils/email';
+import AppError from './../utils/appError';
+import catchAsync from './../utils/catchAsync';
 
 export const User = db.User;
 
@@ -26,7 +28,7 @@ User.beforeSave(async (user: any) => {
 // FUNCTIONS
 const changePasswordAfter = function (JWTTimestamp: any, user: any) {
   const passwordChangedAt: any = user.passwordChangedAt.getTime() / 1000;
-  console.log('🍉🍉🍉🍉🍉🍉', passwordChangedAt, ' ', JWTTimestamp);
+
   if (user.passwordChangedAt) {
     const changeTimeStamp = parseInt(passwordChangedAt, 10);
     return JWTTimestamp < changeTimeStamp;
@@ -48,8 +50,11 @@ const correctPasswordResetToken = (user: any) => {
   return resetToken;
 };
 
-const comparePasswords = async (candidatePassword: string, userPassword: string) => {
-  return   await bcrypt.compare(candidatePassword, userPassword);
+const comparePasswords = async (
+  candidatePassword: string,
+  userPassword: string
+) => {
+  return await bcrypt.compare(candidatePassword, userPassword);
 };
 
 const signToken = (id: string) => {
@@ -83,7 +88,7 @@ const createAndSendToken = (user: any, statusCode: number, res: any) => {
 };
 
 // MIDDLWARES
-export const protect = async (req: any, res: any, next: any) => {
+export const protect = catchAsync(async (req: any, res: any, next: any) => {
   // STEP:  Getting the token and checking if it exist
   let token;
   if (
@@ -94,64 +99,58 @@ export const protect = async (req: any, res: any, next: any) => {
   }
 
   if (!token) {
-    throw new Error('You are not logged in.  Please login to get access');
+    return next(
+      new AppError('You are not logged in. Please login to get access', 401)
+    );
   }
 
-  // STEP:  Verification token
+  // STEP: Verification token
   // NOTE: We verfiy if the data was modified and if the token is expired
   const JWT_SECRET: any = process.env.JWT_SECRET;
   const decoded: any = jwt.verify(token, JWT_SECRET);
 
-  console.log('😁😁😁😁😁', decoded.id);
   const currentUser = await User.findByPk(decoded.id);
 
   // STEP:  Check if user still exist
   if (!currentUser) {
-    throw new Error('The user belonging to this token does not exits');
+    return next(
+      new AppError('The user belonging to this token does not exits', 401)
+    );
   }
 
-  console.log('💥💥💥💥💥💥💥');
   // STEP:  Check user change password after the token was issued
   if (changePasswordAfter(decoded.iat, currentUser)) {
-    throw new Error('user recenty changed password!. Please log in again');
+    next(
+      new AppError('user recenty changed password!. Please log in again', 401)
+    );
   }
 
   // STEP: GRANT ACCESS TO PROTECT ROUTE
   req.user = currentUser;
-
   next();
-};
+});
 
 // ROUTES HANDLERS
-export const signup = async (req: any, res: any, next: any) => {
-  try {
-    const newUser = await db.User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
-    });
+export const signup = catchAsync(async (req: any, res: any, next: any) => {
+  const newUser = await db.User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+  });
 
-    res.status(201).json({
-      status: 'success',
-      data: { newUser },
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      data: {
-        error: error,
-      },
-    });
-  }
-};
+  res.status(201).json({
+    status: 'success',
+    data: { newUser },
+  });
+});
 
-export const login = async (req: any, res: any, next: any) => {
+export const signin = catchAsync(async (req: any, res: any, next: any) => {
   const { email, password } = req.body;
 
   // STEP: chech if email and password is not empty
   if (!email || !password) {
-    throw new Error('Please provide email or password');
+    return next(new AppError('Please provide email and password', 401));
   }
 
   const user = await User.findOne({
@@ -169,14 +168,13 @@ export const login = async (req: any, res: any, next: any) => {
   });
 
   // STEP: check if user exist && password is correct
-  const passwords = await comparePasswords(password, user.password);
-  if (!email || !passwords) {
-    throw new Error('incorrect email or password');
+  if (!user || !(await comparePasswords(password, user.password))) {
+    return next(new AppError('Incorrect email or password', 401));
   }
 
   // STEP: send token
   createAndSendToken(user, 200, res);
-};
+});
 
 export const forgotPassword = async (req: any, res: any, next: any) => {
   // STEP: Get user based on posted email
@@ -184,7 +182,9 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   const user = await User.findOne({ where: { email } });
 
   if (!user) {
-    throw new Error(`There is no user with the email address ${email}`);
+    return next(
+      new AppError(`There is no user with the email address ${email}`, 404)
+    );
   }
 
   // STEP: Generate a random reset token
@@ -215,7 +215,9 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
     user.passwordResetExpires = undefined;
     await user.save();
 
-    throw new Error('There was an error sending the email. Try again later');
+    next(
+      new AppError('There was an error sending the email. Try again later', 500)
+    );
   }
 };
 
@@ -235,7 +237,7 @@ export const resetPassword = async (req: any, res: any, next: any) => {
 
   // STEP:  If token has not expired, and there is a user, set the new password
   if (!user) {
-    throw new Error('Token is invalid or has expired');
+    return next(new AppError('Token is invalid or has expired', 400));
   }
 
   // STEP: 3) Update password propety for the user

@@ -6,6 +6,7 @@
   "scripts": {
     "start:sass": "node-sass src/public/sass/main.scss src/public/css/style.css -w",
     "start": "tsnd --respawn src/server.ts",
+    "start:prod": "NODE_ENV=production tsnd --respawn src/server.ts",
     "dev": "concurrently \"npx tsc --watch\" \"node dist/server.js\"",
     "build": "rimraf dist && npx tsc",
     "watch:frontside": "parcel ./src/public/js/index.js --dist-dir ./src/public/dist",

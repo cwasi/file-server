@@ -1,11 +1,12 @@
 import path from 'path';
 
 import express from 'express';
-// Developer Modules
 import morgan from 'morgan';
+// Developer Modules
 import userRouter from './routes/userRoutes';
 import fileRouter from './routes/fileRouter';
 import viewRouter from './routes/viewRoutes';
+import globalErrorHandler from './controllers/errorController';
 
 // Start express app
 const app = express();
@@ -47,5 +48,7 @@ app.use((req: any, res: any, next: any) => {
 app.use('/', viewRouter);
 app.use('/auth', userRouter);
 app.use('/api/file', fileRouter);
+
+app.use(globalErrorHandler);
 
 export default app;
