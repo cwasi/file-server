@@ -3,89 +3,17 @@ import { Op } from 'sequelize';
 
 import crypto from 'crypto';
 import db from './../models';
-import bcrypt from 'bcryptjs';
 import sendEmail from './../utils/email';
 import AppError from './../utils/appError';
 import catchAsync from './../utils/catchAsync';
+import {
+  createAndSendToken,
+  changePasswordAfter,
+  correctPasswordResetToken,
+  comparePasswords,
+} from './../utils/helpers';
 
-export const User = db.User;
-
-// Hooks
-User.beforeSave(async (user: any) => {
-  if (!user.changed('password')) {
-    return;
-  }
-  user.password = await bcrypt.hash(user.password, 12);
-});
-
-User.beforeSave(async (user: any) => {
-  if (!user.changed('password')) {
-    return;
-  }
-  user.passwordChangedAt = Date.now() - 1000;
-});
-
-// FUNCTIONS
-const changePasswordAfter = function (JWTTimestamp: any, user: any) {
-  const passwordChangedAt: any = user.passwordChangedAt.getTime() / 1000;
-
-  if (user.passwordChangedAt) {
-    const changeTimeStamp = parseInt(passwordChangedAt, 10);
-    return JWTTimestamp < changeTimeStamp;
-  }
-  // NOTE: if FALSE means password was NOT change
-  return false;
-};
-
-const correctPasswordResetToken = (user: any) => {
-  const resetToken = crypto.randomBytes(32).toString('hex');
-
-  user.passwordResetToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-
-  user.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-
-  return resetToken;
-};
-
-const comparePasswords = async (
-  candidatePassword: string,
-  userPassword: string
-) => {
-  return await bcrypt.compare(candidatePassword, userPassword);
-};
-
-const signToken = (id: string) => {
-  const JWT_SECRET: any = process.env.JWT_SECRET;
-  return jwt.sign({ id }, JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-};
-
-const createAndSendToken = (user: any, statusCode: number, res: any) => {
-  const token = signToken(user.id);
-  const JWT_COOKIE_EXPIRES_IN: any = process.env.JWT_COOKIE_EXPIRES_IN;
-  const cookieOption: any = {
-    expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-    httpOnly: true,
-  };
-
-  // secure cookie http in production
-  if (process.env.NODE_ENV) {
-    cookieOption.secure = true;
-  }
-
-  // send cookie
-  res.cookie('jwt', token, cookieOption);
-
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: { user },
-  });
-};
+const User = db.User;
 
 // MIDDLWARES
 export const protect = catchAsync(async (req: any, res: any, next: any) => {

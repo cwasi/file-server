@@ -1,6 +1,8 @@
 'use strict';
 import { Model } from 'sequelize';
 
+import bcrypt from 'bcryptjs';
+
 interface UserAttributes {
   id: string;
   name: string;
@@ -83,7 +85,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         },
       },
       passwordConfirm: {
-        type: DataTypes.STRING,
+        type: DataTypes.VIRTUAL,
         allowNull: false,
         validate: {
           validatePasswords(value: string) {
@@ -99,9 +101,28 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
 
     {
+      timestamps: true,
+      updatedAt: false,
       sequelize,
       modelName: 'User',
     }
   );
+
+  // Hooks
+  User.beforeSave(async (user: any) => {
+    if (!user.changed('password') || !user.isNewRecord) {
+      return;
+    }
+    // STEP: Hash the password with cost of 12
+    user.password = await bcrypt.hash(user.password, 12);
+  });
+
+  User.beforeSave(async (user: any) => {
+    if (!user.changed('password' || user.isNewRecord)) {
+      return;
+    }
+    user.passwordChangedAt = Date.now() - 1000;
+  });
+
   return User;
 };
