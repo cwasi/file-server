@@ -88,6 +88,14 @@ const isSignedIn = async (req: any, res: any, next: any) => {
   next();
 };
 
+const signOut = (req: any, res: any) => {
+  res.cookie('jwt', 'signedOut', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
+
 // ROUTES HANDLERS
 export const signup = catchAsync(async (req: any, res: any, next: any) => {
   const newUser = await db.User.create({
