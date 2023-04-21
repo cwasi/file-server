@@ -60,6 +60,34 @@ export const protect = catchAsync(async (req: any, res: any, next: any) => {
   next();
 });
 
+const isSignedIn = async (req: any, res: any, next: any) => {
+  if (req.cookies.jwt) {
+    try {
+      // 1) verify token
+      const JWT_SECRET: any = process.env.JWT_SECRET;
+      const decoded: any = jwt.verify(req.cookies.jwt, JWT_SECRET);
+
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // 3) Check if user changed password after the token was issued
+      if (changePasswordAfter(decoded.iat, currentUser)) {
+        return next();
+      }
+
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
+  next();
+};
+
 // ROUTES HANDLERS
 export const signup = catchAsync(async (req: any, res: any, next: any) => {
   const newUser = await db.User.create({
