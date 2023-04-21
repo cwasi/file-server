@@ -198,6 +198,10 @@ body {
     margin-bottom: 2.4rem;
     display: flex;
     gap: 1.6rem; }
+  .content__result__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
 
 .search__form {
   margin-bottom: 2.4rem; }
@@ -221,13 +225,19 @@ body {
   .search__form__group button {
     width: 9.1rem; }
 
+.add-file-btn--container {
+  width: 10rem; }
+
 .table {
   border-collapse: collapse;
   border: 0.1rem solid #f5f3f9;
   border-radius: 0.1rem;
   font-family: inherit;
   width: 100%; }
-  .table .table__row:not(:last-child) {
+  .table__row:first-child {
+    background-color: #f5f3f9;
+    border-bottom: 1px solid #d2d1d5; }
+  .table__row:not(:last-child) {
     border-bottom: 1px solid #d2d1d5; }
   .table__row:not(:first-child):hover {
     background-color: #f5f3f9; }
@@ -241,7 +251,6 @@ body {
     color: #898690; }
   .table__head {
     padding: 2.4rem 0 1.9rem 3.2rem;
-    background-color: #f5f3f9;
     margin: 10rem; }
   .table__data {
     padding: 2.4rem 3.2rem 2.4rem 3.2rem;

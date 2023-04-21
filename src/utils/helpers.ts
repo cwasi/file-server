@@ -3,7 +3,6 @@ import crypto from 'crypto';
 
 import jwt from 'jsonwebtoken';
 
-
 // FUNCTIONS
 export const changePasswordAfter = function (JWTTimestamp: any, user: any) {
   const passwordChangedAt: any = user.passwordChangedAt.getTime() / 1000;
@@ -50,9 +49,10 @@ export const createAndSendToken = (user: any, statusCode: number, res: any) => {
     expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
   };
-
+  
+console.log("🦄🦄🦄🦄😎😎😎😎😎")
   // secure cookie http in production
-  if (process.env.NODE_ENV) {
+  if (process.env.NODE_ENV === 'production') {
     cookieOption.secure = true;
   }
 

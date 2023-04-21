@@ -14,6 +14,7 @@ router.post('/signup', signup);
 router.post('/signin', signin);
 router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
+router.use(protect)
 router.get('/updateMe', protect, updateMe);
 
 export default router;

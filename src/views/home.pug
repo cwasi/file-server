@@ -1,0 +1,64 @@
+extends base
+
+mixin navItem(link, text, icon, alt, active)
+    li.side-nav__item(class=`${active ? 'side-nav__item--active' : ''}`)
+        a.side-nav__link(href=`${link}`)
+            img.side-nav__icon(src=`/assets/icon/${icon}` alt=`${alt}`)
+            span #{text}
+
+mixin tableRowUser(documnentName)
+    tr.table__row
+        td.table__data #{documnentName}
+            td.table__data
+                button.download-btn
+                    img(src='/assets/icon/icon-paper-download.svg', alt='download file icon')
+
+mixin tableRowAdmin(documnentName, numberOfEmailsSent, numberOfDownloads)
+    tr.table__row
+        td.table__data #{documnentName}
+            td.table__data #{numberOfEmailsSent}
+            td.table__data #{numberOfDownloads}
+            td.table__data
+                button.download-btn
+                    img(src='/assets/icon/icon-paper-download.svg', alt='download file icon')
+
+block content
+    // HEADER
+    include _header
+    main.main
+        nav.sidebar
+            ul.side-nav
+                +navItem('#', 'Download File', 'icon-paper-download.svg', 'download file icon', true )
+                - if (user.role === 'user')
+                    +navItem('#', 'Send Email', 'icon-email.svg', 'email icon')
+                +navItem('#', 'Settings', 'icon-settings.svg', 'settings icon')
+        .content
+            .content__title__container
+                img.content__title__icon(src='/assets/icon/icon-paper-download.svg', alt='download file icon')
+                p.content__title Download
+            form.search__form(action='#')
+                .search__form__group
+                    input.search__form__input(type='text', placeholder='Search file')
+                    button.btn.btn__primary.btn__search search
+            .content__result__container
+                p
+                    span 5
+                    |  Documents
+                .add-file-btn--container 
+                    button.btn.btn__primary Add a file
+
+            table.table
+                tbody
+                    - if (user.role === 'admin')
+                        tr.table__row
+                            th.table__head Document Name
+                            th.table__head Number of emails sent
+                            th.table__head Number of downloads
+                            th.table__head   
+                        +tableRowAdmin('wedding Cards', 6, 10)
+                    - else
+                        tr.table__row
+                            th.table__head Document Name
+                            th.table__head   
+                        +tableRowUser('application form')
+

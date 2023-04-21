@@ -24,11 +24,12 @@ export const protect = catchAsync(async (req: any, res: any, next: any) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
-
   if (!token) {
     return next(
-      new AppError('You are not logged in. Please login to get access', 401)
+      new AppError('You are not signed in. Please sign to get access', 401)
     );
   }
 
@@ -55,6 +56,7 @@ export const protect = catchAsync(async (req: any, res: any, next: any) => {
 
   // STEP: GRANT ACCESS TO PROTECT ROUTE
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 
@@ -101,6 +103,7 @@ export const signin = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   // STEP: send token
+  console.log('💥💥💥💥💥💥');
   createAndSendToken(user, 200, res);
 });
 

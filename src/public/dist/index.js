@@ -584,7 +584,12 @@ const signin = async (email, password)=>{
                 password
             }
         });
-        if (res.data.status === "success") (0, _alertsJs.showAlert)("success", "Signed in successfully!");
+        if (res.data.status === "success") {
+            (0, _alertsJs.showAlert)("success", "Signed in successfully!");
+            window.setTimeout(()=>{
+                location.assign("/users/home");
+            }, 1500);
+        }
     } catch (err) {
         (0, _alertsJs.showAlert)("error", err.response.data.message);
     }

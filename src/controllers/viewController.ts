@@ -1,5 +1,10 @@
-export const getHomePage = (req: any, res: any, next: any) => {
+export const getWelcomePage = (req: any, res: any, next: any) => {
   res.status(200).render({});
+};
+export const getHomePage = (req: any, res: any, next: any) => {
+  res.status(200).render('home', {
+    title: 'Home',
+  });
 };
 
 export const getSignupPage = (req: any, res: any, next: any) => {

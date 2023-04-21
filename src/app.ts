@@ -2,6 +2,7 @@ import path from 'path';
 
 import express from 'express';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 // Developer Modules
 import userRouter from './routes/userRoutes';
 import fileRouter from './routes/fileRouter';
@@ -22,6 +23,7 @@ app.use(express.static('node_modules'));
 
 // Body passer, reading data from body
 app.use(express.json());
+app.use(cookieParser());
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -33,6 +35,7 @@ console.log('📍📍📍📍📍📍', process.env.NODE_ENV);
 // Test middleware
 app.use((req, res, next) => {
   console.log('MIDDLEWARE');
+  console.log(req.cookies)
   next();
 });
 
