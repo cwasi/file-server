@@ -1,8 +1,7 @@
-console.log('This is the index');
-
-import { signin } from "./signin.js";
+import { signin, signOut } from './signin.js';
 
 const signinForm = document.querySelector('.signin__form');
+const signOutBtn = document.querySelector('.sign-out');
 
 if (signinForm) {
   signinForm.addEventListener('submit', (e) => {
@@ -12,3 +11,5 @@ if (signinForm) {
     signin(email, password);
   });
 }
+
+if(signOutBtn) signOutBtn.addEventListener("click", signOut)

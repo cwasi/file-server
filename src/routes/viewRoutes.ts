@@ -16,6 +16,6 @@ router.get('/signin', getSigninPage);
 router.get('/signup', getSignupPage);
 router.get('/resetPassword', getResetPasswordPage);
 router.get('/sendResetPasswordLink', getSendResetPasswordLinkPage);
-router.get('/users/home',protect, getHomePage);
+router.get('/home',protect, getHomePage);
 
 export default router;

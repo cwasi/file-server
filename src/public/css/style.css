@@ -82,6 +82,11 @@ body {
   align-items: center;
   justify-content: center; }
 
+.display-flex-center-gap-2 {
+  display: flex;
+  align-items: center;
+  gap: 2rem; }
+
 .form {
   width: 38rem;
   display: flex;
@@ -323,6 +328,31 @@ body {
   display: grid;
   grid-template-columns: 32.6rem 1fr;
   gap: 2.8rem; }
+
+.welcome {
+  display: flex;
+  justify-content: center;
+  height: 100%; }
+  .welcome__container {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem; }
+  .welcome__content {
+    display: flex;
+    align-items: center;
+    gap: 2rem; }
+  .welcome__signin-btn {
+    display: flex;
+    align-items: center;
+    gap: 2rem; }
+  .welcome__signin-btn:first-child, .welcome__signin-btn:last-child {
+    width: 40rem; }
+
+.link {
+  text-decoration: none; }
 
 .sign-up__layout {
   display: grid;

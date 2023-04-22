@@ -5,8 +5,12 @@ block content
         .sign-up
             .sign-up__container
                 .sign-up__text--content
-                    h1.heading-4.heading-4--w-400.mb-16 Sign in to
-                    p.text-16 Please enter your detials.
+                    .display-flex-center-gap-2
+                        h1.heading-4.heading-4--w-400.mb-16 Sign in to
+                        .logo--box
+                            img(src='/assets/file-server-logo.png', alt='file server log')
+                    //- p.text-16 Please enter your detials.
+                
                 form.form.signin__form(action='#', method='post')
                     .form__group
                         label.form__label(for='email') Email
@@ -21,4 +25,4 @@ block content
                         button.btn.btn__primary
                             .icon
                             p Sign in
-        .sign-up__img--box adfadfafa
+        .sign-up__img--box

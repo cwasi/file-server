@@ -88,7 +88,7 @@ const isSignedIn = async (req: any, res: any, next: any) => {
   next();
 };
 
-const signOut = (req: any, res: any) => {
+export const signOut = (req: any, res: any) => {
   res.cookie('jwt', 'signedOut', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,

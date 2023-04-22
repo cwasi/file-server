@@ -558,19 +558,21 @@ function hmrAccept(bundle, id) {
 
 },{}],"dq5Q2":[function(require,module,exports) {
 var _signinJs = require("./signin.js");
-console.log("This is the index");
 const signinForm = document.querySelector(".signin__form");
+const signOutBtn = document.querySelector(".sign-out");
 if (signinForm) signinForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     (0, _signinJs.signin)(email, password);
 });
+if (signOutBtn) signOutBtn.addEventListener("click", (0, _signinJs.signOut));
 
 },{"./signin.js":"idsNh"}],"idsNh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "signin", ()=>signin);
+parcelHelpers.export(exports, "signOut", ()=>signOut);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alertsJs = require("./alerts.js");
@@ -587,11 +589,24 @@ const signin = async (email, password)=>{
         if (res.data.status === "success") {
             (0, _alertsJs.showAlert)("success", "Signed in successfully!");
             window.setTimeout(()=>{
-                location.assign("/users/home");
+                location.assign("/home");
             }, 1500);
         }
     } catch (err) {
         (0, _alertsJs.showAlert)("error", err.response.data.message);
+    }
+};
+const signOut = async (e)=>{
+    try {
+        const res = await (0, _axiosDefault.default)({
+            method: "GET",
+            url: "http://127.0.0.1:5050/auth/signout"
+        });
+        res.data.status = "success";
+        location.assign("/");
+    } catch (err) {
+        console.log(err.response);
+        (0, _alertsJs.showAlert)("error", "Error logging out! Try again.");
     }
 };
 

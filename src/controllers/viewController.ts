@@ -1,5 +1,7 @@
 export const getWelcomePage = (req: any, res: any, next: any) => {
-  res.status(200).render({});
+  res.status(200).render('Welcome',{
+    title:'Welcome'
+  });
 };
 export const getHomePage = (req: any, res: any, next: any) => {
   res.status(200).render('home', {
