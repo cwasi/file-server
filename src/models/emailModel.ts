@@ -1,16 +1,13 @@
 'use strict';
 import { Model } from 'sequelize';
 
-interface DownloadAttributes {
+interface EmailAttributes {
   id: string;
-  downloadedBy: string;
+  emailSentTo: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Download
-    extends Model<DownloadAttributes>
-    implements DownloadAttributes
-  {
+  class Email extends Model<EmailAttributes> implements EmailAttributes {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -18,16 +15,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
 
     id!: string;
-    name!: string;
-    downloadedBy!: string;
+    emailSentTo!: string;
 
     static associate(models: any) {
       // define association here
-      Download.hasMany(models.Email);
-      models.Email.belongsTo(Download);
+      // Email.hasMany(models.File);
+      // models.File.belongsTo(Email);
     }
   }
-  Download.init(
+  Email.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -35,17 +31,23 @@ module.exports = (sequelize: any, DataTypes: any) => {
         primaryKey: true,
       },
 
-      downloadedBy: {
+      emailSentTo: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'Please provide a recipient',
+          },
+        },
       },
     },
-
     {
-      timestamps: false,
+      timestamps: true,
+      createdAt: 'emailDate',
+      updatedAt: false,
       sequelize,
-      modelName: 'Download',
+      modelName: 'Email',
     }
   );
-  return Download;
+  return Email;
 };

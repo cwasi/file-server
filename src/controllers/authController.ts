@@ -60,6 +60,17 @@ export const protect = catchAsync(async (req: any, res: any, next: any) => {
   next();
 });
 
+export const restictTo = (role: string) => {
+  return (req: any, res: any, next: any) => {
+    if (!role.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action', 403)
+      );
+    }
+    next();
+  };
+};
+
 const isSignedIn = async (req: any, res: any, next: any) => {
   if (req.cookies.jwt) {
     try {

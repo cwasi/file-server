@@ -22,7 +22,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
     description!: string;
 
     static associate(models: any) {
-      // console.log('💥💥💥💥💥💥💥',models.Download)
       // define association here
       File.hasMany(models.Download);
       models.Download.belongsTo(File)

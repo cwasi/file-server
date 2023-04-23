@@ -1,9 +1,16 @@
 import express from 'express';
 
-import { downloadFile } from '../controllers/downloadController';
+import {
+  countNumberOfFileDownload,
+  downloadFile,
+  getAllDownloads,
+} from '../controllers/downloadController';
 
 const router = express.Router({ mergeParams: true });
 
-router.route('/').get(downloadFile);
+router
+  .route('/')
+  .post(downloadFile)
+  .get(countNumberOfFileDownload, getAllDownloads);
 
 export default router;

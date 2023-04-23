@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import userRouter from './routes/userRoutes';
 import fileRouter from './routes/fileRouter';
 import viewRouter from './routes/viewRoutes';
+import emailRouter from './routes/emailRoutes';
+import downloadRouter from './routes/downloadRouter';
 import globalErrorHandler from './controllers/errorController';
 
 // Start express app
@@ -51,6 +53,8 @@ app.use((req: any, res: any, next: any) => {
 app.use('/', viewRouter);
 app.use('/auth', userRouter);
 app.use('/api/file', fileRouter);
+app.use('/api/download', downloadRouter);
+app.use('/api/email', emailRouter);
 
 app.use(globalErrorHandler);
 

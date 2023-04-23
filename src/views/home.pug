@@ -18,9 +18,6 @@ mixin tableRowAdmin(documnentName, numberOfEmailsSent, numberOfDownloads)
         td.table__data #{documnentName}
             td.table__data #{numberOfEmailsSent}
             td.table__data #{numberOfDownloads}
-            td.table__data
-                button.download-btn
-                    img(src='/assets/icon/icon-paper-download.svg', alt='download file icon')
 
 block content
     // HEADER
@@ -44,8 +41,9 @@ block content
                 p
                     span 5
                     |  Documents
-                .add-file-btn--container 
-                    button.btn.btn__primary Add a file
+                -if (user.role==='admin')    
+                    .add-file-btn--container 
+                        button.btn.btn__primary Add a file
 
             table.table
                 tbody
@@ -53,8 +51,7 @@ block content
                         tr.table__row
                             th.table__head Document Name
                             th.table__head Number of emails sent
-                            th.table__head Number of downloads
-                            th.table__head   
+                            th.table__head Number of downloads 
                         +tableRowAdmin('wedding Cards', 6, 10)
                     - else
                         tr.table__row
