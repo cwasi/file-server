@@ -10,6 +10,7 @@ interface UserAttributes {
   role: string;
   email: string;
   password: string;
+  verifyCode: string;
   passwordConfirm: string;
   passwordChangedAt: Date;
   passwordResetToken: String;
@@ -31,6 +32,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     email!: string;
     password!: string;
     passwordConfirm!: string;
+    verifyCode!: string;
     passwordChangedAt!: Date;
     passwordResetToken!: String;
     passwordResetExpires!: Date;
@@ -80,7 +82,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Please provide a passwor',
+            msg: 'Please provide a password',
           },
         },
       },
@@ -95,6 +97,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
           },
         },
       },
+      verifyCode: DataTypes.STRING,
       passwordChangedAt: DataTypes.DATE,
       passwordResetToken: DataTypes.STRING,
       passwordResetExpires: DataTypes.DATE,

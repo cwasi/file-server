@@ -37,7 +37,7 @@ console.log('📍📍📍📍📍📍', process.env.NODE_ENV);
 // Test middleware
 app.use((req, res, next) => {
   console.log('MIDDLEWARE');
-  console.log(req.cookies)
+  console.log(req.cookies);
   next();
 });
 

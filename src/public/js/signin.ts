@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { showAlert } from './alerts.js';
 
-export const signin = async (email, password) => {
+export const signin = async (email:string, password:string) => {
   try {
     const res = await axios({
       method: 'POST',
@@ -18,12 +18,12 @@ export const signin = async (email, password) => {
           location.assign('/home');
         }, 1500);
       }
-    } catch (err) {
+    } catch (err:any) {
     showAlert('error', err.response.data.message);
   }
 };
 
-export const signOut = async e => {
+export const signOut = async ()=> {
   try {
     const res = await axios({
       method: 'GET',
@@ -32,7 +32,6 @@ export const signOut = async e => {
 
     if ((res.data.status = 'success'))   location.assign('/');
   } catch (err) {
-    console.log(err.response);
     showAlert('error', 'Error logging out! Try again.');
   }
 };

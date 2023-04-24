@@ -6,6 +6,7 @@ import db from './../models';
 import sendEmail from './../utils/email';
 import AppError from './../utils/appError';
 import catchAsync from './../utils/catchAsync';
+import verify from './../utils/verify';
 import {
   createAndSendToken,
   changePasswordAfter,
@@ -116,9 +117,24 @@ export const signup = catchAsync(async (req: any, res: any, next: any) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
+  const verificationCode = verify(6);
+  const verifyURL = `${req.protocol}://${req.get('host')}/verification`;
+  const message = `Your verification is below. Enter it in your browser window and you will signed in \n ${verificationCode}\n
+  ${verifyURL}`;
+  const email = newUser.email;
+
+  sendEmail({
+    email,
+    subject: `Your verification Code ${verificationCode}`,
+    message,
+  });
+
+  newUser.set({verifyCode:verificationCode})
+  newUser.save()
   res.status(201).json({
     status: 'success',
-    data: { newUser },
+    message: 'verification code sent to email',
+    // data: { newUser },
   });
 });
 
@@ -150,7 +166,6 @@ export const signin = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   // STEP: send token
-  console.log('💥💥💥💥💥💥');
   createAndSendToken(user, 200, res);
 });
 

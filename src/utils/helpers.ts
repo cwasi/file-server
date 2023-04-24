@@ -50,7 +50,6 @@ export const createAndSendToken = (user: any, statusCode: number, res: any) => {
     httpOnly: true,
   };
   
-console.log("🦄🦄🦄🦄😎😎😎😎😎")
   // secure cookie http in production
   if (process.env.NODE_ENV === 'production') {
     cookieOption.secure = true;

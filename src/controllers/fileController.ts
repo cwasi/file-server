@@ -1,3 +1,4 @@
+import multer from 'multer';
 import { promisify } from 'util';
 import catchAsync from '../utils/catchAsync';
 import db from './../models';
@@ -5,6 +6,31 @@ import db from './../models';
 const File = db.File;
 const Download = db.Download;
 const Email = db.Email;
+
+// const multerStorage = multer.diskStorage({
+//   destination: (req: any, file: any, cb: any) => {
+//     cb(null, 'public/document');
+//   },
+
+//   filename: (req: any, file: any, cb: any) => {},
+// });
+
+// const upload = multer({
+//   storage: multerStorage,
+// });
+
+// export const uploadFile = upload.single('uploaded_file');
+
+export const saveDocument = catchAsync(
+  async (req: any, res: any, next: any) => {
+    console.log('here in document');
+    console.log(req.body);
+    console.log('😍😍😍😍', req.file);
+    res.status(200).json({
+      status: 'success',
+    });
+  }
+);
 
 export const createfile = async (req: any, res: any, next: any) => {
   console.log(req.body);
@@ -42,7 +68,6 @@ export const numOfdownloadAndEmails = catchAsync(
       status: 'success',
       data: {
         getNumOfdownloadfile,
-        
       },
     });
   }
