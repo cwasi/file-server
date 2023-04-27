@@ -3,7 +3,7 @@ extends base
 mixin navItem(link, text, icon, alt, active)
     li.side-nav__item(class=`${active ? 'side-nav__item--active' : ''}`)
         a.side-nav__link(href=`${link}`)
-            img.side-nav__icon(src=`/assets/icon/${icon}` alt=`${alt}`)
+            img.side-nav__icon(src=`/icon/${icon}` alt=`${alt}`)
             span #{text}
 
 mixin tableRowUser(documnentName)
@@ -11,7 +11,7 @@ mixin tableRowUser(documnentName)
         td.table__data #{documnentName}
             td.table__data
                 button.download-btn
-                    img(src='/assets/icon/icon-paper-download.svg', alt='download file icon')
+                    img(src='/icon/icon-paper-download.svg', alt='download file icon')
 
 mixin tableRowAdmin(documnentName, numberOfEmailsSent, numberOfDownloads)
     tr.table__row
@@ -31,7 +31,7 @@ block content
                 +navItem('#', 'Settings', 'icon-settings.svg', 'settings icon')
         .content
             .content__title__container
-                img.content__title__icon(src='/assets/icon/icon-paper-download.svg', alt='download file icon')
+                img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
                 p.content__title Download
             form.search__form(action='#')
                 .search__form__group

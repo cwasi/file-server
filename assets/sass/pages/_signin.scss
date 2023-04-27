@@ -1,0 +1,23 @@
+.sign-up__layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  min-height: 100%;
+}
+
+.sign-up {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__text--content {
+    margin-bottom: 4.8rem;
+  }
+
+  // &__container {
+  // }
+  // &__img--box {
+  // }
+
+  &__img--box {
+    background-color: $color-primary-light-10;
+  }
+}

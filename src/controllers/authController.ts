@@ -15,7 +15,6 @@ import {
 } from './../utils/helpers';
 
 const User = db.User;
-
 // MIDDLWARES
 export const protect = catchAsync(async (req: any, res: any, next: any) => {
   // STEP:  Getting the token and checking if it exist
@@ -129,8 +128,8 @@ export const signup = catchAsync(async (req: any, res: any, next: any) => {
     message,
   });
 
-  newUser.set({verifyCode:verificationCode})
-  newUser.save()
+  newUser.set({ verifyCode: verificationCode });
+  newUser.save();
   res.status(201).json({
     status: 'success',
     message: 'verification code sent to email',

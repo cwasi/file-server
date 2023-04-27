@@ -4,13 +4,13 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "start:sass": "node-sass src/public/sass/main.scss src/public/css/style.css -w",
-    "start": "tsnd --respawn src/server.ts",
-    "start:prod": "NODE_ENV=production tsnd --respawn src/server.ts",
-    "dev": "npx tsc --watch && nodemon dist/server.js",
+    "start": "rimraf dist && tsc --watch",
+    "start:dev": "nodemon dist/server.js",
+    "start:prod": "NODE_ENV=production nodemon dist/server.js",
     "build": "rimraf dist && npx tsc",
-    "watch:frontside": "parcel ./src/public/js/index.js --dist-dir ./src/public/dist",
-    "build:frontside": "parcel build ./src/public/js/index.js --dist-dir ./src/public/dist/index.js"
+    "start:sass": "node-sass src/public/sass/main.scss src/public/assets/css/style.css -w",
+    "watch:parcel": "parcel ./dist/public/js/index.js",
+    "build:parcel": "parcel build ./src/public/js/index.js --dist-dir ./src/public/dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -33,8 +33,7 @@
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "pug": "^3.0.2",
-    "sequelize": "^6.30.0",
-    "uninstall": "^0.0.0"
+    "sequelize": "^6.30.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

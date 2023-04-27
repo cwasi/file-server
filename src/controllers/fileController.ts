@@ -21,7 +21,7 @@ const Email = db.Email;
 
 // export const uploadFile = upload.single('uploaded_file');
 
-export const saveDocument = catchAsync(
+export const uploadFile = catchAsync(
   async (req: any, res: any, next: any) => {
     console.log('here in document');
     console.log(req.body);

@@ -1,0 +1,29 @@
+.align-left {
+  text-align: right;
+}
+.mb-16 {
+  margin-bottom: 1.6rem;
+}
+.mb-40 {
+  margin-bottom: 4rem;
+}
+.mt-144 {
+  margin-top: 14.4rem;
+}
+
+.w-130 {
+  width: 13rem;
+}
+
+.display-flex-center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.display-flex-center-gap-2 {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}

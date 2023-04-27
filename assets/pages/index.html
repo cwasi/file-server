@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>File Server</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo-box">
+        <img src="assets/file-server-logo.png" alt="" />
+      </div>
+
+      <div class="action-container display-flex-center">
+        <figure class="display-flex-center">
+          <div class="user__photo-box">
+            <img
+              src="assets/img/users/Lizzy-Doe.jpg"
+              alt="photo of Lizzy Doe"
+              class="user__photo"
+            />
+          </div>
+          <figcaption><p class="user__name">Lizzy Doe.</p></figcaption>
+        </figure>
+
+        <div class="vertical-line"></div>
+
+        <div class="">
+          <button
+            class="btn btn__primary btn btn__primary-w-icon display-flex-center"
+          >
+            <span class="btn__text">Sign out</span>
+            <img src="assets/icon/icon-sign-out.svg" alt="" />
+          </button>
+        </div>
+      </div>
+    </header>
+    <main class="main">
+      <nav class="sidebar">
+        <ul class="side-nav">
+          <li class="side-nav__item side-nav__item--active">
+            <a href="#" class="side-nav__link">
+              <img
+                src="assets/icon/icon-paper-download.svg"
+                alt="download file icon"
+                class="side-nav__icon"
+              />
+              <span>Download File</span>
+            </a>
+          </li>
+          <li class="side-nav__item">
+            <a href="#" class="side-nav__link">
+              <img
+                src="assets/icon/icon-email.svg"
+                alt="email icon"
+                class="side-nav__icon"
+              />
+              <span>Send Email</span>
+            </a>
+          </li>
+          <li class="side-nav__item">
+            <a href="#" class="side-nav__link">
+              <img
+                src="assets/icon/icon-settings.svg"
+                alt="settings icon"
+                class="side-nav__icon"
+              />
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="content">
+        <div class="content__title__container">
+          <img
+            src="assets/icon/icon-paper-download.svg"
+            alt="download file icon"
+            class="content__title__icon"
+          />
+          <p class="content__title">Download</p>
+        </div>
+        <form action="#" class="search__form">
+          <div class="search__form__group">
+            <input
+              type="text"
+              class="search__form__input"
+              placeholder="Search file"
+            />
+            <button class="btn btn__primary">search</button>
+          </div>
+        </form>
+
+        <div class="content__result__container">
+          <p><span>5</span> Documents</p>
+        </div>
+
+        <table class="table">
+          <tr class="table__row">
+            <th class="table__head">Document Name</th>
+            <th class="table__head">Type of Document</th>
+            <th class="table__head"></th>
+          </tr>
+          <tr class="table__row">
+            <td class="table__data">wedding Cards</td>
+            <td class="table__data">wedding Cards</td>
+            <td class="table__data">
+              <button class="download-btn">
+                <img
+                  src="assets/icon/icon-paper-download.svg"
+                  alt="download file icon"
+                />
+              </button>
+            </td>
+          </tr>
+          <tr class="table__row">
+            <td class="table__data">wedding Cards</td>
+            <td class="table__data">wedding Cards</td>
+            <td class="table__data">
+              <button class="download-btn">
+                <img
+                  src="assets/icon/icon-paper-download.svg"
+                  alt="download file icon"
+                />
+              </button>
+            </td>
+          </tr>
+          <tr class="table__row">
+            <td class="table__data">wedding Cards</td>
+            <td class="table__data">wedding Cards</td>
+            <td class="table__data">
+              <button class="download-btn">
+                <img
+                  src="assets/icon/icon-paper-download.svg"
+                  alt="download file icon"
+                />
+              </button>
+            </td>
+          </tr>
+          <tr class="table__row">
+            <td class="table__data">wedding Cards</td>
+            <td class="table__data">wedding Cards</td>
+            <td class="table__data">
+              <button class="download-btn">
+                <img
+                  src="assets/icon/icon-paper-download.svg"
+                  alt="download file icon"
+                />
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

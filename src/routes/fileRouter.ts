@@ -5,13 +5,12 @@ import {
   createfile,
   getAllfiles,
   numOfdownloadAndEmails,
-  saveDocument,
-  // uploadFile,
+  uploadFile,
 } from './../controllers/fileController';
 import { protect, restictTo } from './../controllers/authController';
 import downloadRouter from './../routes/downloadRouter';
 
-const upload = multer({ dest: 'src/public/document' });
+const upload = multer({ dest: '/public/document' });
 
 const router = express.Router();
 
@@ -24,6 +23,6 @@ router
 
 router
   .route('/upload-file')
-  .post(restictTo('admin'), upload.single('photo'), saveDocument);
+  .post(restictTo('admin'), upload.single('document'), uploadFile);
 
 export default router;

@@ -1,0 +1,53 @@
+.btn {
+  width: 100%;
+  padding: 1.2rem 0rem;
+
+  color: white;
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: inherit;
+  border-radius: 0.5rem;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+
+  &__primary {
+    background-color: $color-primary;
+    border: none;
+    &-w-icon {
+      padding: 0.8rem 1.6rem;
+      // width: 100%;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+  }
+
+  &__secondary {
+    color: $color-primary;
+    background-color: transparent;
+    border: 0.1rem solid $color-primary !important;
+    &__secondary-w-icon {
+      padding: 0.8rem 1.6rem;
+      min-width: 100%;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+  }
+
+  &__group {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 2.9rem;
+  }
+}
+
+

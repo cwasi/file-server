@@ -16,12 +16,12 @@ const app = express();
 
 // Set up template engine PUG
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join('views'));
 
 // Serving static files
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, '/')));
-app.use(express.static('node_modules'));
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join('client')));
+app.use(express.static(path.join('assets')));
 
 // Body passer, reading data from body
 app.use(express.json());
