@@ -24,7 +24,7 @@ export const countNumberOfFileDownload = catchAsync(
       '6daab7cf-ea4c-4bfd-ab67-55114b01dd5b'
     );
     const fileId = query.FileId;
-    console.log("🍌🍌🍌🍌",fileId)
+    console.log('🍌🍌🍌🍌', fileId);
 
     const numberofFileDownloads = await db.Download.findAll({
       where: { FileId: fileId },

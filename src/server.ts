@@ -2,7 +2,7 @@ import db from './models';
 import app from './app';
 
 db.sequelize
-  .sync()
+  .sync({ alter: true })
   .then(() => {
     console.log('Connection has been established successfully.');
   })

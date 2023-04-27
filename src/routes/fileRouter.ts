@@ -1,28 +1,24 @@
 import express from 'express';
-import multer from 'multer';
 
 import {
-  createfile,
   getAllfiles,
   numOfdownloadAndEmails,
+  saveFile,
   uploadFile,
 } from './../controllers/fileController';
 import { protect, restictTo } from './../controllers/authController';
 import downloadRouter from './../routes/downloadRouter';
 
-const upload = multer({ dest: '/public/document' });
-
 const router = express.Router();
 
-router.use('/download/:fileId', downloadRouter);
 router.use(protect);
-router.route('/').get(getAllfiles).post(restictTo('admin'), createfile);
-router
-  .route('/num-of-files-download-and-email-sent')
-  .get(restictTo('admin'), numOfdownloadAndEmails);
+router.route('/').get(getAllfiles);
+router.use('/download/:fileId', downloadRouter);
 
+router.use(restictTo('admin'));
 router
-  .route('/upload-file')
-  .post(restictTo('admin'), upload.single('document'), uploadFile);
+  .route('/num-of-files-download-and-emails-sent')
+  .get(restictTo('admin'), numOfdownloadAndEmails);
+router.route('/upload-file').post(restictTo('admin'), uploadFile, saveFile);
 
 export default router;

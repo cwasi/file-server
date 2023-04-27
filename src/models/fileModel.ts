@@ -3,7 +3,6 @@ import { Model } from 'sequelize';
 
 interface FileAttributes {
   id: string;
-  file: string;
   title: string;
   description: string;
 }
@@ -17,7 +16,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
 
     id!: string;
-    file!: string;
     title!: string;
     description!: string;
 
@@ -33,16 +31,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-      },
-
-      file: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: 'Please provide the file',
-          },
-        },
       },
 
       title: {

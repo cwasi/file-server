@@ -1,47 +1,50 @@
 import multer from 'multer';
-import { promisify } from 'util';
 import catchAsync from '../utils/catchAsync';
 import db from './../models';
+import AppError from './../utils/appError';
 
 const File = db.File;
 const Download = db.Download;
 const Email = db.Email;
 
-// const multerStorage = multer.diskStorage({
-//   destination: (req: any, file: any, cb: any) => {
-//     cb(null, 'public/document');
-//   },
+const multerStorage = multer.diskStorage({
+  destination: (req: any, file: any, cb: any) => {
+    cb(null, './assets/document');
+  },
+});
 
-//   filename: (req: any, file: any, cb: any) => {},
-// });
+const upload = multer({ storage: multerStorage });
 
-// const upload = multer({
-//   storage: multerStorage,
-// });
+export const uploadFile = upload.single('uploadFile');
 
-// export const uploadFile = upload.single('uploaded_file');
-
-export const uploadFile = catchAsync(
-  async (req: any, res: any, next: any) => {
-    console.log('here in document');
-    console.log(req.body);
-    console.log('😍😍😍😍', req.file);
-    res.status(200).json({
-      status: 'success',
-    });
+export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
+  if (!req.file) {
+    return next(new AppError('Please upload a file', 401));
   }
-);
 
-export const createfile = async (req: any, res: any, next: any) => {
-  console.log(req.body);
-  const newFile = await File.create(req.body);
+  const duplicatFileName = await File.findOne({
+    where: { title: req.body.title },
+  });
+
+  if (duplicatFileName) {
+    return next(
+      new AppError('File name already exist. Please try another file name', 401)
+    );
+  }
+
+  const fileObj = {
+    title: req.body.title,
+    description: req.body.description,
+  };
+
+  const newFile = await File.create(fileObj);
+
   res.status(200).json({
     status: 'success',
-    data: {
-      newFile,
-    },
+    data: { newFile },
   });
-};
+});
+
 
 export const getAllfiles = async (req: any, res: any, next: any) => {
   const files = await File.findAll();
