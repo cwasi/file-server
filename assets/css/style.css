@@ -92,6 +92,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2.4rem; }
+  .form__add-fill {
+    width: 100%; }
   .form__label {
     font-size: 1.6rem;
     font-weight: inherit; }
@@ -99,7 +101,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.8rem; }
-  .form__input {
+  .form__textarea, .form__input {
     padding: 1.2rem 0 1.2rem 1.6rem;
     border-radius: 0.5rem;
     border: 0.1rem solid #898690;
@@ -108,9 +110,9 @@ body {
     color: #4e4a59;
     width: 100%;
     display: block; }
-    .form__input:hover, .form__input:active, .form__input:focus {
+    .form__textarea:hover, .form__textarea:active, .form__textarea:focus, .form__input:hover, .form__input:active, .form__input:focus {
       border: 0.1rem solid #7f56da !important; }
-    .form__input::-webkit-input-placeholder {
+    .form__textarea::-webkit-input-placeholder, .form__input::-webkit-input-placeholder {
       color: #c4c2c7; }
 
 .btn {
@@ -290,6 +292,45 @@ body {
     background-color: #20bf6b; }
   .alert--error {
     background-color: #eb4d4b; }
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 3000;
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s; }
+  @supports (-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
+    .popup {
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      background-color: rgba(0, 0, 0, 0.3); } }
+  .popup__content {
+    padding: 3rem;
+    border-radius: 2rem !important;
+    position: absolute;
+    background-color: #fff;
+    width: 35%;
+    border-radius: 3px;
+    box-shadow: 0 3rem 4rem rgba(0, 0, 0, 0.2);
+    display: table;
+    overflow: hidden;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+    transition: all 0.4s 0.2s;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); }
+  .popup__header {
+    margin-bottom: 3.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
 
 .book__layout {
   display: grid;

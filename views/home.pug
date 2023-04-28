@@ -59,3 +59,20 @@ block content
                             th.table__head   
                         +tableRowUser('application form')
 
+        #popup.popup
+            .popup__content
+                .popup__header
+                h5.heading-5.popup__title Add a file
+                .popup__close
+                    img(src='/assets/icon/icon-close.svg', alt='icon close')
+                form.form.form__add-fill(action='#')
+                .form__group
+                    input#myFile(type='file', name='filename')
+                .form__group
+                    label.form__label(for='title') Title
+                    input#title.form__input(type='text', placeholder='title')
+                .form__group
+                    label.form__label(for='Description') Description
+                    textarea#description.form__textarea(name='description', cols='30', rows='5', placeholder='Description')
+                .form__group
+                    button.btn.btn__primary Upload

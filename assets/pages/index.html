@@ -4,20 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
     <title>File Server</title>
   </head>
   <body>
     <header class="header">
       <div class="logo-box">
-        <img src="assets/file-server-logo.png" alt="" />
+        <img src="/assets/file-server-logo.png" alt="" />
       </div>
 
       <div class="action-container display-flex-center">
         <figure class="display-flex-center">
           <div class="user__photo-box">
             <img
-              src="assets/img/users/Lizzy-Doe.jpg"
+              src="/assets/img/users/Lizzy-Doe.jpg"
               alt="photo of Lizzy Doe"
               class="user__photo"
             />
@@ -32,7 +32,7 @@
             class="btn btn__primary btn btn__primary-w-icon display-flex-center"
           >
             <span class="btn__text">Sign out</span>
-            <img src="assets/icon/icon-sign-out.svg" alt="" />
+            <img src="/assets/icon/icon-sign-out.svg" alt="" />
           </button>
         </div>
       </div>
@@ -43,7 +43,7 @@
           <li class="side-nav__item side-nav__item--active">
             <a href="#" class="side-nav__link">
               <img
-                src="assets/icon/icon-paper-download.svg"
+                src="/assets/icon/icon-paper-download.svg"
                 alt="download file icon"
                 class="side-nav__icon"
               />
@@ -53,7 +53,7 @@
           <li class="side-nav__item">
             <a href="#" class="side-nav__link">
               <img
-                src="assets/icon/icon-email.svg"
+                src="/assets/icon/icon-email.svg"
                 alt="email icon"
                 class="side-nav__icon"
               />
@@ -63,7 +63,7 @@
           <li class="side-nav__item">
             <a href="#" class="side-nav__link">
               <img
-                src="assets/icon/icon-settings.svg"
+                src="/assets/icon/icon-settings.svg"
                 alt="settings icon"
                 class="side-nav__icon"
               />
@@ -75,7 +75,7 @@
       <div class="content">
         <div class="content__title__container">
           <img
-            src="assets/icon/icon-paper-download.svg"
+            src="/assets/icon/icon-paper-download.svg"
             alt="download file icon"
             class="content__title__icon"
           />
@@ -108,7 +108,7 @@
             <td class="table__data">
               <button class="download-btn">
                 <img
-                  src="assets/icon/icon-paper-download.svg"
+                  src="/assets/icon/icon-paper-download.svg"
                   alt="download file icon"
                 />
               </button>
@@ -120,7 +120,7 @@
             <td class="table__data">
               <button class="download-btn">
                 <img
-                  src="assets/icon/icon-paper-download.svg"
+                  src="/assets/icon/icon-paper-download.svg"
                   alt="download file icon"
                 />
               </button>
@@ -132,7 +132,7 @@
             <td class="table__data">
               <button class="download-btn">
                 <img
-                  src="assets/icon/icon-paper-download.svg"
+                  src="/assets/icon/icon-paper-download.svg"
                   alt="download file icon"
                 />
               </button>
@@ -144,13 +144,51 @@
             <td class="table__data">
               <button class="download-btn">
                 <img
-                  src="assets/icon/icon-paper-download.svg"
+                  src="/assets/icon/icon-paper-download.svg"
                   alt="download file icon"
                 />
               </button>
             </td>
           </tr>
         </table>
+      </div>
+      <div class="popup" id="popup">
+        <div class="popup__content">
+          <div class="popup__header">
+            <h5 class="heading-5 popup__title">Add a file</h5>
+            <div class="popup__close">
+              <img src="/assets/icon/icon-close.svg" alt="icon close" />
+            </div>
+          </div>
+          <form action="#" class="form form__add-fill">
+            <div class="form__group">
+              <input type="file" id="myFile" name="filename" />
+            </div>
+            <div class="form__group">
+              <label for="title" class="form__label">Title</label>
+              <input
+                type="text"
+                class="form__input"
+                id="title"
+                placeholder="title"
+              />
+            </div>
+            <div class="form__group">
+              <label for="Description" class="form__label">Description</label>
+              <textarea
+                name="description"
+                id="description"
+                cols="30"
+                rows="5"
+                class="form__textarea"
+                placeholder="Description"
+              ></textarea>
+            </div>
+            <div class="form__group">
+              <button class="btn btn__primary">Upload</button>
+            </div>
+          </form>
+        </div>
       </div>
     </main>
   </body>

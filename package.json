@@ -8,8 +8,8 @@
     "start:dev": "nodemon dist/src/server.js",
     "start:prod": "NODE_ENV=production nodemon dist/src/server.js",
     "build": "rimraf dist && npx tsc",
-    "start:sass": "node-sass src/public/sass/main.scss src/public/assets/css/style.css -w",
-    "watch:parcel": "parcel ./dist/public/js/index.js --dist-dir ./client/dist",
+    "start:sass": "node-sass ./assets/sass/main.scss ./assets/css/style.css -w",
+    "watch:parcel": "parcel ./dist/src/public/js/index.js --dist-dir ./client/dist",
     "build:parcel": "parcel build ./src/public/js/index.js --dist-dir ./src/public/dist/index.js"
   },
   "keywords": [],
