@@ -1,0 +1,38 @@
+extends base
+
+block content
+    include _header
+    main.main
+        nav.sidebar
+            ul.side-nav
+                li.side-nav__item
+                    a.side-nav__link(href='#')
+                        img.side-nav__icon(src='/assets/icon/icon-paper-download.svg', alt='download file icon')
+                        span Download File
+                li.side-nav__item.side-nav__item--active
+                    a.side-nav__link(href='#')
+                        img.side-nav__icon(src='/assets/icon/icon-email.svg', alt='email icon')
+                        span Send Email
+                li.side-nav__item
+                    a.side-nav__link(href='#')
+                        img.side-nav__icon(src='/assets/icon/icon-settings.svg', alt='settings icon')
+                        span Settings
+        .content
+            form.form.form__email(action='#')
+                .form__group
+                    label.form__label(for='to') To
+                    input#to.form__input(type='text', placeholder='To')
+                .form__group
+                    label.form__label(for='title') From
+                    input#from.form__input(type='text', placeholder='From')
+                .form__group
+                    label.form__label(for='subject') Subject
+                    input#subject.form__input(type='text', placeholder='Subject')
+                .form__group
+                    label Attach file
+                    input#myFile(type='file', name='filename')
+                .form__group
+                    label.form__label(for='message') Message
+                    textarea#message.form__textarea(name='description', cols='30', rows='5', placeholder='Message')
+                .form__group
+                    button.btn.btn__primary Send

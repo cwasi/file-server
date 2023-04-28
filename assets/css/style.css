@@ -92,8 +92,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2.4rem; }
-  .form__add-fill {
+  .form__email, .form__add-fill {
     width: 100%; }
+  .form__email button {
+    align-self: flex-end;
+    width: 10rem; }
   .form__label {
     font-size: 1.6rem;
     font-weight: inherit; }
