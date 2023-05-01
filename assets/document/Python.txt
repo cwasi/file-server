@@ -1,0 +1,83 @@
+C:\Pycharm\FirstProject\venv\Scripts\python.exe "C:\Program Files\JetBrains\PyCharm Community Edition 2018.3.3\helpers\pydev\pydevconsole.py" --mode=client --port=7974
+import sys; print('Python %s on %s' % (sys.version, sys.platform))
+sys.path.extend(['C:\\Pycharm\\FirstProject', 'C:/Pycharm/FirstProject'])
+PyDev console: starting.
+Python 3.7.0 (v3.7.0:1bf9cc5093, Jun 27 2018, 04:06:47) [MSC v.1914 32 bit (Intel)] on win32
+
+print(myvar)
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+NameError: name 'myvar' is not defined
+myvar "name"
+  File "<input>", line 1
+    myvar "name"
+               ^
+SyntaxError: invalid syntax
+
+
+myvar = "name"
+print(myvar)
+name
+hash={"key":12,}
+hash={"key":12, "key":23,"key":56}
+print(hash)
+{'key': 56}
+
+hash={"key1":12, "key2":23,"key3":56}
+print(hash)
+{'key1': 12, 'key2': 23, 'key3': 56}
+hash.get("key1")
+12
+my_tuple=("you", 57, "here", 17)
+print(my_tuple)
+('you', 57, 'here', 17)
+def my_cool():
+    a= 1 
+    b="hello"
+    c="99"
+    return a, b , c
+my_cool()
+print(my_cool())
+(1, 'hello', '99')
+def my_new():
+    
+    pass
+def my_new(me):
+    return me
+print(me())
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+NameError: name 'me' is not defined
+print(my_new)
+<function my_new at 0x037B6468>
+print(my_new())
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+TypeError: my_new() missing 1 required positional argument: 'me'
+print(my_new(me))
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+NameError: name 'me' is not defined
+print(my_new("football"))
+football
+print(my_new(me))
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+NameError: name 'me' is not defined
+my_dict ={"key1":my_new}
+print(my_dict)
+{'key1': <function my_new at 0x037B6468>}
+print(my_dict.get(key1))
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+NameError: name 'key1' is not defined
+print(my_dict.get("key1"))
+<function my_new at 0x037B6468>
+print(my_dict.get(my_new))
+None
+print(my_dict.get(my_new(me)))
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+NameError: name 'me' is not defined
+print(my_dict.get("key1")("me"))
+me

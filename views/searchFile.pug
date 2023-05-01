@@ -40,28 +40,24 @@ block content
                     button.btn.btn__primary.btn__search.btn__search search
             .content__result__container
                 p
-                    span=files.length
+                    span= files.length
                     |  Documents
                 -if (user.role==='admin')    
                     .add-file-btn--container 
                         button.btn.btn__primary Add a file
 
             table.table
-
-                - if (user.role === 'admin')
-                    thead                    
+                tbody
+                    - if (user.role === 'admin')
                         tr.table__row
                             th.table__head Document Name
                             th.table__head Number of emails sent
                             th.table__head Number of downloads 
-                    tbody 
                         +tableRowAdmin('wedding Cards', 6, 10)
-                - else
-                    thead 
+                    - else
                         tr.table__row
                             th.table__head Document Name
                             th.table__head   
-                    tbody 
                         each file in files
                             +tableRowUser(`${file.title}`)
 

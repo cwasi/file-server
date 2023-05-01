@@ -1,10 +1,12 @@
 'use strict';
 import { Model } from 'sequelize';
+import slugify from 'slugify';
 
 interface FileAttributes {
   id: string;
   title: string;
   description: string;
+  slug: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -18,11 +20,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: string;
     title!: string;
     description!: string;
+    slug!: string;
 
     static associate(models: any) {
       // define association here
       File.hasMany(models.Download);
-      models.Download.belongsTo(File)
+      models.Download.belongsTo(File);
     }
   }
   File.init(
@@ -51,6 +54,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
           },
         },
       },
+      slug: DataTypes.STRING,
     },
     {
       timestamps: false,
@@ -58,5 +62,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
       modelName: 'File',
     }
   );
+
+  File.beforeSave(async (File: any) => {
+    File.slug = slugify(File.title.split('.')[0], { lower: true });
+  });
   return File;
 };

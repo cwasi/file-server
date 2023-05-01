@@ -1,4 +1,5 @@
 import multer from 'multer';
+import { Op } from 'sequelize';
 import catchAsync from '../utils/catchAsync';
 import db from './../models';
 import AppError from './../utils/appError';
@@ -10,6 +11,9 @@ const Email = db.Email;
 const multerStorage = multer.diskStorage({
   destination: (req: any, file: any, cb: any) => {
     cb(null, './assets/document');
+  },
+  filename: (req: any, file: any, cb: any) => {
+    cb(null, `${file.originalname}`);
   },
 });
 
@@ -23,7 +27,7 @@ export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   const duplicatFileName = await File.findOne({
-    where: { title: req.body.title },
+    where: { title: req.file.originalname },
   });
 
   if (duplicatFileName) {
@@ -33,7 +37,7 @@ export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   const fileObj = {
-    title: req.body.title,
+    title: req.file.originalname,
     description: req.body.description,
   };
 
@@ -45,7 +49,6 @@ export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
   });
 });
 
-
 export const getAllfiles = async (req: any, res: any, next: any) => {
   const files = await File.findAll();
 
@@ -54,6 +57,22 @@ export const getAllfiles = async (req: any, res: any, next: any) => {
     data: { files },
   });
 };
+
+export const getFile = catchAsync(async (req: any, res: any, next: any) => {
+  const doc = req.params.slug;
+  const file = await File.findOne({
+    where: { slug: { [Op.startsWith]: doc } },
+  });
+
+  if (!file) {
+    return next(new AppError('No document found with that name', 404));
+  }
+  
+  res.status(200).json({
+    status: 'success',
+    data: { file },
+  });
+});
 
 export const numOfdownloadAndEmails = catchAsync(
   async (req: any, res: any, next: any) => {

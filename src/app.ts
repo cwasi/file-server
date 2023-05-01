@@ -1,8 +1,12 @@
+// system Modules
 import path from 'path';
 
+// Third party Modules
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
+import cors from 'cors';
+
 // Developer Modules
 import userRouter from './routes/userRoutes';
 import fileRouter from './routes/fileRouter';
@@ -18,9 +22,11 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join('views'));
 
+app.use(cors())
+app.options('*', cors());
+
 // Serving static files
-app.use(express.static(path.join(__dirname, '/public')));
-app.use(express.static(path.join('client')));
+app.use(express.static(path.join('bin')));
 app.use(express.static(path.join('assets')));
 
 // Body passer, reading data from body
@@ -32,12 +38,12 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-console.log('📍📍📍📍📍📍', process.env.NODE_ENV);
+console.log('🚀🚀🚀🚀', process.env.NODE_ENV);
 
 // Test middleware
 app.use((req, res, next) => {
   console.log('MIDDLEWARE');
-  console.log(req.cookies);
+  console.log('🦄🦄🦄🦄🦄', req.cookies);
   next();
 });
 

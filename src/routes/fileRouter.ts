@@ -5,6 +5,7 @@ import {
   numOfdownloadAndEmails,
   saveFile,
   uploadFile,
+  getFile,
 } from './../controllers/fileController';
 import { protect, restictTo } from './../controllers/authController';
 import downloadRouter from './../routes/downloadRouter';
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.use(protect);
 router.route('/').get(getAllfiles);
+router.route('/:slug').get(getFile);
 router.use('/download/:fileId', downloadRouter);
 
 router.use(restictTo('admin'));

@@ -1,7 +1,7 @@
-import { signin, signOut } from './signin.js';
+import { signin, signOut} from './action.js';
 
-const signinForm = document.querySelector('.signin__form')!;
-const signOutBtn = document.querySelector('.sign-out');
+const signinForm = document.querySelector('.signin__form')! as HTMLFormElement;
+const signOutBtn = document.querySelector('.sign-out')! as HTMLButtonElement;
 
 if (signinForm) {
   signinForm.addEventListener('submit', (e) => {

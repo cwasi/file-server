@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-
 import jwt from 'jsonwebtoken';
 
 // FUNCTIONS
@@ -49,7 +48,7 @@ export const createAndSendToken = (user: any, statusCode: number, res: any) => {
     expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
   };
-  
+
   // secure cookie http in production
   if (process.env.NODE_ENV === 'production') {
     cookieOption.secure = true;
