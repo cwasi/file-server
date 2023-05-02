@@ -558,12 +558,40 @@ function hmrAccept(bundle, id) {
 
 },{}],"iyn2h":[function(require,module,exports) {
 "use strict";
+var __awaiter = this && this.__awaiter || function(thisArg, _arguments, P, generator) {
+    function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve) {
+            resolve(value);
+        });
+    }
+    return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) {
+            try {
+                step(generator.next(value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+        function rejected(value) {
+            try {
+                step(generator["throw"](value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+        function step(result) {
+            result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const action_js_1 = require("4153f3de4112d64f");
 const signinForm = document.querySelector(".signin__form");
 const signOutBtn = document.querySelector(".sign-out");
+const searchForm = document.querySelector(".search__form");
 if (signinForm) signinForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const emailInput = document.getElementById("email");
@@ -572,6 +600,38 @@ if (signinForm) signinForm.addEventListener("submit", (e)=>{
     const password = passwordInput.value;
     (0, action_js_1.signin)(email, password);
 });
+if (signOutBtn) signOutBtn.addEventListener("click", action_js_1.signOut);
+if (searchForm) searchForm.addEventListener("submit", (e)=>__awaiter(void 0, void 0, void 0, function*() {
+        e.preventDefault();
+        const searchInput = document.getElementById("search__input");
+        const searchValue = searchInput.value.trim();
+        const doc = yield (0, action_js_1.searchFile)(searchValue);
+        renderFiles(doc);
+    }));
+function renderFiles(doc) {
+    const files = doc.data.data.files;
+    const numOfDoc = document.querySelector(".num_of_doc");
+    const tbody = document.querySelector("tbody");
+    tbody.innerHTML = "";
+    numOfDoc.textContent = files.length;
+    files.forEach((el)=>{
+        const html = `
+    <tr class="table__row">
+          <td class="table__data">${el.title}</td>
+          <td class="table__data">
+            <button class="download-btn">
+            <a href='/document/${el.title}' download>
+              <img
+                src="/icon/icon-paper-download.svg"
+                alt="download file icon"
+              />
+              </a>
+            </button>
+            </td>
+        </tr>`;
+        tbody.insertAdjacentHTML("beforeend", html);
+    });
+}
 if (signOutBtn) signOutBtn.addEventListener("click", action_js_1.signOut);
 
 },{"4153f3de4112d64f":"41eum"}],"41eum":[function(require,module,exports) {
@@ -611,7 +671,7 @@ var __importDefault = this && this.__importDefault || function(mod) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.signOut = exports.signin = void 0;
+exports.searchFile = exports.signOut = exports.signin = void 0;
 const axios_1 = __importDefault(require("ffb046113c73d2b0"));
 const alerts_js_1 = require("cb9ef61cf25b3440");
 const signin = (email, password)=>__awaiter(void 0, void 0, void 0, function*() {
@@ -648,6 +708,18 @@ const signOut = ()=>__awaiter(void 0, void 0, void 0, function*() {
         }
     });
 exports.signOut = signOut;
+const searchFile = (value)=>__awaiter(void 0, void 0, void 0, function*() {
+        try {
+            const res = yield (0, axios_1.default)({
+                method: "GET",
+                url: `http://127.0.0.1:5050/api/file/${value}`
+            });
+            if (res) return res;
+        } catch (err) {
+            console.log(err);
+        }
+    });
+exports.searchFile = searchFile;
 
 },{"ffb046113c73d2b0":"jo6P5","cb9ef61cf25b3440":"bbKxJ"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

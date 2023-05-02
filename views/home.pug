@@ -40,7 +40,7 @@ block content
                     button.btn.btn__primary.btn__search.btn__search search
             .content__result__container
                 p
-                    span=files.length
+                    span.num_of_doc #{files.length}
                     |  Documents
                 -if (user.role==='admin')    
                     .add-file-btn--container 

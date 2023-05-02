@@ -60,17 +60,17 @@ export const getAllfiles = async (req: any, res: any, next: any) => {
 
 export const getFile = catchAsync(async (req: any, res: any, next: any) => {
   const doc = req.params.slug;
-  const file = await File.findOne({
+  const files = await File.findAll({
     where: { slug: { [Op.startsWith]: doc } },
   });
 
-  if (!file) {
+  if (!files) {
     return next(new AppError('No document found with that name', 404));
   }
   
   res.status(200).json({
     status: 'success',
-    data: { file },
+    data: { files },
   });
 });
 

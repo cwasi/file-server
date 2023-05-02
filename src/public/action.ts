@@ -35,3 +35,18 @@ export const signOut = async () => {
     showAlert('error', 'Error logging out! Try again.');
   }
 };
+
+export const searchFile = async (value: string) => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: `http://127.0.0.1:5050/api/file/${value}`,
+    });
+
+    if (res) {
+      return res;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
