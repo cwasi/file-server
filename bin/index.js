@@ -592,6 +592,8 @@ const action_js_1 = require("4153f3de4112d64f");
 const signinForm = document.querySelector(".signin__form");
 const signOutBtn = document.querySelector(".sign-out");
 const searchForm = document.querySelector(".search__form");
+const inputs = document.querySelectorAll(".form__otp__input");
+const btnVerify = document.querySelector(".btn__verify");
 if (signinForm) signinForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const emailInput = document.getElementById("email");
@@ -608,6 +610,58 @@ if (searchForm) searchForm.addEventListener("submit", (e)=>__awaiter(void 0, voi
         const doc = yield (0, action_js_1.searchFile)(searchValue);
         renderFiles(doc);
     }));
+if (inputs && btnVerify) {
+    optFormActions(inputs);
+    btnVerify.addEventListener("click", (e)=>{
+        e.preventDefault();
+        let verificationCode = [];
+        inputs.forEach((el)=>{
+            verificationCode.push(el.value);
+        });
+        verificationCode = verificationCode.join("");
+        console.log(verificationCode);
+    });
+}
+function optFormActions(inputs) {
+    inputs.forEach((input, index1)=>{
+        input.addEventListener("keyup", (e)=>{
+            // This code gets the current input element and stores it in the currentInput variable
+            // This code gets the next sibling element of the current input element and stores it in the nextInput variable
+            // This code gets the previous sibling element of the current input element and stores it in the prevInput variable
+            const currentInput = input, nextInput = input.nextElementSibling, prevInput = input.previousElementSibling;
+            // if the value has more than one character then clear it
+            if (currentInput.value.length > 1) {
+                currentInput.value = "";
+                return;
+            }
+            // if the next input is disabled and the current value is not empty
+            //  enable the next input and focus on it
+            if (nextInput && nextInput.hasAttribute("disabled") && currentInput.value !== "") {
+                nextInput.removeAttribute("disabled");
+                nextInput.focus();
+            }
+            // if the backspace key is pressed
+            if (e.key === "Backspace") // iterate over all inputs again
+            inputs.forEach((input, index2)=>{
+                // if the index1 of the current input is less than or equal to the index2 of the input in the outer loop
+                // and the previous element exists, set the disabled attribute on the input and focus on the previous element
+                if (index1 <= index2 && prevInput) {
+                    input.setAttribute("disabled", true);
+                    input.value = "";
+                    prevInput.focus();
+                }
+            });
+            //if the fourth input( which index number is 3) is not empty and has not disable attribute then
+            //add active class if not then remove the active class.
+            if (!inputs[5].disabled && inputs[5].value !== "") {
+                btnVerify.classList.add("active");
+                return;
+            }
+            btnVerify.classList.remove("active");
+        });
+    });
+    window.addEventListener("load", ()=>inputs[0].focus());
+}
 function renderFiles(doc) {
     const files = doc.data.data.files;
     const numOfDoc = document.querySelector(".num_of_doc");
@@ -632,7 +686,6 @@ function renderFiles(doc) {
         tbody.insertAdjacentHTML("beforeend", html);
     });
 }
-if (signOutBtn) signOutBtn.addEventListener("click", action_js_1.signOut);
 
 },{"4153f3de4112d64f":"41eum"}],"41eum":[function(require,module,exports) {
 "use strict";

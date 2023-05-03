@@ -26,9 +26,10 @@
   &__input {
     padding: 1.2rem 0 1.2rem 1.6rem;
     border-radius: 0.5rem;
-    border: 0.1rem solid $text-black-50;
+    // border: 0.1rem solid $text-black-50;
     font-size: 1.6rem;
     font-family: inherit;
+    border: 0.1rem solid $color-primary-light-50;
     color: $text-black-75;
     width: 100%;
     display: block;
@@ -36,7 +37,7 @@
     &:hover,
     &:active,
     &:focus {
-      border: 0.1rem solid $color-primary !important;
+      border-color: $color-primary-light-50 !important;
     }
 
     &::-webkit-input-placeholder {

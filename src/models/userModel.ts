@@ -11,6 +11,7 @@ interface UserAttributes {
   email: string;
   password: string;
   verifyCode: string;
+  isVerified: boolean;
   passwordConfirm: string;
   passwordChangedAt: Date;
   passwordResetToken: String;
@@ -33,12 +34,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
     password!: string;
     passwordConfirm!: string;
     verifyCode!: string;
+    isVerified!: boolean;
     passwordChangedAt!: Date;
     passwordResetToken!: String;
     passwordResetExpires!: Date;
 
     static associate(models: any) {
       // define association here
+      User.hasOne(models.Token)
+      models.Token.belongsTo(User)
     }
   }
   User.init(
@@ -97,6 +101,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
           },
         },
       },
+      isVerified: { type: DataTypes.BOOLEAN, defaultValue: false },
       verifyCode: DataTypes.STRING,
       passwordChangedAt: DataTypes.DATE,
       passwordResetToken: DataTypes.STRING,

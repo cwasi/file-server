@@ -1,8 +1,4 @@
-// program to generate random strings
-
-// declare all characters
-const characters =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const characters = '0123456789';
 
 const verify = (length: number) => {
   let result = ' ';

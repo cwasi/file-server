@@ -6,7 +6,7 @@ import {
   getSigninPage,
   getResetPasswordPage,
   getSendResetPasswordLinkPage,
-  searchFilePage,
+  verifyAccount
 } from './../controllers/viewController';
 import { protect } from '../controllers/authController';
 
@@ -18,7 +18,7 @@ router.get('/signin', getSigninPage);
 router.get('/signup', getSignupPage);
 router.get('/resetPassword', getResetPasswordPage);
 router.get('/sendResetPasswordLink', getSendResetPasswordLinkPage);
+router.get('/verify-account',verifyAccount);
 router.get('/home',protect, getHomePage);
-router.get('/search-file',protect,searchFilePage);
 
 export default router;

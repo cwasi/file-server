@@ -3,6 +3,8 @@ import { signin, signOut, searchFile } from './action.js';
 const signinForm = document.querySelector('.signin__form')! as HTMLFormElement;
 const signOutBtn = document.querySelector('.sign-out')! as HTMLButtonElement;
 const searchForm = document.querySelector('.search__form')!;
+const inputs = document.querySelectorAll('.form__otp__input')!;
+const btnVerify = document.querySelector('.btn__verify')!;
 
 if (signinForm) {
   signinForm.addEventListener('submit', (e) => {
@@ -32,13 +34,81 @@ if (searchForm) {
   });
 }
 
+if (inputs && btnVerify) {
+
+  optFormActions(inputs);
+
+  btnVerify.addEventListener('click', (e) => {
+    e.preventDefault();
+    let verificationCode:any = [];
+    inputs.forEach((el: any) => {
+      verificationCode.push(el.value);
+    });
+    verificationCode = verificationCode.join('')
+  console.log(verificationCode)
+  });
+
+}
+
+function optFormActions(inputs: any) {
+  inputs.forEach((input: any, index1: any) => {
+    input.addEventListener('keyup', (e: any) => {
+      // This code gets the current input element and stores it in the currentInput variable
+      // This code gets the next sibling element of the current input element and stores it in the nextInput variable
+      // This code gets the previous sibling element of the current input element and stores it in the prevInput variable
+      const currentInput = input,
+        nextInput = input.nextElementSibling,
+        prevInput = input.previousElementSibling;
+
+      // if the value has more than one character then clear it
+      if (currentInput.value.length > 1) {
+        currentInput.value = '';
+        return;
+      }
+      // if the next input is disabled and the current value is not empty
+      //  enable the next input and focus on it
+      if (
+        nextInput &&
+        nextInput.hasAttribute('disabled') &&
+        currentInput.value !== ''
+      ) {
+        nextInput.removeAttribute('disabled');
+        nextInput.focus();
+      }
+
+      // if the backspace key is pressed
+      if (e.key === 'Backspace') {
+        // iterate over all inputs again
+        inputs.forEach((input: any, index2: any) => {
+          // if the index1 of the current input is less than or equal to the index2 of the input in the outer loop
+          // and the previous element exists, set the disabled attribute on the input and focus on the previous element
+          if (index1 <= index2 && prevInput) {
+            input.setAttribute('disabled', true);
+            input.value = '';
+            prevInput.focus();
+          }
+        });
+      }
+      //if the fourth input( which index number is 3) is not empty and has not disable attribute then
+      //add active class if not then remove the active class.
+      if (!inputs[5].disabled && inputs[5].value !== '') {
+        btnVerify.classList.add('active');
+        return;
+      }
+      btnVerify.classList.remove('active');
+    });
+  });
+
+  window.addEventListener('load', () => inputs[0].focus());
+}
+
 function renderFiles(doc: any) {
   const files = doc.data.data.files;
   const numOfDoc = document.querySelector('.num_of_doc')!;
   const tbody = document.querySelector('tbody')!;
   tbody.innerHTML = '';
   numOfDoc.textContent = files.length;
-  
+
   files.forEach((el: any) => {
     const html: any = `
     <tr class="table__row">
@@ -57,4 +127,3 @@ function renderFiles(doc: any) {
     tbody.insertAdjacentHTML('beforeend', html);
   });
 }
-if (signOutBtn) signOutBtn.addEventListener('click', signOut);

@@ -1,0 +1,19 @@
+extends base
+
+block content
+    main.otp
+        .otp__container
+            header.otp__header
+                i.bx.bxs-check-shield
+            h4 Enter OTP Code
+            p=message
+            form.form__otp(action='#')
+                .input-field
+                    input.form__otp__input(type='number')
+                    input.form__otp__input(type='number', disabled='')
+                    input.form__otp__input(type='number', disabled='')
+                    input.form__otp__input(type='number', disabled='')
+                    input.form__otp__input(type='number', disabled='')
+                    input.form__otp__input(type='number', disabled='')
+                button.btn__verify 
+                    p Verify OTP

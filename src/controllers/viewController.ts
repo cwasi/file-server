@@ -14,20 +14,15 @@ export const getHomePage = catchAsync(async (req: any, res: any, next: any) => {
     files: getAllFiles,
   });
 });
-export const searchFilePage = catchAsync(
-  async (req: any, res: any, next: any) => {
-    const val = req.params.slug;
 
-    const doc: any = await db.File.findOne({
-      where: { slug: { [Op.startsWith]: val } },
-    });
-    res.status(200).render('searchFile', {
-      title: 'Search',
-      files: doc,
-    });
-  }
-);
 
+export const verifyAccount = (req: any, res: any, next: any) => {
+
+  res.status(200).render('verifyAccount', {
+    title: 'Verify Your Account',
+    message: "Please check your email for your verification code"
+  });
+};
 export const getSignupPage = (req: any, res: any, next: any) => {
   res.status(200).render('signup', {
     title: 'Sign up',
