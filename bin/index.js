@@ -591,6 +591,7 @@ Object.defineProperty(exports, "__esModule", {
 const action_js_1 = require("4153f3de4112d64f");
 const signupForm = document.querySelector(".signup__form");
 const signinForm = document.querySelector(".signin__form");
+const forgorPasswordForm = document.querySelector(".form__forgot-password");
 const signOutBtn = document.querySelector(".sign-out");
 const searchForm = document.querySelector(".search__form");
 const inputs = document.querySelectorAll(".form__otp__input");
@@ -641,6 +642,12 @@ if (messageEmail) {
     messageEmail.textContent = localStorage.getItem("email");
     localStorage.removeItem("email");
 }
+if (forgorPasswordForm) forgorPasswordForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const emailInput = document.getElementById("email");
+    const email = emailInput.value;
+    (0, action_js_1.forgotPassword)(email);
+});
 function optFormActions(inputs) {
     inputs.forEach((input, index1)=>{
         input.addEventListener("keyup", (e)=>{
@@ -743,7 +750,7 @@ var __importDefault = this && this.__importDefault || function(mod) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.signup = exports.searchFile = exports.signOut = exports.signin = void 0;
+exports.forgotPassword = exports.signup = exports.searchFile = exports.signOut = exports.signin = void 0;
 const axios_1 = __importDefault(require("ffb046113c73d2b0"));
 const alerts_js_1 = require("cb9ef61cf25b3440");
 const signin = (email, password)=>__awaiter(void 0, void 0, void 0, function*() {
@@ -788,7 +795,7 @@ const searchFile = (value)=>__awaiter(void 0, void 0, void 0, function*() {
             });
             if (res) return res;
         } catch (err) {
-            console.log(err);
+            (0, alerts_js_1.showAlert)("error", "File does not exist");
         }
     });
 exports.searchFile = searchFile;
@@ -816,6 +823,26 @@ const signup = (name, email, password, confirmPassword)=>__awaiter(void 0, void 
         }
     });
 exports.signup = signup;
+const forgotPassword = (email)=>__awaiter(void 0, void 0, void 0, function*() {
+        try {
+            const res = yield (0, axios_1.default)({
+                method: "POST",
+                url: "http://127.0.0.1:5050/auth/forgotPassword",
+                data: {
+                    email
+                }
+            });
+            if (res.data.status === "success") {
+                (0, alerts_js_1.showAlert)("success", "Link sent successfully");
+                window.setTimeout(()=>{
+                    location.assign("/");
+                }, 1500);
+            }
+        } catch (err) {
+            (0, alerts_js_1.showAlert)("error", "User does not exist.");
+        }
+    });
+exports.forgotPassword = forgotPassword;
 
 },{"ffb046113c73d2b0":"jo6P5","cb9ef61cf25b3440":"bbKxJ"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

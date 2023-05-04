@@ -47,7 +47,7 @@ export const searchFile = async (value: string) => {
       return res;
     }
   } catch (err) {
-    console.log(err);
+    showAlert('error', 'File does not exist');
   }
 };
 
@@ -80,5 +80,27 @@ export const signup = async (
     }
   } catch (err: any) {
     showAlert('error', err.response.data.message);
+  }
+};
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: 'http://127.0.0.1:5050/auth/forgotPassword',
+      data: {
+        email,
+      },
+    });
+
+    if (res.data.status === 'success') {
+      showAlert('success', 'Link sent successfully');
+
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
+    }
+  } catch (err: any) {
+    showAlert('error', 'User does not exist.');
   }
 };

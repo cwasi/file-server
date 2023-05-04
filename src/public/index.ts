@@ -1,7 +1,16 @@
-import { signin, signOut, searchFile, signup } from './action.js';
+import {
+  signin,
+  signOut,
+  searchFile,
+  signup,
+  forgotPassword,
+} from './action.js';
 
 const signupForm = document.querySelector('.signup__form')! as HTMLFormElement;
 const signinForm = document.querySelector('.signin__form')! as HTMLFormElement;
+const forgorPasswordForm = document.querySelector(
+  '.form__forgot-password'
+)! as HTMLFormElement;
 const signOutBtn = document.querySelector('.sign-out')! as HTMLButtonElement;
 const searchForm = document.querySelector('.search__form')!;
 const inputs = document.querySelectorAll('.form__otp__input')!;
@@ -74,8 +83,18 @@ if (inputs && btnVerify) {
 
 if (messageEmail) {
   messageEmail.textContent = localStorage.getItem('email');
-  localStorage.removeItem('email')
+  localStorage.removeItem('email');
 }
+
+if (forgorPasswordForm) {
+  forgorPasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const emailInput = document.getElementById('email')! as HTMLInputElement;
+    const email = emailInput.value;
+    forgotPassword(email)
+  });
+}
+
 function optFormActions(inputs: any) {
   inputs.forEach((input: any, index1: any) => {
     input.addEventListener('keyup', (e: any) => {

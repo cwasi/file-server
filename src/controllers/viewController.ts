@@ -49,3 +49,8 @@ export const getResetPasswordPage = (req: any, res: any, next: any) => {
     title: 'Reset password',
   });
 };
+export const getforgotPasswordPage = (req: any, res: any, next: any) => {
+  res.status(200).render('forgotPassword', {
+    title: 'Forgot password',
+  });
+};
