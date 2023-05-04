@@ -11,7 +11,7 @@ export const signin = async (email: string, password: string) => {
         password,
       },
     });
-  
+
     if (res.data.status === 'success') {
       showAlert('success', 'Signed in successfully!');
       window.setTimeout(() => {
@@ -48,5 +48,37 @@ export const searchFile = async (value: string) => {
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const signup = async (
+  name: string,
+  email: string,
+  password: string,
+  confirmPassword: string
+) => {
+  try {
+    if (!(password == confirmPassword)) {
+      return showAlert('error', 'Passwords are not the same');
+    }
+    const res = await axios({
+      method: 'POST',
+      url: 'http://127.0.0.1:5050/auth/signup',
+      data: {
+        name,
+        email,
+        password,
+        passwordConfirm: confirmPassword,
+      },
+    });
+
+    if (res.data.status === 'success') {
+      localStorage.setItem('email', `${email}`);
+      window.setTimeout(() => {
+        location.assign('/sendVerificationLink');
+      }, 1500);
+    }
+  } catch (err: any) {
+    showAlert('error', err.response.data.message);
   }
 };

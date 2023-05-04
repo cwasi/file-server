@@ -11,20 +11,20 @@ block content
                             img(src='/file-server-logo.png', alt='file server log')
                     //- p.text-16 Please enter your detials.
 
-                form.form(action='#', method='post')
+                form.form.signup__form(action='#')
                     .form__group
                         label.form__label(for='name') Name
-                        input.form__input(type='text', placeholder='Name')
+                        input.form__input#name(type='text', placeholder='Name')
                     .form__group
                         label.form__label(for='email') Email
-                        input.form__input(type='text', placeholder='Email')
+                        input.form__input#email(type='text', placeholder='Email')
                     .form__group
                         label.form__label(for='password') Password
-                        input.form__input(type='password', placeholder='Password')
+                        input.form__input#password(type='password', placeholder='Password')
                     .form__group
                         label.form__label(for='password')
                             | Confirm Password
-                        input.form__input(type='password', placeholder='Confirm Password')
+                        input.form__input#confirm_password(type='password', placeholder='Confirm Password')
                     .form__group
                         button.btn.btn__primary
                             .icon

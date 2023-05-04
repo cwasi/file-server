@@ -1,10 +1,12 @@
-import { signin, signOut, searchFile } from './action.js';
+import { signin, signOut, searchFile, signup } from './action.js';
 
+const signupForm = document.querySelector('.signup__form')! as HTMLFormElement;
 const signinForm = document.querySelector('.signin__form')! as HTMLFormElement;
 const signOutBtn = document.querySelector('.sign-out')! as HTMLButtonElement;
 const searchForm = document.querySelector('.search__form')!;
 const inputs = document.querySelectorAll('.form__otp__input')!;
 const btnVerify = document.querySelector('.btn__verify')!;
+const messageEmail = document.querySelector('.message__email')!;
 
 if (signinForm) {
   signinForm.addEventListener('submit', (e) => {
@@ -16,6 +18,28 @@ if (signinForm) {
     )! as HTMLInputElement;
     const password = passwordInput.value;
     signin(email, password);
+  });
+}
+
+if (signupForm) {
+  signupForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('signup Form');
+    const nameInput = document.getElementById('name')! as HTMLInputElement;
+    const emailInput = document.getElementById('email')! as HTMLInputElement;
+    const passwordInput = document.getElementById(
+      'password'
+    )! as HTMLInputElement;
+    const confirmPasswordInput = document.getElementById(
+      'confirm_password'
+    )! as HTMLInputElement;
+
+    const name = nameInput.value;
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    signup(name, email, password, confirmPassword);
   });
 }
 
@@ -35,21 +59,23 @@ if (searchForm) {
 }
 
 if (inputs && btnVerify) {
-
   optFormActions(inputs);
 
   btnVerify.addEventListener('click', (e) => {
     e.preventDefault();
-    let verificationCode:any = [];
+    let verificationCode: any = [];
     inputs.forEach((el: any) => {
       verificationCode.push(el.value);
     });
-    verificationCode = verificationCode.join('')
-  console.log(verificationCode)
+    verificationCode = verificationCode.join('');
+    console.log(verificationCode);
   });
-
 }
 
+if (messageEmail) {
+  messageEmail.textContent = localStorage.getItem('email');
+  localStorage.removeItem('email')
+}
 function optFormActions(inputs: any) {
   inputs.forEach((input: any, index1: any) => {
     input.addEventListener('keyup', (e: any) => {

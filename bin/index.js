@@ -589,11 +589,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 const action_js_1 = require("4153f3de4112d64f");
+const signupForm = document.querySelector(".signup__form");
 const signinForm = document.querySelector(".signin__form");
 const signOutBtn = document.querySelector(".sign-out");
 const searchForm = document.querySelector(".search__form");
 const inputs = document.querySelectorAll(".form__otp__input");
 const btnVerify = document.querySelector(".btn__verify");
+const messageEmail = document.querySelector(".message__email");
 if (signinForm) signinForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const emailInput = document.getElementById("email");
@@ -601,6 +603,19 @@ if (signinForm) signinForm.addEventListener("submit", (e)=>{
     const passwordInput = document.getElementById("password");
     const password = passwordInput.value;
     (0, action_js_1.signin)(email, password);
+});
+if (signupForm) signupForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    console.log("signup Form");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm_password");
+    const name = nameInput.value;
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+    (0, action_js_1.signup)(name, email, password, confirmPassword);
 });
 if (signOutBtn) signOutBtn.addEventListener("click", action_js_1.signOut);
 if (searchForm) searchForm.addEventListener("submit", (e)=>__awaiter(void 0, void 0, void 0, function*() {
@@ -621,6 +636,10 @@ if (inputs && btnVerify) {
         verificationCode = verificationCode.join("");
         console.log(verificationCode);
     });
+}
+if (messageEmail) {
+    messageEmail.textContent = localStorage.getItem("email");
+    localStorage.removeItem("email");
 }
 function optFormActions(inputs) {
     inputs.forEach((input, index1)=>{
@@ -724,7 +743,7 @@ var __importDefault = this && this.__importDefault || function(mod) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.searchFile = exports.signOut = exports.signin = void 0;
+exports.signup = exports.searchFile = exports.signOut = exports.signin = void 0;
 const axios_1 = __importDefault(require("ffb046113c73d2b0"));
 const alerts_js_1 = require("cb9ef61cf25b3440");
 const signin = (email, password)=>__awaiter(void 0, void 0, void 0, function*() {
@@ -773,6 +792,30 @@ const searchFile = (value)=>__awaiter(void 0, void 0, void 0, function*() {
         }
     });
 exports.searchFile = searchFile;
+const signup = (name, email, password, confirmPassword)=>__awaiter(void 0, void 0, void 0, function*() {
+        try {
+            if (!(password == confirmPassword)) return (0, alerts_js_1.showAlert)("error", "Passwords are not the same");
+            const res = yield (0, axios_1.default)({
+                method: "POST",
+                url: "http://127.0.0.1:5050/auth/signup",
+                data: {
+                    name,
+                    email,
+                    password,
+                    passwordConfirm: confirmPassword
+                }
+            });
+            if (res.data.status === "success") {
+                localStorage.setItem("email", `${email}`);
+                window.setTimeout(()=>{
+                    location.assign("/sendVerificationLink");
+                }, 1500);
+            }
+        } catch (err) {
+            (0, alerts_js_1.showAlert)("error", err.response.data.message);
+        }
+    });
+exports.signup = signup;
 
 },{"ffb046113c73d2b0":"jo6P5","cb9ef61cf25b3440":"bbKxJ"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

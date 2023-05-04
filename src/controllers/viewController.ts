@@ -39,6 +39,11 @@ export const getSendResetPasswordLinkPage = (req: any, res: any, next: any) => {
     title: 'Send reset password link',
   });
 };
+export const getSendVerificationPage = (req: any, res: any, next: any) => {
+  res.status(200).render('sendVerificationLink', {
+    title: 'Send verification link',
+  });
+};
 export const getResetPasswordPage = (req: any, res: any, next: any) => {
   res.status(200).render('resetPassword', {
     title: 'Reset password',
