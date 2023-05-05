@@ -276,8 +276,10 @@ a {
   padding: 0.1rem;
   border: none;
   outline: none;
-  border-radius: 50rem;
   background-color: transparent; }
+
+.download-btn img {
+  display: flex; }
 
 .alert {
   position: fixed;

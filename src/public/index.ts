@@ -4,6 +4,7 @@ import {
   searchFile,
   signup,
   forgotPassword,
+  downloadFile,
 } from './action.js';
 
 const signupForm = document.querySelector('.signup__form')! as HTMLFormElement;
@@ -81,6 +82,16 @@ if (inputs && btnVerify) {
   });
 }
 
+// if (downloadTable) {
+//   downloadTable.addEventListener('click', (e) => {
+//     e.preventDefault();
+//     const el: any = e.target;
+//     const parentEl = el.parentNode;
+//     const filePath = parentEl.getAttribute('data-file');
+//     downloadFile(filePath)
+//   });
+// }
+
 if (messageEmail) {
   messageEmail.textContent = localStorage.getItem('email');
   localStorage.removeItem('email');
@@ -91,7 +102,7 @@ if (forgorPasswordForm) {
     e.preventDefault();
     const emailInput = document.getElementById('email')! as HTMLInputElement;
     const email = emailInput.value;
-    forgotPassword(email)
+    forgotPassword(email);
   });
 }
 
@@ -159,14 +170,12 @@ function renderFiles(doc: any) {
     <tr class="table__row">
           <td class="table__data">${el.title}</td>
           <td class="table__data">
-            <button class="download-btn">
-            <a href='/document/${el.title}' download>
-              <img
-                src="/icon/icon-paper-download.svg"
-                alt="download file icon"
-              />
-              </a>
-            </button>
+            <a href="/api/file/download/${el.title}">
+                <img
+                  src="/icon/icon-paper-download.svg"
+                  alt="download file icon"
+                />
+            </a>
             </td>
         </tr>`;
     tbody.insertAdjacentHTML('beforeend', html);

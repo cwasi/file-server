@@ -13,9 +13,9 @@ import downloadRouter from './../routes/downloadRouter';
 const router = express.Router();
 
 router.use(protect);
+router.use('/download/:filetitle', downloadRouter);
 router.route('/').get(getAllfiles);
 router.route('/:slug').get(getFile);
-router.use('/download/:fileId', downloadRouter);
 
 router.use(restictTo('admin'));
 router

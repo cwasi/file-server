@@ -24,8 +24,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
       // define association here
+      // Download
       File.hasMany(models.Download);
       models.Download.belongsTo(File);
+      // Emails
+      File.hasMany(models.Email);
+      models.Email.belongsTo(File);
     }
   }
   File.init(

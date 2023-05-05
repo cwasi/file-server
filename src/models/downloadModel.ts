@@ -23,8 +23,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
       // define association here
-      Download.hasMany(models.Email);
-      models.Email.belongsTo(Download);
+   
     }
   }
   Download.init(

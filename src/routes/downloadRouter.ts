@@ -12,7 +12,7 @@ const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
-  .post(downloadFile)
+  .get(downloadFile)
   .get(countNumberOfFileDownload, getAllDownloads);
 
 

@@ -28,6 +28,7 @@ app.options('*', cors());
 // Serving static files
 app.use(express.static(path.join('bin')));
 app.use(express.static(path.join('assets')));
+app.use(express.static(path.join('public')));
 
 // Body passer, reading data from body
 app.use(express.json());

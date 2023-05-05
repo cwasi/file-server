@@ -638,6 +638,15 @@ if (inputs && btnVerify) {
         console.log(verificationCode);
     });
 }
+// if (downloadTable) {
+//   downloadTable.addEventListener('click', (e) => {
+//     e.preventDefault();
+//     const el: any = e.target;
+//     const parentEl = el.parentNode;
+//     const filePath = parentEl.getAttribute('data-file');
+//     downloadFile(filePath)
+//   });
+// }
 if (messageEmail) {
     messageEmail.textContent = localStorage.getItem("email");
     localStorage.removeItem("email");
@@ -699,14 +708,12 @@ function renderFiles(doc) {
     <tr class="table__row">
           <td class="table__data">${el.title}</td>
           <td class="table__data">
-            <button class="download-btn">
-            <a href='/document/${el.title}' download>
-              <img
-                src="/icon/icon-paper-download.svg"
-                alt="download file icon"
-              />
-              </a>
-            </button>
+            <a href="/api/file/download/${el.title}">
+                <img
+                  src="/icon/icon-paper-download.svg"
+                  alt="download file icon"
+                />
+            </a>
             </td>
         </tr>`;
         tbody.insertAdjacentHTML("beforeend", html);
@@ -750,7 +757,7 @@ var __importDefault = this && this.__importDefault || function(mod) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.forgotPassword = exports.signup = exports.searchFile = exports.signOut = exports.signin = void 0;
+exports.downloadFile = exports.forgotPassword = exports.signup = exports.searchFile = exports.signOut = exports.signin = void 0;
 const axios_1 = __importDefault(require("ffb046113c73d2b0"));
 const alerts_js_1 = require("cb9ef61cf25b3440");
 const signin = (email, password)=>__awaiter(void 0, void 0, void 0, function*() {
@@ -843,6 +850,21 @@ const forgotPassword = (email)=>__awaiter(void 0, void 0, void 0, function*() {
         }
     });
 exports.forgotPassword = forgotPassword;
+const downloadFile = (filePath)=>__awaiter(void 0, void 0, void 0, function*() {
+        try {
+            const fileTitle = filePath.split("/")[2];
+            const res = yield (0, axios_1.default)({
+                method: "GET",
+                url: `http://127.0.0.1:5050/api/file/download/${fileTitle}`
+            });
+            console.log(res);
+            if (res.data.status === "success") (0, alerts_js_1.showAlert)("success", "successfully");
+            console.log(filePath);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+exports.downloadFile = downloadFile;
 
 },{"ffb046113c73d2b0":"jo6P5","cb9ef61cf25b3440":"bbKxJ"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

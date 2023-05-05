@@ -104,3 +104,22 @@ export const forgotPassword = async (email: string) => {
     showAlert('error', 'User does not exist.');
   }
 };
+
+export const downloadFile = async (filePath: string) => {
+  try {
+    const fileTitle = filePath.split('/')[2];
+    const res = await axios({
+      method: 'GET',
+      url: `http://127.0.0.1:5050/api/file/download/${fileTitle}`,
+    });
+
+    console.log(res);
+    if (res.data.status === 'success') {
+      showAlert('success', 'successfully');
+    }
+
+    console.log(filePath)
+  } catch (err:any) {
+console.log(err)
+  }
+};

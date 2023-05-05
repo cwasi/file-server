@@ -10,9 +10,8 @@ mixin tableRowUser(documentName)
     tr.table__row
         td.table__data #{documentName}
             td.table__data
-                button.download
-                    a(href=`/document/${documentName}` download) 
-                        img(src='/icon/icon-paper-download.svg', alt='download file icon')
+                a(href=`/api/file/download/${documentName}`)
+                    img(src='/icon/icon-paper-download.svg', alt='download file icon')
 
 mixin tableRowAdmin(documentName, numberOfEmailsSent, numberOfDownloads)
     tr.table__row
