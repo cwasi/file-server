@@ -1,30 +1,82 @@
 import nodemailer from 'nodemailer';
+import pug from 'pug';
+import { convert } from 'html-to-text';
 
-const sendEmail = async (options: any) => {
-  const EMAIL_HOST: any = process.env.EMAIL_HOST;
-  const EMAIL_PORT: any = process.env.EMAIL_PORT;
+// Transporter
+class Email {
+  to: string;
+  firstName: string;
+  url: string;
+  from: string;
 
-  // STEP: CREATE TRANSPORTER
-  const transporter = nodemailer.createTransport({
-    host: EMAIL_HOST,
-    port: EMAIL_PORT,
+  constructor(user: any, url: string) {
+    this.to = user.email;
+    this.firstName = user.name.split(' ')[0];
+    this.url = url;
+    this.from = `Lizz File Server <${process.env.EMAIL_FROM}>`;
+  }
 
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
+  newTransport() {
+    let EMAIL_HOST: any = process.env.EMAIL_HOST;
+    let EMAIL_PORT: any = process.env.EMAIL_PORT;
 
-  // STEP: DEFINE THE EMAIL OPTIONS
-  const maillOption = {
-    from: 'File server <fileserver@example.com>',
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-  };
+    if (process.env.NODE_ENV === 'production') {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.PASS,
+        },
+      });
+      return transporter;
+    }
 
-  //   STEP: SEND EMAIL
-  await transporter.sendMail(maillOption);
-};
+    const transporter = nodemailer.createTransport({
+      host: EMAIL_HOST,
+      port: EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
 
-export default sendEmail;
+    return transporter;
+  }
+
+  // Send the actual email
+  async send(template: any, subject: string) {
+    // 1) Render HTML based on a pug template
+    const html = pug.renderFile(`./views/email/${template}.pug`, {
+      firstName: this.firstName,
+      url: this.url,
+      subject,
+    });
+
+    // 2) Defimne email options
+    const mailOptions = {
+      from: this.from,
+      to: this.to,
+      subject,
+      html,
+      text: convert(html),
+    };
+
+    // 3) Create a transport and send email
+    const info = await this.newTransport().sendMail(mailOptions);
+
+    console.log(info);
+  }
+
+  async sendWelcome() {
+    await this.send('welcome', 'Welcome to the File Server');
+  }
+
+  async passwordReset() {
+    await this.send(
+      'passwordReset',
+      'Reset Your Password (valid for 10 minutes)'
+    );
+  }
+}
+
+export default Email;

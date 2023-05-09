@@ -123,23 +123,15 @@ export const signup = catchAsync(async (req: any, res: any, next: any) => {
     UserId: newUser.id,
     token: hashVerificationCode,
   });
+  
+  const url = `${req.protocol}://${req.get('host')}/auth/verify/${token.token}`;
+  await new sendEmail(newUser, url).sendWelcome()
 
-  // const hashUserId = await bcrypt.hash(newUser.id, 10);
-  const verifyURL = `${req.protocol}://${req.get('host')}/auth/verify/${
-    token.token
-  }`;
-  const message = `Use the link below to get verified\n
-  ${verifyURL}`;
-
-  sendEmail({
-    email: newUser.email,
-    subject: `Your verification code`,
-    message,
-  });
+  
+  
 
   res.status(200).json({
     status: 'success',
-    message: 'verification code sent to email',
     // data: { newUser },
   });
 });
@@ -208,11 +200,8 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   \nIf your didn't forget your password, please ignore this email;`;
 
   try {
-    sendEmail({
-      email,
-      subject: 'Your password reset token (valid for 10 minutes)',
-      message,
-    });
+
+    await new sendEmail(user, resetURL).passwordReset()
 
     res.status(200).json({
       status: 'success',
@@ -273,7 +262,7 @@ export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   const id = token.UserId;
-  const user = await User.findOne({where:{id }});
+  const user = await User.findOne({ where: { id } });
   user.isVerified = true;
   await user.save();
 
@@ -283,7 +272,6 @@ export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
   // STEP:  log the user in, send jwt
   createAndSendToken(user, 200, res);
 });
-
 
 export const updateMe = (req: any, res: any, next: any) => {
   res.status(200).json({

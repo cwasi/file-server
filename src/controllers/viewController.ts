@@ -54,3 +54,8 @@ export const getforgotPasswordPage = (req: any, res: any, next: any) => {
     title: 'Forgot password',
   });
 };
+export const getSendEmailPage = (req: any, res: any, next: any) => {
+  res.status(200).render('email', {
+    title: 'Send Email',
+  });
+};

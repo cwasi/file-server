@@ -1,38 +1,32 @@
 extends base
 
+mixin navItem(link, text, icon, alt, active)
+    li.side-nav__item(class=`${active ? 'side-nav__item--active' : ''}`)
+        a.side-nav__link(href=`${link}`)
+            img.side-nav__icon(src=`/icon/${icon}` alt=`${alt}`)
+            span #{text}
+
 block content
+    // HEADER
     include _header
     main.main
-        nav.sidebar
-            ul.side-nav
-                li.side-nav__item
-                    a.side-nav__link(href='#')
-                        img.side-nav__icon(src='/assets/icon/icon-paper-download.svg', alt='download file icon')
-                        span Download File
-                li.side-nav__item.side-nav__item--active
-                    a.side-nav__link(href='#')
-                        img.side-nav__icon(src='/assets/icon/icon-email.svg', alt='email icon')
-                        span Send Email
-                li.side-nav__item
-                    a.side-nav__link(href='#')
-                        img.side-nav__icon(src='/assets/icon/icon-settings.svg', alt='settings icon')
-                        span Settings
+        include _sideNav
         .content
             form.form.form__email(action='#')
                 .form__group
-                    label.form__label(for='to') To
-                    input#to.form__input(type='text', placeholder='To')
-                .form__group
                     label.form__label(for='title') From
-                    input#from.form__input(type='text', placeholder='From')
+                    input#email_from.form__input(type='email', placeholder='From' value=`${user.email}` disabled)
+                .form__group
+                    label.form__label(for='to') To
+                    input#email_to.form__input(type='email', placeholder='To')
                 .form__group
                     label.form__label(for='subject') Subject
-                    input#subject.form__input(type='text', placeholder='Subject')
+                    input#email_subject.form__input(type='text', placeholder='Subject')
                 .form__group
                     label Attach file
-                    input#myFile(type='file', name='filename')
+                    input#email_File(type='file', name='filename')
                 .form__group
                     label.form__label(for='message') Message
-                    textarea#message.form__textarea(name='description', cols='30', rows='5', placeholder='Message')
+                    textarea#email_message.form__textarea(type='text', name='description', cols='30', rows='5', placeholder='Message')
                 .form__group
                     button.btn.btn__primary Send

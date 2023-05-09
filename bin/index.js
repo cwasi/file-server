@@ -592,6 +592,7 @@ const action_js_1 = require("4153f3de4112d64f");
 const signupForm = document.querySelector(".signup__form");
 const signinForm = document.querySelector(".signin__form");
 const forgorPasswordForm = document.querySelector(".form__forgot-password");
+const emailForm = document.querySelector(".form__email");
 const signOutBtn = document.querySelector(".sign-out");
 const searchForm = document.querySelector(".search__form");
 const inputs = document.querySelectorAll(".form__otp__input");
@@ -656,6 +657,22 @@ if (forgorPasswordForm) forgorPasswordForm.addEventListener("submit", (e)=>{
     const emailInput = document.getElementById("email");
     const email = emailInput.value;
     (0, action_js_1.forgotPassword)(email);
+});
+if (emailForm) emailForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    console.log("email form");
+    const emailTo = document.getElementById("email_to");
+    const emailForm = document.getElementById("email_from");
+    const emailSubject = document.getElementById("email_subject");
+    // const  = document.getElementById('')! as HTMLInputElement;
+    const emailMessage = document.getElementById("email_message");
+    const emailFile = document.getElementById("email_File");
+    const emailToValue = emailTo.value;
+    const emailToFormValue = emailForm.value;
+    const emailSubjectValue = emailSubject.value;
+    const emailMessageValue = emailMessage.value;
+    const emailFileValue = emailFile.value;
+    console.log(emailToValue, emailToFormValue, emailSubjectValue, emailMessageValue, emailFileValue);
 });
 function optFormActions(inputs) {
     inputs.forEach((input, index1)=>{

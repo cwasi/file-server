@@ -8,7 +8,8 @@ import {
   getSendResetPasswordLinkPage,
   verifyAccount,
   getSendVerificationPage,
-  getforgotPasswordPage
+  getforgotPasswordPage,
+  getSendEmailPage,
 } from './../controllers/viewController';
 import { protect } from '../controllers/authController';
 
@@ -24,5 +25,6 @@ router.get('/sendResetPasswordLink', getSendResetPasswordLinkPage);
 router.get('/sendVerificationLink', getSendVerificationPage);
 router.get('/verify-account',verifyAccount);
 router.get('/home',protect, getHomePage);
+router.get('/send_email',protect, getSendEmailPage);
 
 export default router;

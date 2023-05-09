@@ -12,6 +12,7 @@ const signinForm = document.querySelector('.signin__form')! as HTMLFormElement;
 const forgorPasswordForm = document.querySelector(
   '.form__forgot-password'
 )! as HTMLFormElement;
+const emailForm = document.querySelector('.form__email')! as HTMLFormElement;
 const signOutBtn = document.querySelector('.sign-out')! as HTMLButtonElement;
 const searchForm = document.querySelector('.search__form')!;
 const inputs = document.querySelectorAll('.form__otp__input')!;
@@ -106,6 +107,39 @@ if (forgorPasswordForm) {
   });
 }
 
+if (emailForm) {
+  emailForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('email form');
+    const emailTo = document.getElementById('email_to')! as HTMLInputElement;
+    const emailForm = document.getElementById(
+      'email_from'
+    )! as HTMLInputElement;
+    const emailSubject = document.getElementById(
+      'email_subject'
+    )! as HTMLInputElement;
+    // const  = document.getElementById('')! as HTMLInputElement;
+    const emailMessage = document.getElementById(
+      'email_message'
+    )! as HTMLInputElement;
+    const emailFile = document.getElementById(
+      'email_File'
+    )! as HTMLInputElement;
+
+    const emailToValue = emailTo.value;
+    const emailToFormValue = emailForm.value;
+    const emailSubjectValue = emailSubject.value;
+    const emailMessageValue = emailMessage.value;
+    const emailFileValue = emailFile.value;
+    console.log(
+      emailToValue,
+      emailToFormValue,
+      emailSubjectValue,
+      emailMessageValue,
+      emailFileValue
+    );
+  });
+}
 function optFormActions(inputs: any) {
   inputs.forEach((input: any, index1: any) => {
     input.addEventListener('keyup', (e: any) => {

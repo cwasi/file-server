@@ -23,12 +23,7 @@ block content
     // HEADER
     include _header
     main.main
-        nav.sidebar
-            ul.side-nav
-                +navItem('#', 'Download File', 'icon-paper-download.svg', 'download file icon', true )
-                - if (user.role === 'user')
-                    +navItem('#', 'Send Email', 'icon-email.svg', 'email icon')
-                +navItem('#', 'Settings', 'icon-settings.svg', 'settings icon')
+        include _sideNav
         .content
             .content__title__container
                 img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
