@@ -36,9 +36,6 @@ block content
                 p
                     span.num_of_doc #{files.length}
                     |  Documents
-                -if (user.role==='admin')    
-                    .add-file-btn--container 
-                        button.btn.btn__primary Add a file
 
             table.table
 
@@ -58,21 +55,3 @@ block content
                     tbody 
                         each file in files
                             +tableRowUser(`${file.title}`)
-
-        #popup.popup
-            .popup__content
-                .popup__header
-                h5.heading-5.popup__title Add a file
-                .popup__close
-                    img(src='/assets/icon/icon-close.svg', alt='icon close')
-                form.form.form__add-fill(action='#')
-                .form__group
-                    input#myFile(type='file', name='filename')
-                .form__group
-                    label.form__label(for='title') Title
-                    input#title.form__input(type='text', placeholder='title')
-                .form__group
-                    label.form__label(for='Description') Description
-                    textarea#description.form__textarea(name='description', cols='30', rows='5', placeholder='Description')
-                .form__group
-                    button.btn.btn__primary Upload

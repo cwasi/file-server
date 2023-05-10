@@ -593,6 +593,7 @@ const signupForm = document.querySelector(".signup__form");
 const signinForm = document.querySelector(".signin__form");
 const forgorPasswordForm = document.querySelector(".form__forgot-password");
 const emailForm = document.querySelector(".form__email");
+const AddFileForm = document.querySelector(".form__add-file");
 const signOutBtn = document.querySelector(".sign-out");
 const searchForm = document.querySelector(".search__form");
 const inputs = document.querySelectorAll(".form__otp__input");
@@ -627,6 +628,19 @@ if (searchForm) searchForm.addEventListener("submit", (e)=>__awaiter(void 0, voi
         const doc = yield (0, action_js_1.searchFile)(searchValue);
         renderFiles(doc);
     }));
+if (AddFileForm) AddFileForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const titleInput = document.getElementById("title");
+    const descriptionInput = document.getElementById("description");
+    const fileInput = document.getElementById("upload__File");
+    const titleValue = titleInput.value;
+    const descriptionValue = descriptionInput.value;
+    const fileValue = fileInput.value;
+    console.log(titleValue);
+    console.log(descriptionValue);
+    console.log(fileValue);
+    (0, action_js_1.uploadFile)(fileValue, titleValue, descriptionValue);
+});
 if (inputs && btnVerify) {
     optFormActions(inputs);
     btnVerify.addEventListener("click", (e)=>{
@@ -774,7 +788,7 @@ var __importDefault = this && this.__importDefault || function(mod) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.downloadFile = exports.forgotPassword = exports.signup = exports.searchFile = exports.signOut = exports.signin = void 0;
+exports.uploadFile = exports.downloadFile = exports.forgotPassword = exports.signup = exports.searchFile = exports.signOut = exports.signin = void 0;
 const axios_1 = __importDefault(require("ffb046113c73d2b0"));
 const alerts_js_1 = require("cb9ef61cf25b3440");
 const signin = (email, password)=>__awaiter(void 0, void 0, void 0, function*() {
@@ -882,6 +896,25 @@ const downloadFile = (filePath)=>__awaiter(void 0, void 0, void 0, function*() {
         }
     });
 exports.downloadFile = downloadFile;
+const uploadFile = (uploadFile, title, description)=>__awaiter(void 0, void 0, void 0, function*() {
+        try {
+            const fileTitle = uploadFile.split("/")[2];
+            const res = yield (0, axios_1.default)({
+                method: "POST",
+                url: `http://127.0.0.1:5050/api/file/upload-file`,
+                data: {
+                    uploadFile: fileTitle,
+                    title,
+                    description
+                }
+            });
+            console.log(res);
+            if (res.data.status === "success") (0, alerts_js_1.showAlert)("success", "successfull");
+        } catch (err) {
+            console.log(err);
+        }
+    });
+exports.uploadFile = uploadFile;
 
 },{"ffb046113c73d2b0":"jo6P5","cb9ef61cf25b3440":"bbKxJ"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

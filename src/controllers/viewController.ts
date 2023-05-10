@@ -59,3 +59,8 @@ export const getSendEmailPage = (req: any, res: any, next: any) => {
     title: 'Send Email',
   });
 };
+export const getAddFilePage = (req: any, res: any, next: any) => {
+  res.status(200).render('addFile', {
+    title: 'Add File',
+  });
+};

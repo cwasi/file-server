@@ -6,8 +6,6 @@
   width: 100%;
   z-index: 3000;
   background-color: rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  visibility: hidden;
   transition: all 0.3s;
   @supports (-webkit-backdrop-filter: blur(10px)) or
     (backdrop-filter: blur(10px)) {
@@ -26,7 +24,7 @@
     box-shadow: 0 3rem 4rem rgba(0, 0, 0, 0.2);
     display: table;
     overflow: hidden;
-    opacity: 0;
+  
     transform: translate(-50%, -50%) scale(0.5);
     transition: all 0.4s 0.2s;
 

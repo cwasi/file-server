@@ -118,8 +118,34 @@ export const downloadFile = async (filePath: string) => {
       showAlert('success', 'successfully');
     }
 
-    console.log(filePath)
-  } catch (err:any) {
-console.log(err)
+    console.log(filePath);
+  } catch (err: any) {
+    console.log(err);
+  }
+};
+
+export const uploadFile = async (
+  uploadFile: string,
+  title: string,
+  description: string
+) => {
+  try {
+    const fileTitle = uploadFile.split('/')[2];
+    const res = await axios({
+      method: 'POST',
+      url: `http://127.0.0.1:5050/api/file/upload-file`,
+      data: {
+        uploadFile:fileTitle,
+        title,
+        description,
+      },
+    });
+
+    console.log(res);
+    if (res.data.status === 'success') {
+      showAlert('success', 'successfull');
+    }
+  } catch (err: any) {
+    console.log(err);
   }
 };

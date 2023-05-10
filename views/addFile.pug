@@ -1,0 +1,42 @@
+extends base
+
+mixin navItem(link, text, icon, alt, active)
+    li.side-nav__item(class=`${active ? 'side-nav__item--active' : ''}`)
+        a.side-nav__link(href=`${link}`)
+            img.side-nav__icon(src=`/icon/${icon}` alt=`${alt}`)
+            span #{text}
+
+mixin tableRowUser(documentName)
+    tr.table__row
+        td.table__data #{documentName}
+            td.table__data
+                a(href=`/api/file/download/${documentName}`)
+                    img(src='/icon/icon-paper-download.svg', alt='download file icon')
+
+mixin tableRowAdmin(documentName, numberOfEmailsSent, numberOfDownloads)
+    tr.table__row
+        td.table__data #{documentName}
+            td.table__data #{numberOfEmailsSent}
+            td.table__data #{numberOfDownloads}
+
+block content
+    // HEADER
+    include _header
+    main.main
+        include _sideNav
+        .content
+
+
+            .popup__header
+                h5.heading-5.popup__title Add a file
+            form.form.form__add-file(action='#')
+                .form__group
+                    input#upload__File(type='file', name='filename')
+                .form__group
+                    label.form__label(for='title') Title
+                    input#title.form__input(type='text', placeholder='title')
+                .form__group
+                    label.form__label(for='Description') Description
+                    textarea#description.form__textarea(name='description', cols='30', rows='5', placeholder='Description')
+                .form__group
+                    button.btn.btn__primary Upload

@@ -30,3 +30,8 @@ a {
   align-items: center;
   gap: 2rem;
 }
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}

@@ -4,7 +4,7 @@ import {
   searchFile,
   signup,
   forgotPassword,
-  downloadFile,
+  uploadFile,
 } from './action.js';
 
 const signupForm = document.querySelector('.signup__form')! as HTMLFormElement;
@@ -13,6 +13,9 @@ const forgorPasswordForm = document.querySelector(
   '.form__forgot-password'
 )! as HTMLFormElement;
 const emailForm = document.querySelector('.form__email')! as HTMLFormElement;
+const AddFileForm = document.querySelector(
+  '.form__add-file'
+)! as HTMLFormElement;
 const signOutBtn = document.querySelector('.sign-out')! as HTMLButtonElement;
 const searchForm = document.querySelector('.search__form')!;
 const inputs = document.querySelectorAll('.form__otp__input')!;
@@ -66,6 +69,30 @@ if (searchForm) {
     const searchValue = searchInput.value.trim();
     const doc = await searchFile(searchValue);
     renderFiles(doc);
+  });
+}
+
+if (AddFileForm) {
+  AddFileForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const titleInput = document.getElementById('title')! as HTMLInputElement;
+    const descriptionInput = document.getElementById(
+      'description'
+    )! as HTMLInputElement;
+    const fileInput = document.getElementById(
+      'upload__File'
+    )! as HTMLInputElement;
+
+    const titleValue = titleInput.value;
+    const descriptionValue = descriptionInput.value;
+    const fileValue = fileInput.value;
+
+    console.log(titleValue);
+    console.log(descriptionValue);
+    console.log(fileValue);
+
+    uploadFile(fileValue, titleValue, descriptionValue);
+  
   });
 }
 
@@ -140,6 +167,7 @@ if (emailForm) {
     );
   });
 }
+
 function optFormActions(inputs: any) {
   inputs.forEach((input: any, index1: any) => {
     input.addEventListener('keyup', (e: any) => {

@@ -1,14 +1,20 @@
 
 nav.sidebar
     ul.side-nav
-        li.side-nav__item
+        li.side-nav__item.side-nav__item--active
             a.side-nav__link(href='/home')
                 img.side-nav__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
                 span Download File
-        li.side-nav__item.side-nav__item--active
-            a.side-nav__link(href='/send_email')
-                img.side-nav__icon(src='/icon/icon-email.svg', alt='email icon')
-                span Send Email
+        - if (user.role === 'user')
+            li.side-nav__item
+                a.side-nav__link(href='/send_email')
+                    img.side-nav__icon(src='/icon/icon-email.svg', alt='email icon')
+                    span Send Email
+        - if (user.role === 'admin')
+            li.side-nav__item
+                a.side-nav__link(href='/add-file')
+                    img.side-nav__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    span Add file
         li.side-nav__item
             a.side-nav__link(href='#')
                 img.side-nav__icon(src='/icon/icon-settings.svg', alt='settings icon')
