@@ -4,26 +4,26 @@ import nodemailer from 'nodemailer';
 import AppError from './../utils/appError';
 
 export const sendEmail = catchAsync(async (req: any, res: any, next: any) => {
-  const { to, from, subject, attachement, message } = req.body;
+  const { to, from, subject, attachment, message } = req.body;
 
   console.log(from);
   console.log(to);
   console.log(subject);
-  console.log(attachement);
+  console.log(attachment);
   console.log(message);
 
-  const file = await db.File.findOne({ where: { title: attachement } });
+  const file = await db.File.findOne({ where: { title: attachment } });
   if (!file) {
     return next(new AppError('Document dose not exist', 401));
   }
 
-  const filePath = `./public/document/${attachement}`;
+  const filePath = `./public/document/${attachment}`;
 
   await Email({
     email: to,
     subject,
     message,
-    filename: attachement,
+    filename: attachment,
     filePath,
   });
 
@@ -53,8 +53,6 @@ const Email = async (options: any) => {
     },
   });
 
-  console.log("💥💥💥💥💥",EMAIL_HOST)
-  console.log("💥💥💥💥💥",EMAIL_PORT)
 
   // STEP: DEFINE THE EMAIL OPTIONS
   const maillOption = {
@@ -62,10 +60,10 @@ const Email = async (options: any) => {
     to: options.email,
     subject: options.subject,
     html: `<p>${options.message}<p>`,
-    attachements: [
+    attachments: [
       {
-        filename: options.filename,
-        path: options.filePath,
+        filename: 'leo.jpg',
+        path: './public/document/leo.jpg',
       },
     ],
   };

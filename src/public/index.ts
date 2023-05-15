@@ -9,6 +9,9 @@ import {
 
 const signupForm = document.querySelector('.signup__form')! as HTMLFormElement;
 const signinForm = document.querySelector('.signin__form')! as HTMLFormElement;
+const resetPassworForm = document.querySelector(
+  '.reset__password__form'
+)! as HTMLFormElement;
 const forgorPasswordForm = document.querySelector(
   '.form__forgot-password'
 )! as HTMLFormElement;
@@ -38,7 +41,6 @@ if (signinForm) {
 if (signupForm) {
   signupForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('signup Form');
     const nameInput = document.getElementById('name')! as HTMLInputElement;
     const emailInput = document.getElementById('email')! as HTMLInputElement;
     const passwordInput = document.getElementById(
@@ -80,19 +82,26 @@ if (AddFileForm) {
       'description'
     )! as HTMLInputElement;
     const fileInput = document.getElementById(
-      'upload__File'
+      'uploadFile'
     )! as HTMLInputElement;
 
     const titleValue = titleInput.value;
     const descriptionValue = descriptionInput.value;
-    const fileValue = fileInput.value;
+    const fileValue: any = fileInput.files;
 
-    console.log(titleValue);
-    console.log(descriptionValue);
-    console.log(fileValue);
+    const form = new FormData();
+    form.append('uploadFile', fileValue[0]);
+    form.append('title', titleValue);
+    form.append('description', descriptionValue);
 
-    uploadFile(fileValue, titleValue, descriptionValue);
-  
+    uploadFile(form);
+  });
+}
+
+if (resetPassworForm) {
+  resetPassworForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('Reset Password Form was submited');
   });
 }
 
@@ -137,6 +146,8 @@ if (forgorPasswordForm) {
 if (emailForm) {
   emailForm.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    console.log('email form clicked');
     console.log('email form');
     const emailTo = document.getElementById('email_to')! as HTMLInputElement;
     const emailForm = document.getElementById(
@@ -158,13 +169,6 @@ if (emailForm) {
     const emailSubjectValue = emailSubject.value;
     const emailMessageValue = emailMessage.value;
     const emailFileValue = emailFile.value;
-    console.log(
-      emailToValue,
-      emailToFormValue,
-      emailSubjectValue,
-      emailMessageValue,
-      emailFileValue
-    );
   });
 }
 

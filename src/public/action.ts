@@ -5,7 +5,7 @@ export const signin = async (email: string, password: string) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:5050/auth/signin',
+      url: '/auth/signin',
       data: {
         email,
         password,
@@ -27,7 +27,7 @@ export const signOut = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: 'http://127.0.0.1:5050/auth/signout',
+      url: '/auth/signout',
     });
 
     if ((res.data.status = 'success')) location.assign('/');
@@ -40,7 +40,7 @@ export const searchFile = async (value: string) => {
   try {
     const res = await axios({
       method: 'GET',
-      url: `http://127.0.0.1:5050/api/file/${value}`,
+      url: `/api/file/${value}`,
     });
 
     if (res) {
@@ -63,7 +63,7 @@ export const signup = async (
     }
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:5050/auth/signup',
+      url: '/auth/signup',
       data: {
         name,
         email,
@@ -74,11 +74,14 @@ export const signup = async (
 
     if (res.data.status === 'success') {
       localStorage.setItem('email', `${email}`);
+      showAlert('success', 'signed up successfully');
       window.setTimeout(() => {
         location.assign('/sendVerificationLink');
       }, 1500);
     }
   } catch (err: any) {
+    console.log('💥💥💥', err);
+    console.log('💥💥💥', err.response.data.stack);
     showAlert('error', err.response.data.message);
   }
 };
@@ -87,7 +90,7 @@ export const forgotPassword = async (email: string) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:5050/auth/forgotPassword',
+      url: '/auth/forgotPassword',
       data: {
         email,
       },
@@ -110,7 +113,7 @@ export const downloadFile = async (filePath: string) => {
     const fileTitle = filePath.split('/')[2];
     const res = await axios({
       method: 'GET',
-      url: `http://127.0.0.1:5050/api/file/download/${fileTitle}`,
+      url: `/api/file/download/${fileTitle}`,
     });
 
     console.log(res);
@@ -124,21 +127,12 @@ export const downloadFile = async (filePath: string) => {
   }
 };
 
-export const uploadFile = async (
-  uploadFile: string,
-  title: string,
-  description: string
-) => {
+export const uploadFile = async (data: any) => {
   try {
-    const fileTitle = uploadFile.split('/')[2];
     const res = await axios({
       method: 'POST',
-      url: `http://127.0.0.1:5050/api/file/upload-file`,
-      data: {
-        uploadFile:fileTitle,
-        title,
-        description,
-      },
+      url: `/api/file/upload-file`,
+      data,
     });
 
     console.log(res);
@@ -147,5 +141,6 @@ export const uploadFile = async (
     }
   } catch (err: any) {
     console.log(err);
+    showAlert('error', err.response.data.message);
   }
 };

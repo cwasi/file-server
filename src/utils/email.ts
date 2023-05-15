@@ -31,7 +31,7 @@ class Email {
       return transporter;
     }
 
-    const transporter = nodemailer.createTransport({
+    return nodemailer.createTransport({
       host: EMAIL_HOST,
       port: EMAIL_PORT,
       auth: {
@@ -39,8 +39,6 @@ class Email {
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-
-    return transporter;
   }
 
   // Send the actual email
@@ -59,6 +57,12 @@ class Email {
       subject,
       html,
       text: convert(html),
+      attachments: [
+        {
+          filename: 'leo.jpg',
+          path: './public/document/leo.jpg',
+        },
+      ],
     };
 
     // 3) Create a transport and send email

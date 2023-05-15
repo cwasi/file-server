@@ -125,10 +125,8 @@ export const signup = catchAsync(async (req: any, res: any, next: any) => {
   });
   
   const url = `${req.protocol}://${req.get('host')}/auth/verify/${token.token}`;
-  await new sendEmail(newUser, url).sendWelcome()
 
-  
-  
+  await new sendEmail(newUser, url).sendWelcome()
 
   res.status(200).json({
     status: 'success',
@@ -194,10 +192,7 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   // STEP:  send it to use's  email
   const resetURL = `${req.protocol}://${req.get(
     'host'
-  )}/auth/resetPassword/${resetToken}`;
-
-  const message = `Forgort your password?. Submit a PATCH request with you new password and passwordConfirm to ${resetURL}.
-  \nIf your didn't forget your password, please ignore this email;`;
+  )}/auth/password_reset/new/${resetToken}`;
 
   try {
 

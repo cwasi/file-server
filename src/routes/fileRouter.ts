@@ -13,7 +13,7 @@ import downloadRouter from './../routes/downloadRouter';
 const router = express.Router();
 
 router.use(protect);
-router.use('/download/:filetitle', downloadRouter);
+router.use('/download/:filetitle', restictTo('user'), downloadRouter);
 router.route('/').get(getAllfiles);
 router.route('/:slug').get(getFile);
 

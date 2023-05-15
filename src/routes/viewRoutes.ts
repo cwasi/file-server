@@ -19,16 +19,15 @@ const router = express.Router();
 router.get('/', getWelcomePage);
 router.get('/signin', getSigninPage);
 router.get('/signup', getSignupPage);
-router.get('/password_resets/new', getResetPasswordPage);
+router.get('/password_reset/:token', getResetPasswordPage);
 router.get('/forgot_password', getforgotPasswordPage);
 router.get('/sendResetPasswordLink', getSendResetPasswordLinkPage);
 router.get('/sendVerificationLink', getSendVerificationPage);
-router.get('/verify-account', verifyAccount);
+router.get('/auth/verify/:hash', verifyAccount);
 
 // router.use(protect);
 router.get('/home', protect, getHomePage);
-
 router.get('/add-file', protect, restictTo('admin'), getAddFilePage);
-router.get('/send_email', protect, restictTo('admin'), getSendEmailPage);
+router.get('/send_email', protect, restictTo('user'), getSendEmailPage);
 
 export default router;

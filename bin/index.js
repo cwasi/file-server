@@ -591,6 +591,7 @@ Object.defineProperty(exports, "__esModule", {
 const action_js_1 = require("4153f3de4112d64f");
 const signupForm = document.querySelector(".signup__form");
 const signinForm = document.querySelector(".signin__form");
+const resetPassworForm = document.querySelector(".reset__password__form");
 const forgorPasswordForm = document.querySelector(".form__forgot-password");
 const emailForm = document.querySelector(".form__email");
 const AddFileForm = document.querySelector(".form__add-file");
@@ -609,7 +610,6 @@ if (signinForm) signinForm.addEventListener("submit", (e)=>{
 });
 if (signupForm) signupForm.addEventListener("submit", (e)=>{
     e.preventDefault();
-    console.log("signup Form");
     const nameInput = document.getElementById("name");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
@@ -632,14 +632,19 @@ if (AddFileForm) AddFileForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const titleInput = document.getElementById("title");
     const descriptionInput = document.getElementById("description");
-    const fileInput = document.getElementById("upload__File");
+    const fileInput = document.getElementById("uploadFile");
     const titleValue = titleInput.value;
     const descriptionValue = descriptionInput.value;
-    const fileValue = fileInput.value;
-    console.log(titleValue);
-    console.log(descriptionValue);
-    console.log(fileValue);
-    (0, action_js_1.uploadFile)(fileValue, titleValue, descriptionValue);
+    const fileValue = fileInput.files;
+    const form = new FormData();
+    form.append("uploadFile", fileValue[0]);
+    form.append("title", titleValue);
+    form.append("description", descriptionValue);
+    (0, action_js_1.uploadFile)(form);
+});
+if (resetPassworForm) resetPassworForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    console.log("Reset Password Form was submited");
 });
 if (inputs && btnVerify) {
     optFormActions(inputs);
@@ -674,6 +679,7 @@ if (forgorPasswordForm) forgorPasswordForm.addEventListener("submit", (e)=>{
 });
 if (emailForm) emailForm.addEventListener("submit", (e)=>{
     e.preventDefault();
+    console.log("email form clicked");
     console.log("email form");
     const emailTo = document.getElementById("email_to");
     const emailForm = document.getElementById("email_from");
@@ -686,7 +692,6 @@ if (emailForm) emailForm.addEventListener("submit", (e)=>{
     const emailSubjectValue = emailSubject.value;
     const emailMessageValue = emailMessage.value;
     const emailFileValue = emailFile.value;
-    console.log(emailToValue, emailToFormValue, emailSubjectValue, emailMessageValue, emailFileValue);
 });
 function optFormActions(inputs) {
     inputs.forEach((input, index1)=>{
@@ -795,7 +800,7 @@ const signin = (email, password)=>__awaiter(void 0, void 0, void 0, function*() 
         try {
             const res = yield (0, axios_1.default)({
                 method: "POST",
-                url: "http://127.0.0.1:5050/auth/signin",
+                url: "/auth/signin",
                 data: {
                     email,
                     password
@@ -816,7 +821,7 @@ const signOut = ()=>__awaiter(void 0, void 0, void 0, function*() {
         try {
             const res = yield (0, axios_1.default)({
                 method: "GET",
-                url: "http://127.0.0.1:5050/auth/signout"
+                url: "/auth/signout"
             });
             res.data.status = "success";
             location.assign("/");
@@ -829,7 +834,7 @@ const searchFile = (value)=>__awaiter(void 0, void 0, void 0, function*() {
         try {
             const res = yield (0, axios_1.default)({
                 method: "GET",
-                url: `http://127.0.0.1:5050/api/file/${value}`
+                url: `/api/file/${value}`
             });
             if (res) return res;
         } catch (err) {
@@ -842,7 +847,7 @@ const signup = (name, email, password, confirmPassword)=>__awaiter(void 0, void 
             if (!(password == confirmPassword)) return (0, alerts_js_1.showAlert)("error", "Passwords are not the same");
             const res = yield (0, axios_1.default)({
                 method: "POST",
-                url: "http://127.0.0.1:5050/auth/signup",
+                url: "/auth/signup",
                 data: {
                     name,
                     email,
@@ -852,11 +857,14 @@ const signup = (name, email, password, confirmPassword)=>__awaiter(void 0, void 
             });
             if (res.data.status === "success") {
                 localStorage.setItem("email", `${email}`);
+                (0, alerts_js_1.showAlert)("success", "signed up successfully");
                 window.setTimeout(()=>{
                     location.assign("/sendVerificationLink");
                 }, 1500);
             }
         } catch (err) {
+            console.log("\uD83D\uDCA5\uD83D\uDCA5\uD83D\uDCA5", err);
+            console.log("\uD83D\uDCA5\uD83D\uDCA5\uD83D\uDCA5", err.response.data.stack);
             (0, alerts_js_1.showAlert)("error", err.response.data.message);
         }
     });
@@ -865,7 +873,7 @@ const forgotPassword = (email)=>__awaiter(void 0, void 0, void 0, function*() {
         try {
             const res = yield (0, axios_1.default)({
                 method: "POST",
-                url: "http://127.0.0.1:5050/auth/forgotPassword",
+                url: "/auth/forgotPassword",
                 data: {
                     email
                 }
@@ -886,7 +894,7 @@ const downloadFile = (filePath)=>__awaiter(void 0, void 0, void 0, function*() {
             const fileTitle = filePath.split("/")[2];
             const res = yield (0, axios_1.default)({
                 method: "GET",
-                url: `http://127.0.0.1:5050/api/file/download/${fileTitle}`
+                url: `/api/file/download/${fileTitle}`
             });
             console.log(res);
             if (res.data.status === "success") (0, alerts_js_1.showAlert)("success", "successfully");
@@ -896,22 +904,18 @@ const downloadFile = (filePath)=>__awaiter(void 0, void 0, void 0, function*() {
         }
     });
 exports.downloadFile = downloadFile;
-const uploadFile = (uploadFile, title, description)=>__awaiter(void 0, void 0, void 0, function*() {
+const uploadFile = (data)=>__awaiter(void 0, void 0, void 0, function*() {
         try {
-            const fileTitle = uploadFile.split("/")[2];
             const res = yield (0, axios_1.default)({
                 method: "POST",
-                url: `http://127.0.0.1:5050/api/file/upload-file`,
-                data: {
-                    uploadFile: fileTitle,
-                    title,
-                    description
-                }
+                url: `/api/file/upload-file`,
+                data
             });
             console.log(res);
             if (res.data.status === "success") (0, alerts_js_1.showAlert)("success", "successfull");
         } catch (err) {
             console.log(err);
+            (0, alerts_js_1.showAlert)("error", err.response.data.message);
         }
     });
 exports.uploadFile = uploadFile;

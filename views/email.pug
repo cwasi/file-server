@@ -21,10 +21,10 @@ block content
                     input#email_to.form__input(type='email', placeholder='To')
                 .form__group
                     label.form__label(for='subject') Subject
-                    input#email_subject.form__input(type='text', placeholder='Subject')
+                    input#email_subject.form__input(type='text', placeholder='Subject' required)
                 .form__group
                     label Attach file
-                    input#email_File(type='file', name='filename')
+                    input#email_File(type='file', name='filename' required)
                 .form__group
                     label.form__label(for='message') Message
                     textarea#email_message.form__textarea(type='text', name='description', cols='30', rows='5', placeholder='Message')

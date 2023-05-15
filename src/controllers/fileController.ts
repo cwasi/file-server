@@ -19,12 +19,14 @@ const multerStorage = multer.diskStorage({
 
 const upload = multer({ storage: multerStorage });
 
-export const uploadFile = upload.single('uploadFile');
+export const uploadFile = upload.single('file');
 
 export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
   if (!req.file) {
     return next(new AppError('Please upload a file', 401));
   }
+
+  console.log('🍍🍍🍍🍍', req.file);
 
   const duplicatFileName = await File.findOne({
     where: { title: req.file.originalname },
@@ -67,7 +69,7 @@ export const getFile = catchAsync(async (req: any, res: any, next: any) => {
   if (!files) {
     return next(new AppError('No document found with that name', 404));
   }
-  
+
   res.status(200).json({
     status: 'success',
     data: { files },

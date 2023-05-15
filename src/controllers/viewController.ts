@@ -1,6 +1,8 @@
 import { Op } from 'sequelize';
 import catchAsync from './../utils/catchAsync';
 import db from './../models';
+import AppError from './../utils/appError';
+import { createAndSendToken } from './../utils/helpers';
 
 export const getWelcomePage = (req: any, res: any, next: any) => {
   res.status(200).render('Welcome', {
@@ -15,14 +17,40 @@ export const getHomePage = catchAsync(async (req: any, res: any, next: any) => {
   });
 });
 
+export const verifyAccount = catchAsync(
+  async (req: any, res: any, next: any) => {
+    const hash = req.params.hash;
+    const token = await db.Token.findOne({
+      where: {
+        token: hash,
+        expiresAt: { [Op.gt]: Date.now() },
+      },
+    });
 
-export const verifyAccount = (req: any, res: any, next: any) => {
+    if (!token) {
+      return next(new AppError('Invalid link', 400));
+    }
 
-  res.status(200).render('verifyAccount', {
-    title: 'Verify Your Account',
-    message: "Please check your email for your verification code"
-  });
-};
+    const id = token.UserId;
+    const user = await db.User.findOne({ where: { id } });
+    user.isVerified = true;
+    await user.save();
+
+    token.token = '';
+    await token.save();
+
+    // STEP:  log the user in, send jwt
+    // createAndSendToken(user, 200, res);
+
+    // req.params.hash;
+    res.redirect(`http://127.0.0.1:5050/signin`);
+
+    res.status(200).render('verifyAccount', {
+      title: 'Verify Your Account',
+    });
+  }
+);
+
 export const getSignupPage = (req: any, res: any, next: any) => {
   res.status(200).render('signup', {
     title: 'Sign up',
@@ -45,8 +73,10 @@ export const getSendVerificationPage = (req: any, res: any, next: any) => {
   });
 };
 export const getResetPasswordPage = (req: any, res: any, next: any) => {
+  console.log('💥💥💥💥💥💥', req.params.token);
+
   res.status(200).render('resetPassword', {
-    title: 'Reset password',
+    title: 'Reset Password',
   });
 };
 export const getforgotPasswordPage = (req: any, res: any, next: any) => {

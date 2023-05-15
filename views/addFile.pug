@@ -26,17 +26,18 @@ block content
         include _sideNav
         .content
 
-
+            //- (action=`api/file/upload-file`, method="post", enctype='multipart/form-data')
+       
             .popup__header
                 h5.heading-5.popup__title Add a file
-            form.form.form__add-file(action='#')
+            form.form.form__add-file
                 .form__group
-                    input#upload__File(type='file', name='filename')
+                    input#uploadFile(type='file',  required name='file')
                 .form__group
                     label.form__label(for='title') Title
-                    input#title.form__input(type='text', placeholder='title')
+                    input#title.form__input(type='text', required placeholder='title' name="title")
                 .form__group
                     label.form__label(for='Description') Description
-                    textarea#description.form__textarea(name='description', cols='30', rows='5', placeholder='Description')
+                    textarea#description.form__textarea(name='description', required cols='30', rows='5', placeholder='Description')
                 .form__group
                     button.btn.btn__primary Upload

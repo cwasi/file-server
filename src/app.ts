@@ -14,9 +14,12 @@ import viewRouter from './routes/viewRoutes';
 import emailRouter from './routes/emailRoutes';
 import downloadRouter from './routes/downloadRouter';
 import globalErrorHandler from './controllers/errorController';
+import AppError from './utils/appError';
 
 // Start express app
 const app = express();
+
+app.enable('trust proxy');
 
 // Set up template engine PUG
 app.set('view engine', 'pug');
@@ -32,6 +35,7 @@ app.use(express.static(path.join('public')));
 
 // Body passer, reading data from body
 app.use(express.json());
+app.use(express.urlencoded());
 app.use(cookieParser());
 
 // Development logging
@@ -62,6 +66,10 @@ app.use('/auth', userRouter);
 app.use('/api/file', fileRouter);
 app.use('/api/download', downloadRouter);
 app.use('/api/email', emailRouter);
+
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
 
 app.use(globalErrorHandler);
 

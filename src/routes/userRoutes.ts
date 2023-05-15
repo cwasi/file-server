@@ -18,9 +18,9 @@ router.post('/signup', signup);
 router.post('/signin', signin);
 router.get('/signout', signOut);
 router.post('/forgotPassword', forgotPassword);
-router.patch('/resetPassword/:token', resetPassword);
+router.patch('/password_reset/:token', resetPassword);
 router.get('/verify/:hash', verifyEmail);
 
-router.get('/updateMe', protect, updateMe);
+// router.get('/updateMe', protect, updateMe);
 
 export default router;
