@@ -144,3 +144,29 @@ export const uploadFile = async (data: any) => {
     showAlert('error', err.response.data.message);
   }
 };
+
+export const passwordReset = async (
+  password: string,
+  passwordConfirm: string,
+  token: string
+) => {
+  try {
+    if (!(password === passwordConfirm)) {
+      return showAlert('error', 'Passwords are not the same');
+    }
+    console.log('🍉🍉🍉🍉🍉🍉', token);
+    const res = await axios({
+      method: 'PATCH',
+      url: `/auth/password_reset/${token}`,
+      data: {
+        password,
+        passwordConfirm,
+      },
+    });
+    if (res.data.status === 'success') {
+      showAlert('success', 'successfull');
+    }
+  } catch (err: any) {
+    showAlert('error', err.response.data.message);
+  }
+};

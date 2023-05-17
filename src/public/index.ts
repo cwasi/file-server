@@ -5,11 +5,12 @@ import {
   signup,
   forgotPassword,
   uploadFile,
+  passwordReset,
 } from './action.js';
 
 const signupForm = document.querySelector('.signup__form')! as HTMLFormElement;
 const signinForm = document.querySelector('.signin__form')! as HTMLFormElement;
-const resetPassworForm = document.querySelector(
+const passwordResetForm = document.querySelector(
   '.reset__password__form'
 )! as HTMLFormElement;
 const forgorPasswordForm = document.querySelector(
@@ -98,9 +99,20 @@ if (AddFileForm) {
   });
 }
 
-if (resetPassworForm) {
-  resetPassworForm.addEventListener('submit', (e) => {
+if (passwordResetForm) {
+  passwordResetForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const passwordInput = document.getElementById(
+      'password'
+    )! as HTMLInputElement;
+    const passwordConfirmInput = document.getElementById(
+      'passwordConfirm'
+    )! as HTMLInputElement;
+
+    const passwordValue = passwordInput.value.trim();
+    const passwordConfirmValue = passwordConfirmInput.value.trim();
+    const token: any = window.location.pathname.split('/').pop();
+    passwordReset(passwordValue, passwordConfirmValue, token);
     console.log('Reset Password Form was submited');
   });
 }

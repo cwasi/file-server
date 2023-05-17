@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import catchAsync from './../utils/catchAsync';
 import db from './../models';
 import AppError from './../utils/appError';
-import { createAndSendToken } from './../utils/helpers';
+import crypto from 'crypto';
 
 export const getWelcomePage = (req: any, res: any, next: any) => {
   res.status(200).render('Welcome', {
@@ -72,13 +72,30 @@ export const getSendVerificationPage = (req: any, res: any, next: any) => {
     title: 'Send verification link',
   });
 };
-export const getResetPasswordPage = (req: any, res: any, next: any) => {
-  console.log('💥💥💥💥💥💥', req.params.token);
+export const getResetPasswordPage = catchAsync(
+  async (req: any, res: any, next: any) => {
+    // STEP: Get token from URL
+    const hashToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
 
-  res.status(200).render('resetPassword', {
-    title: 'Reset Password',
-  });
-};
+    const user = await db.User.findOne({
+      where: {
+        passwordResetToken: hashToken,
+        passwordResetExpires: { [Op.gt]: Date.now() },
+      },
+    });
+
+    // STEP:  If token has not expired, and there is a user, set the new password
+    if (!user) {
+      return next(new AppError('Token is invalid or has expired', 400));
+    }
+    res.status(200).render('resetPassword', {
+      title: 'Reset Password',
+    });
+  }
+);
 export const getforgotPasswordPage = (req: any, res: any, next: any) => {
   res.status(200).render('forgotPassword', {
     title: 'Forgot password',

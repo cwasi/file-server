@@ -251,7 +251,7 @@ export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
       expiresAt: { [Op.gt]: Date.now() },
     },
   });
-
+  
   if (!token) {
     return next(new AppError('Invalid link', 400));
   }

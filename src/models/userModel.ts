@@ -118,7 +118,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
   // Hooks
   User.beforeSave(async (user: any) => {
-    if (!user.changed('password') || !user.isNewRecord) {
+    if (!user.changed('password')) {
       return;
     }
     // STEP: Hash the password with cost of 12

@@ -9,7 +9,7 @@
     "start": "concurrently npm:start:*",
     "prod": "NODE_ENV=production nodemon dist/server.js",
     "remove:dist": "rimraf dist",
-    "watch:parcel": "parcel dist/public/index.js --dist-dir bin/",
+    "watch:parcel": "parcel dist/public/index.js --dist-dir dist/bin/",
     "sass": "node-sass ./assets/sass/main.scss ./assets/css/style.css -w"
   },
   "keywords": [],
