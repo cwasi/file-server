@@ -1,9 +1,9 @@
 import { protect, restictTo } from './../controllers/authController'
-import { sendEmail } from '../controllers/emailController'
+import { sendFile } from '../controllers/emailController'
 import express from 'express'
 
 const router = express.Router()
 
-router.route('/').post(protect, restictTo('user'), sendEmail)
+router.route('/send_file').post(protect, restictTo('user'), sendFile)
 
 export default router

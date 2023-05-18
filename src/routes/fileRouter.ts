@@ -19,7 +19,7 @@ router.route('/:slug').get(getFile);
 
 router.use(restictTo('admin'));
 router
-  .route('/num-of-files-download-and-emails-sent')
+  .route('/num-of/downloads/email-sent')
   .get(restictTo('admin'), numOfdownloadAndEmails);
 router.route('/upload-file').post(restictTo('admin'), uploadFile, saveFile);
 

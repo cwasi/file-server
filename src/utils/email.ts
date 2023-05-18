@@ -23,9 +23,12 @@ class Email {
     if (process.env.NODE_ENV === 'production') {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
-          user: process.env.EMAIL,
-          pass: process.env.PASS,
+          user: process.env.EMAIL_ADD,
+          pass: process.env.EMAIL_PASS,
         },
       });
       return transporter;
@@ -42,7 +45,7 @@ class Email {
   }
 
   // Send the actual email
-  async send(template: any, subject: string) {
+  async send(template: any, subject: string, attachment: any) {
     // 1) Render HTML based on a pug template
     const html = pug.renderFile(`./views/email/${template}.pug`, {
       firstName: this.firstName,
@@ -57,12 +60,7 @@ class Email {
       subject,
       html,
       text: convert(html),
-      attachments: [
-        {
-          filename: 'leo.jpg',
-          path: './public/document/leo.jpg',
-        },
-      ],
+      attachments: [attachment],
     };
 
     // 3) Create a transport and send email
@@ -72,14 +70,19 @@ class Email {
   }
 
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to the File Server');
+    await this.send('welcome', 'Welcome to the File Server', {});
   }
 
   async passwordReset() {
     await this.send(
       'passwordReset',
-      'Reset Your Password (valid for 10 minutes)'
+      'Reset Your Password (valid for 10 minutes)',
+      {}
     );
+  }
+
+  async sendFile() {
+    await this.send('sendFile', 'A DOCUMENT FROM LIZZ FILE SERVER', {});
   }
 }
 

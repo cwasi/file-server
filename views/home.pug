@@ -46,7 +46,8 @@ block content
                             th.table__head Number of emails sent
                             th.table__head Number of downloads 
                     tbody 
-                        +tableRowAdmin('wedding Cards', 6, 10)
+                        each file in files
+                            +tableRowAdmin(`${file.title}`, 6, 10)
                 - else
                     thead 
                         tr.table__row
