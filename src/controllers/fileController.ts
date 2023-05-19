@@ -79,24 +79,32 @@ export const getFile = catchAsync(async (req: any, res: any, next: any) => {
 export const numOfdownloadAndEmails = catchAsync(
   async (req: any, res: any, next: any) => {
     // Get the ids
-    const files = await File.findAll();
-    const getNumOfdownloadfile = [];
+    let files;
+    
+    if (req.params.file) {
+      files = await File.findAll({
+        where: { slug: { [Op.startsWith]: req.params.file } },
+      });
+    } else {
+      files = await File.findAll();
+    }
+    const getNumberOfFileDownloadsAndEmailSent = [];
 
     for (let i = 0; i < files.length; i++) {
       const numberOfFileDownloads = await files[i].countDownloads();
       const numberOfEmailSent = await files[i].countEmails();
 
-      getNumOfdownloadfile.push({
+      getNumberOfFileDownloadsAndEmailSent.push({
         title: files[i].title,
         numberOfFileDownloads,
         numberOfEmailSent,
       });
     }
-
+    res.locals.downloadsAndEmails = getNumberOfFileDownloadsAndEmailSent;
     res.status(200).json({
       status: 'success',
       data: {
-        getNumOfdownloadfile,
+        getNumberOfFileDownloadsAndEmailSent,
       },
     });
   }

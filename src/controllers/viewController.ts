@@ -1,8 +1,10 @@
 import { Op } from 'sequelize';
+import { numOfdownloadAndEmails } from './fileController';
 import catchAsync from './../utils/catchAsync';
 import db from './../models';
 import AppError from './../utils/appError';
 import crypto from 'crypto';
+import axios from 'axios';
 
 export const getWelcomePage = (req: any, res: any, next: any) => {
   res.status(200).render('Welcome', {
@@ -11,9 +13,24 @@ export const getWelcomePage = (req: any, res: any, next: any) => {
 };
 export const getHomePage = catchAsync(async (req: any, res: any, next: any) => {
   const getAllFiles = await db.File.findAll();
+
+  // Get the ids
+  const getNumberOfFileDownloadsAndEmailSent = [];
+
+  for (let i = 0; i < getAllFiles.length; i++) {
+    const numberOfFileDownloads = await getAllFiles[i].countDownloads();
+    const numberOfEmailSent = await getAllFiles[i].countEmails();
+
+    getNumberOfFileDownloadsAndEmailSent.push({
+      title: getAllFiles[i].title,
+      numberOfFileDownloads,
+      numberOfEmailSent,
+    });
+  }
   res.status(200).render('home', {
     title: 'Home',
     files: getAllFiles,
+    downloadsAndEmails: getNumberOfFileDownloadsAndEmailSent,
   });
 });
 

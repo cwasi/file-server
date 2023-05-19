@@ -20,6 +20,9 @@ const emailForm = document.querySelector('.form__email')! as HTMLFormElement;
 const AddFileForm = document.querySelector(
   '.form__add-file'
 )! as HTMLFormElement;
+const adminSeachForm = document.querySelector(
+  '.search__form__admin'
+)! as HTMLFormElement;
 const signOutBtn = document.querySelector('.sign-out')! as HTMLButtonElement;
 const searchForm = document.querySelector('.search__form')!;
 const inputs = document.querySelectorAll('.form__otp__input')!;
@@ -70,8 +73,8 @@ if (searchForm) {
     )! as HTMLInputElement;
 
     const searchValue = searchInput.value.trim();
-    const doc = await searchFile(searchValue);
-    renderFiles(doc);
+    const doc = await searchFile(searchValue, false);
+    renderFiles(doc, false);
   });
 }
 
@@ -113,7 +116,6 @@ if (passwordResetForm) {
     const passwordConfirmValue = passwordConfirmInput.value.trim();
     const token: any = window.location.pathname.split('/').pop();
     passwordReset(passwordValue, passwordConfirmValue, token);
-    console.log('Reset Password Form was submited');
   });
 }
 
@@ -127,7 +129,6 @@ if (inputs && btnVerify) {
       verificationCode.push(el.value);
     });
     verificationCode = verificationCode.join('');
-    console.log(verificationCode);
   });
 }
 
@@ -155,12 +156,23 @@ if (forgorPasswordForm) {
   });
 }
 
+if (adminSeachForm) {
+  adminSeachForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const isAdmin = true;
+    const searchInput = document.getElementById(
+      'search__input'
+    )! as HTMLInputElement;
+
+    const searchValue = searchInput.value;
+    const doc = await searchFile(searchValue, isAdmin);
+    renderFiles(doc, isAdmin);
+  });
+}
 if (emailForm) {
   emailForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    console.log('email form clicked');
-    console.log('email form');
     const emailTo = document.getElementById('email_to')! as HTMLInputElement;
     const emailForm = document.getElementById(
       'email_from'
@@ -236,15 +248,32 @@ function optFormActions(inputs: any) {
   window.addEventListener('load', () => inputs[0].focus());
 }
 
-function renderFiles(doc: any) {
-  const files = doc.data.data.files;
-  const numOfDoc = document.querySelector('.num_of_doc')!;
-  const tbody = document.querySelector('tbody')!;
-  tbody.innerHTML = '';
-  numOfDoc.textContent = files.length;
+function renderFiles(doc: any, role: boolean) {
+  let numOfDoc = document.querySelector('.num_of_doc')!;
+  let tbody = document.querySelector('tbody')!;
+  if (role) {
+    const downloadsAndEmails =
+      doc.data.data.getNumberOfFileDownloadsAndEmailSent;
+    tbody.innerHTML = '';
+    numOfDoc.textContent = downloadsAndEmails.length;
 
-  files.forEach((el: any) => {
-    const html: any = `
+    downloadsAndEmails.forEach((el: any) => {
+      const html: string = `
+        <tr class="table__row">
+              <td class="table__data">${el.title}</td>
+              <td class="table__data">${el.numberOfEmailSent}</td>
+              <td class="table__data">${el.numberOfFileDownloads}</td>
+            </tr>`;
+      tbody.insertAdjacentHTML('beforeend', html);
+    });
+  } else {
+    const files = doc.data.data.files;
+
+    tbody.innerHTML = '';
+    numOfDoc.textContent = files.length;
+
+    files.forEach((el: any) => {
+      const html: string = `
     <tr class="table__row">
           <td class="table__data">${el.title}</td>
           <td class="table__data">
@@ -256,6 +285,7 @@ function renderFiles(doc: any) {
             </a>
             </td>
         </tr>`;
-    tbody.insertAdjacentHTML('beforeend', html);
-  });
+      tbody.insertAdjacentHTML('beforeend', html);
+    });
+  }
 }

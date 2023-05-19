@@ -53,12 +53,12 @@ export const protect = catchAsync(async (req: any, res: any, next: any) => {
   if (changePasswordAfter(decoded.iat, currentUser)) {
     next(
       new AppError('user recenty changed password!. Please log in again', 401)
-    );
-  }
-
-  // STEP: GRANT ACCESS TO PROTECT ROUTE
-  req.user = currentUser;
-  res.locals.user = currentUser;
+      );
+    }
+    
+    // STEP: GRANT ACCESS TO PROTECT ROUTE
+    req.user = currentUser;
+    res.locals.user = currentUser;
   next();
 });
 

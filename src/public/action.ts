@@ -36,12 +36,21 @@ export const signOut = async () => {
   }
 };
 
-export const searchFile = async (value: string) => {
+export const searchFile = async (value: string, role: boolean) => {
   try {
-    const res = await axios({
-      method: 'GET',
-      url: `/api/file/${value}`,
-    });
+    let res;
+
+    if (role) {
+      res = await axios({
+        method: 'GET',
+        url: `/api/file/num-of/downloads/email-sent/search/${value}`,
+      });
+    } else {
+      res = await axios({
+        method: 'GET',
+        url: `/api/file/${value}`,
+      });
+    }
 
     if (res) {
       return res;
@@ -80,8 +89,6 @@ export const signup = async (
       }, 1500);
     }
   } catch (err: any) {
-    console.log('💥💥💥', err);
-    console.log('💥💥💥', err.response.data.stack);
     showAlert('error', err.response.data.message);
   }
 };
@@ -116,14 +123,11 @@ export const downloadFile = async (filePath: string) => {
       url: `/api/file/download/${fileTitle}`,
     });
 
-    console.log(res);
     if (res.data.status === 'success') {
-      showAlert('success', 'successfully');
+      showAlert('success', 'successful');
     }
-
-    console.log(filePath);
   } catch (err: any) {
-    console.log(err);
+    showAlert('error', err.response.data.message);
   }
 };
 
@@ -135,12 +139,10 @@ export const uploadFile = async (data: any) => {
       data,
     });
 
-    console.log(res);
     if (res.data.status === 'success') {
       showAlert('success', 'successfull');
     }
   } catch (err: any) {
-    console.log(err);
     showAlert('error', err.response.data.message);
   }
 };
@@ -154,7 +156,6 @@ export const passwordReset = async (
     if (!(password === passwordConfirm)) {
       return showAlert('error', 'Passwords are not the same');
     }
-    console.log('🍉🍉🍉🍉🍉🍉', token);
     const res = await axios({
       method: 'PATCH',
       url: `/auth/password_reset/${token}`,

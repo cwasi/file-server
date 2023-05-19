@@ -28,10 +28,16 @@ block content
             .content__title__container
                 img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
                 p.content__title Download
-            form.search__form(action='#')
-                .search__form__group
-                    input.search__form__input#search__input(type='text', placeholder='Search file')
-                    button.btn.btn__primary.btn__search.btn__search search
+            - if (user.role === 'admin')
+                form.mb2-4.search__form__admin(action='#')
+                    .search__form__group
+                        input.search__form__input#search__input(type='text', placeholder='Search file')
+                        button.btn.btn__primary.btn__search.btn__search search
+            - else
+                form.mb2-4.search__form(action='#')
+                    .search__form__group
+                        input.search__form__input#search__input(type='text', placeholder='Search file')
+                        button.btn.btn__primary.btn__search.btn__search search
             .content__result__container
                 p
                     span.num_of_doc #{files.length}
@@ -46,8 +52,8 @@ block content
                             th.table__head Number of emails sent
                             th.table__head Number of downloads 
                     tbody 
-                        each file in files
-                            +tableRowAdmin(`${file.title}`, 6, 10)
+                        each file in downloadsAndEmails
+                            +tableRowAdmin(`${file.title}`, `${file.numberOfEmailSent}`, `${file.numberOfFileDownloads}`)
                 - else
                     thead 
                         tr.table__row
