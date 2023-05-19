@@ -5,6 +5,7 @@ import db from './../models';
 import AppError from './../utils/appError';
 import crypto from 'crypto';
 import axios from 'axios';
+import { title } from 'process';
 
 export const getWelcomePage = (req: any, res: any, next: any) => {
   res.status(200).render('Welcome', {
@@ -118,9 +119,17 @@ export const getforgotPasswordPage = (req: any, res: any, next: any) => {
     title: 'Forgot password',
   });
 };
-export const getSendEmailPage = (req: any, res: any, next: any) => {
+export const getSendEmailPage = async (req: any, res: any, next: any) => {
+  const getAllFiles = await db.File.findAll();
+
+  let files = getAllFiles.map((el: any, i: number) => {
+    return { title: getAllFiles[i].title, slug: getAllFiles[i].slug };
+  });
+  
+
   res.status(200).render('email', {
     title: 'Send Email',
+    options: files
   });
 };
 export const getAddFilePage = (req: any, res: any, next: any) => {

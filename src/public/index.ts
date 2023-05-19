@@ -6,6 +6,7 @@ import {
   forgotPassword,
   uploadFile,
   passwordReset,
+  sendFile,
 } from './action.js';
 
 const signupForm = document.querySelector('.signup__form')! as HTMLFormElement;
@@ -174,25 +175,14 @@ if (emailForm) {
     e.preventDefault();
 
     const emailTo = document.getElementById('email_to')! as HTMLInputElement;
-    const emailForm = document.getElementById(
-      'email_from'
-    )! as HTMLInputElement;
-    const emailSubject = document.getElementById(
-      'email_subject'
-    )! as HTMLInputElement;
-    // const  = document.getElementById('')! as HTMLInputElement;
-    const emailMessage = document.getElementById(
-      'email_message'
-    )! as HTMLInputElement;
-    const emailFile = document.getElementById(
-      'email_File'
+    const searchFileInput = document.getElementById(
+      'filename'
     )! as HTMLInputElement;
 
     const emailToValue = emailTo.value;
-    const emailToFormValue = emailForm.value;
-    const emailSubjectValue = emailSubject.value;
-    const emailMessageValue = emailMessage.value;
-    const emailFileValue = emailFile.value;
+    const searchValue = searchFileInput.value;
+
+    sendFile(emailToValue, searchValue);
   });
 }
 

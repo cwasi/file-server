@@ -171,3 +171,22 @@ export const passwordReset = async (
     showAlert('error', err.response.data.message);
   }
 };
+
+export const sendFile = async (recipient: string, file: string) => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: 'api/email/send_file',
+      data: {
+        SentFileTo: recipient,
+        document: file,
+      },
+    });
+
+    if (res.data.status === 'success') {
+      showAlert('success', 'File sent');
+    }
+  } catch (err:any) {
+    showAlert('error', err.response.data.message);
+  }
+};
