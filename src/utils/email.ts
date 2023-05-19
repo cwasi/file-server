@@ -9,6 +9,7 @@ class Email {
   url: string;
   from: string;
 
+
   constructor(user: any, url: string) {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
@@ -45,7 +46,7 @@ class Email {
   }
 
   // Send the actual email
-  async send(template: any, subject: string, attachment: any) {
+  async send(template: any, subject: string) {
     // 1) Render HTML based on a pug template
     const html = pug.renderFile(`./views/email/${template}.pug`, {
       firstName: this.firstName,
@@ -60,29 +61,25 @@ class Email {
       subject,
       html,
       text: convert(html),
-      attachments: [attachment],
     };
 
     // 3) Create a transport and send email
-    const info = await this.newTransport().sendMail(mailOptions);
-
-    console.log(info);
+    await this.newTransport().sendMail(mailOptions);
   }
 
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to the File Server', {});
+    await this.send('welcome', 'Welcome to the File Server');
   }
 
   async passwordReset() {
     await this.send(
       'passwordReset',
       'Reset Your Password (valid for 10 minutes)',
-      {}
     );
   }
 
   async sendFile() {
-    await this.send('sendFile', 'A DOCUMENT FROM LIZZ FILE SERVER', {});
+    await this.send('sendFile', 'A DOCUMENT FROM LIZZ FILE SERVER');
   }
 }
 

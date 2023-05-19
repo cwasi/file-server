@@ -123,10 +123,10 @@ export const signup = catchAsync(async (req: any, res: any, next: any) => {
     UserId: newUser.id,
     token: hashVerificationCode,
   });
-  
+
   const url = `${req.protocol}://${req.get('host')}/auth/verify/${token.token}`;
 
-  await new sendEmail(newUser, url).sendWelcome()
+  await new sendEmail(newUser, url).sendWelcome();
 
   res.status(200).json({
     status: 'success',
@@ -195,8 +195,7 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   )}/auth/password_reset/new/${resetToken}`;
 
   try {
-
-    await new sendEmail(user, resetURL).passwordReset()
+    await new sendEmail(user, resetURL).passwordReset();
 
     res.status(200).json({
       status: 'success',
@@ -251,7 +250,7 @@ export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
       expiresAt: { [Op.gt]: Date.now() },
     },
   });
-  
+
   if (!token) {
     return next(new AppError('Invalid link', 400));
   }
