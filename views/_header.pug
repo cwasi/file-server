@@ -1,0 +1,15 @@
+
+header.header
+    .logo-box
+        img(src='/file-server-logo.png', alt='')
+    .action-container.display-flex-center
+        figure.display-flex-center
+            .user__photo-box
+                img.user__photo(src=`/img/users/${user.photo}`, alt='photo of Lizzy Doe')
+            figcaption
+                p.user__name= user.name.split(' ')[0]
+        .vertical-line
+        div
+            button.btn.btn__primary.btn.btn__primary-w-icon.display-flex-center
+                span.btn__text.sign-out Sign out
+                img(src='/icon/icon-sign-out.svg', alt='sign out icon')

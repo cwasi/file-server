@@ -1,30 +1,86 @@
 import nodemailer from 'nodemailer';
+import pug from 'pug';
+import { convert } from 'html-to-text';
 
-const sendEmail = async (options: any) => {
-  const EMAIL_HOST: any = process.env.EMAIL_HOST;
-  const EMAIL_PORT: any = process.env.EMAIL_PORT;
+// Transporter
+class Email {
+  to: string;
+  firstName: string;
+  url: string;
+  from: string;
 
-  // STEP: CREATE TRANSPORTER
-  const transporter = nodemailer.createTransport({
-    host: EMAIL_HOST,
-    port: EMAIL_PORT,
 
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
+  constructor(user: any, url: string) {
+    this.to = user.email;
+    this.firstName = user.name.split(' ')[0];
+    this.url = url;
+    this.from = `Lizz File Server <${process.env.EMAIL_FROM}>`;
+  }
 
-  // STEP: DEFINE THE EMAIL OPTIONS
-  const maillOption = {
-    from: 'File server <fileserver@example.com>',
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-  };
+  newTransport() {
+    let EMAIL_HOST: any = process.env.EMAIL_HOST;
+    let EMAIL_PORT: any = process.env.EMAIL_PORT;
 
-  //   STEP: SEND EMAIL
-  await transporter.sendMail(maillOption);
-};
+    if (process.env.NODE_ENV === 'production') {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_ADD,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+      return transporter;
+    }
 
-export default sendEmail;
+    return nodemailer.createTransport({
+      host: EMAIL_HOST,
+      port: EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  }
+
+  // Send the actual email
+  async send(template: any, subject: string) {
+    // 1) Render HTML based on a pug template
+    const html = pug.renderFile(`./views/email/${template}.pug`, {
+      firstName: this.firstName,
+      url: this.url,
+      subject,
+    });
+
+    // 2) Defimne email options
+    const mailOptions = {
+      from: this.from,
+      to: this.to,
+      subject,
+      html,
+      text: convert(html),
+    };
+
+    // 3) Create a transport and send email
+    await this.newTransport().sendMail(mailOptions);
+  }
+
+  async sendWelcome() {
+    await this.send('welcome', 'Welcome to the File Server');
+  }
+
+  async passwordReset() {
+    await this.send(
+      'passwordReset',
+      'Reset Your Password (valid for 10 minutes)',
+    );
+  }
+
+  async sendFile() {
+    await this.send('sendFile', 'A DOCUMENT FROM LIZZ FILE SERVER');
+  }
+}
+
+export default Email;

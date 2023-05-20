@@ -1,8 +1,9 @@
-import { sendEmail } from '../controllers/emailController'
-import express from 'express'
+import { protect, restrictTo } from './../controllers/authController';
+import { sendFile } from '../controllers/emailController';
+import express from 'express';
 
-const router = express.Router()
+const router = express.Router();
 
-router.route('/').post(sendEmail)
+router.route('/send_file').post(protect, restrictTo('user'), sendFile);
 
-export default router
+export default router;

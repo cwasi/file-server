@@ -1,47 +1,49 @@
 import multer from 'multer';
-import { promisify } from 'util';
+import { Op } from 'sequelize';
 import catchAsync from '../utils/catchAsync';
 import db from './../models';
+import AppError from './../utils/appError';
 
 const File = db.File;
-const Download = db.Download;
-const Email = db.Email;
 
-// const multerStorage = multer.diskStorage({
-//   destination: (req: any, file: any, cb: any) => {
-//     cb(null, 'public/document');
-//   },
+const multerStorage = multer.diskStorage({
+  destination: (req: any, file: any, cb: any) => {
+    cb(null, './public/document');
+  },
+  filename: (req: any, file: any, cb: any) => {
+    cb(null, `${file.originalname}`);
+  },
+});
 
-//   filename: (req: any, file: any, cb: any) => {},
-// });
+const upload = multer({ storage: multerStorage });
 
-// const upload = multer({
-//   storage: multerStorage,
-// });
+export const uploadFile = upload.single('file');
 
-// export const uploadFile = upload.single('uploaded_file');
-
-export const saveDocument = catchAsync(
-  async (req: any, res: any, next: any) => {
-    console.log('here in document');
-    console.log(req.body);
-    console.log('😍😍😍😍', req.file);
-    res.status(200).json({
-      status: 'success',
-    });
+export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
+  if (!req.file) {
+    return next(new AppError('Please upload a file', 401));
   }
-);
 
-export const createfile = async (req: any, res: any, next: any) => {
-  console.log(req.body);
-  const newFile = await File.create(req.body);
+  const duplicatFileName = await File.findOne({
+    where: { title: req.file.originalname },
+  });
+
+  if (duplicatFileName) {
+    return next(new AppError('File exist. Please try another file name', 401));
+  }
+
+  const fileObj = {
+    title: req.file.originalname,
+    description: req.body.description,
+  };
+
+  const newFile = await File.create(fileObj);
+
   res.status(200).json({
     status: 'success',
-    data: {
-      newFile,
-    },
+    data: { newFile },
   });
-};
+});
 
 export const getAllfiles = async (req: any, res: any, next: any) => {
   const files = await File.findAll();
@@ -52,22 +54,51 @@ export const getAllfiles = async (req: any, res: any, next: any) => {
   });
 };
 
+export const getFile = catchAsync(async (req: any, res: any, next: any) => {
+  const doc = req.params.slug;
+  const files = await File.findAll({
+    where: { slug: { [Op.startsWith]: doc } },
+  });
+
+  if (!files) {
+    return next(new AppError('No document found with that name', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: { files },
+  });
+});
+
 export const numOfdownloadAndEmails = catchAsync(
   async (req: any, res: any, next: any) => {
     // Get the ids
-    const query = await File.findAll();
-    const getNumOfdownloadfile = [];
-    for (let i = 0; i < query.length; i++) {
-      const element = query[i];
-      const fileTile = element.file;
-      const numberOfDownloads = await element.countDownloads();
-      getNumOfdownloadfile.push({ fileTile, numberOfDownloads });
-    }
+    let files;
 
+    if (req.params.file) {
+      files = await File.findAll({
+        where: { slug: { [Op.startsWith]: req.params.file } },
+      });
+    } else {
+      files = await File.findAll();
+    }
+    const getNumberOfFileDownloadsAndEmailSent = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const numberOfFileDownloads = await files[i].countDownloads();
+      const numberOfEmailSent = await files[i].countEmails();
+
+      getNumberOfFileDownloadsAndEmailSent.push({
+        title: files[i].title,
+        numberOfFileDownloads,
+        numberOfEmailSent,
+      });
+    }
+    res.locals.downloadsAndEmails = getNumberOfFileDownloadsAndEmailSent;
     res.status(200).json({
       status: 'success',
       data: {
-        getNumOfdownloadfile,
+        getNumberOfFileDownloadsAndEmailSent,
       },
     });
   }

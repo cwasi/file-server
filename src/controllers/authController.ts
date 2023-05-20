@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Op } from 'sequelize';
+import bcrypt from 'bcryptjs';
 
 import crypto from 'crypto';
 import db from './../models';
@@ -15,7 +16,6 @@ import {
 } from './../utils/helpers';
 
 const User = db.User;
-
 // MIDDLWARES
 export const protect = catchAsync(async (req: any, res: any, next: any) => {
   // STEP:  Getting the token and checking if it exist
@@ -61,7 +61,7 @@ export const protect = catchAsync(async (req: any, res: any, next: any) => {
   next();
 });
 
-export const restictTo = (role: string) => {
+export const restrictTo = (role: string) => {
   return (req: any, res: any, next: any) => {
     if (!role.includes(req.user.role)) {
       return next(
@@ -117,23 +117,18 @@ export const signup = catchAsync(async (req: any, res: any, next: any) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  const verificationCode = verify(6);
-  const verifyURL = `${req.protocol}://${req.get('host')}/verification`;
-  const message = `Your verification is below. Enter it in your browser window and you will signed in \n ${verificationCode}\n
-  ${verifyURL}`;
-  const email = newUser.email;
-
-  sendEmail({
-    email,
-    subject: `Your verification Code ${verificationCode}`,
-    message,
+  const hashVerificationCode = crypto.randomBytes(32).toString('hex');
+  const token = await db.Token.create({
+    UserId: newUser.id,
+    token: hashVerificationCode,
   });
 
-  newUser.set({verifyCode:verificationCode})
-  newUser.save()
-  res.status(201).json({
+  const url = `${req.protocol}://${req.get('host')}/auth/verify/${token.token}`;
+
+  await new sendEmail(newUser, url).sendWelcome();
+
+  res.status(200).json({
     status: 'success',
-    message: 'verification code sent to email',
     // data: { newUser },
   });
 });
@@ -160,13 +155,22 @@ export const signin = catchAsync(async (req: any, res: any, next: any) => {
     },
   });
 
+  if (!user.isVerified) {
+    return next(
+      new AppError(
+        'Your account is not verified. Please verify your account',
+        401
+      )
+    );
+  }
+
   // STEP: check if user exist && password is correct
   if (!user || !(await comparePasswords(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
 
   // STEP: send token
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, res, req);
 });
 
 export const forgotPassword = async (req: any, res: any, next: any) => {
@@ -187,17 +191,10 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   // STEP:  send it to use's  email
   const resetURL = `${req.protocol}://${req.get(
     'host'
-  )}/auth/resetPassword/${resetToken}`;
-
-  const message = `Forgort your password?. Submit a PATCH request with you new password and passwordConfirm to ${resetURL}.
-  \nIf your didn't forget your password, please ignore this email;`;
+  )}/auth/password_reset/new/${resetToken}`;
 
   try {
-    sendEmail({
-      email,
-      subject: 'Your password reset token (valid for 10 minutes)',
-      message,
-    });
+    await new sendEmail(user, resetURL).passwordReset();
 
     res.status(200).json({
       status: 'success',
@@ -241,8 +238,33 @@ export const resetPassword = async (req: any, res: any, next: any) => {
   await user.save();
 
   // STEP:  log the user in, send jwt
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, res, req);
 };
+
+export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
+  const hash = req.params.hash;
+  const token = await db.Token.findOne({
+    where: {
+      token: hash,
+      expiresAt: { [Op.gt]: Date.now() },
+    },
+  });
+
+  if (!token) {
+    return next(new AppError('Invalid link', 400));
+  }
+
+  const id = token.UserId;
+  const user = await User.findOne({ where: { id } });
+  user.isVerified = true;
+  await user.save();
+
+  token.token = '';
+  await token.save();
+
+  // STEP:  log the user in, send jwt
+  createAndSendToken(user, 200, res,req);
+});
 
 export const updateMe = (req: any, res: any, next: any) => {
   res.status(200).json({

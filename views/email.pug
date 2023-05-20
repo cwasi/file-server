@@ -1,0 +1,27 @@
+extends base
+
+mixin selectOption(value)
+    option(value=`${value.title}`) #{value.slug}
+
+
+block content
+    // HEADER
+    include _header
+    main.main
+        include _sideNav
+        .content
+            form.form.form__email(action='#')
+                .form__group
+                    label.form__label(for='title') From
+                    input#email_from.form__input(type='email', placeholder='From' value=`${user.email}` disabled)
+                .form__group
+                    label.form__label(for='to') To
+                    input#email_to.form__input(type='email', placeholder='To')
+                .form__group
+                    label Select file
+                    select.form__input#filename(name='cars')
+                        option Select  file
+                        each option in options
+                            +selectOption(option)
+                .form__group
+                    button.btn.btn__primary Send

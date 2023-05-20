@@ -11,6 +11,7 @@ interface UserAttributes {
   email: string;
   password: string;
   verifyCode: string;
+  isVerified: boolean;
   passwordConfirm: string;
   passwordChangedAt: Date;
   passwordResetToken: String;
@@ -33,12 +34,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
     password!: string;
     passwordConfirm!: string;
     verifyCode!: string;
+    isVerified!: boolean;
     passwordChangedAt!: Date;
     passwordResetToken!: String;
     passwordResetExpires!: Date;
 
     static associate(models: any) {
       // define association here
+      User.hasOne(models.Token)
+      models.Token.belongsTo(User)
     }
   }
   User.init(
@@ -92,11 +96,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
         validate: {
           validatePasswords(value: string) {
             if (!(value === this.password)) {
-              throw new Error('Password are not the same');
+              throw new Error('Passwords are not the same');
             }
           },
         },
       },
+      isVerified: { type: DataTypes.BOOLEAN, defaultValue: false },
       verifyCode: DataTypes.STRING,
       passwordChangedAt: DataTypes.DATE,
       passwordResetToken: DataTypes.STRING,
@@ -113,7 +118,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
   // Hooks
   User.beforeSave(async (user: any) => {
-    if (!user.changed('password') || !user.isNewRecord) {
+    if (!user.changed('password')) {
       return;
     }
     // STEP: Hash the password with cost of 12

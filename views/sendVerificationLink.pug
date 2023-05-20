@@ -1,0 +1,23 @@
+extends base 
+
+block content 
+    main.book__layout
+        .message
+            .message__container
+                .message__content
+                    .icon__container.mb-16
+                        img(src="/icon/icon-send-email.svg", alt="email icon")
+                    p.message__title.heading-4.heading-4--w-600.mb-40
+                        | Check your email
+                    p.message__content.paragraph
+                        | Use the link sent to 
+                        span.message__email 
+                        | , to signin.
+                .message__btn-box.mt-144
+                    a(href="/").btn.btn__secondary.btn__secondary__secondary-w-icon
+                        | Return to home
+                    //- a(href="#").btn.btn__secondary.btn__secondary__secondary-w-icon
+                    //-     | Resend Link
+        .sign-up__img--box 
+
+         

@@ -1,0 +1,13 @@
+extends base
+
+block content
+
+    main.welcome
+        .welcome__container
+            .welcome__content
+                h1.heading-4.heading-4--w-400.mb-16 Welcome to  
+                .logo--box
+                    img(src='/file-server-logo.png', alt='file server log')
+            .welcome__signin-btn
+                a.btn.btn__secondary.link(href='/signin') sign in
+                a.btn.btn__primary.link(href='/signup') sign up

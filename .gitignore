@@ -3,6 +3,7 @@ package-lock.json
 node_modules
 .cache
 .parcel-cache
+dist
 src/public/dist
 src/public/pages
 src/public/sass

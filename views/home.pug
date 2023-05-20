@@ -1,0 +1,68 @@
+extends base
+
+mixin navItem(link, text, icon, alt, active)
+    li.side-nav__item(class=`${active ? 'side-nav__item--active' : ''}`)
+        a.side-nav__link(href=`${link}`)
+            img.side-nav__icon(src=`/icon/${icon}` alt=`${alt}`)
+            span #{text}
+
+mixin tableRowUser(documentName)
+    tr.table__row
+        td.table__data #{documentName}
+            td.table__data
+                a(href=`/api/file/download/${documentName}`)
+                    img(src='/icon/icon-paper-download.svg', alt='download file icon')
+
+mixin tableRowAdmin(documentName, numberOfEmailsSent, numberOfDownloads)
+    tr.table__row
+        td.table__data #{documentName}
+            td.table__data #{numberOfEmailsSent}
+            td.table__data #{numberOfDownloads}
+
+block content
+    // HEADER
+    include _header
+    main.main
+        include _sideNav
+        .content
+            .content__title__container
+                - if (user.role === 'user')
+                    img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    p.content__title Download
+                -else 
+                    img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    p.content__title Dashboard
+            - if (user.role === 'admin')
+                form.mb2-4.search__form__admin(action='#')
+                    .search__form__group
+                        input.search__form__input#search__input(type='text', placeholder='Search file')
+                        button.btn.btn__primary.btn__search.btn__search search
+            - else
+                form.mb2-4.search__form(action='#')
+                    .search__form__group
+                        input.search__form__input#search__input(type='text', placeholder='Search file')
+                        button.btn.btn__primary.btn__search.btn__search search
+            .content__result__container
+                p
+                    span.num_of_doc #{files.length}
+                    |  Documents
+
+            table.table
+
+                - if (user.role === 'admin')
+                    thead                    
+                        tr.table__row
+                            th.table__head Document Name
+                            th.table__head Number of emails sent
+                            th.table__head Number of downloads 
+                    tbody 
+                        each file in downloadsAndEmails
+                            +tableRowAdmin(`${file.title}`, `${file.numberOfEmailSent}`, `${file.numberOfFileDownloads}`)
+                - else
+                    thead 
+                        tr.table__row
+                            th.table__head Document Name
+                            th.table__head   
+                    tbody 
+                        each file in files
+                            +tableRowUser(`${file.title}`)

@@ -19,8 +19,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
       // define association here
-      // Email.hasMany(models.File);
-      // models.File.belongsTo(Email);
     }
   }
   Email.init(
@@ -36,7 +34,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Please provide a recipient',
+            msg: 'Please provide a recipient email',
           },
         },
       },

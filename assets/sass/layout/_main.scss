@@ -1,0 +1,44 @@
+.main {
+  padding: 0 14.9rem;
+  padding-bottom: 2.9rem;
+  
+  height: 90rem;
+
+  display: grid;
+  grid-template-columns: 32.6rem 1fr;
+  gap: 2.8rem;
+}
+
+.welcome {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &__signin-btn {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  &__signin-btn:first-child,
+  &__signin-btn:last-child {
+    width: 40rem;
+  }
+}
+.link {
+  text-decoration: none;
+}

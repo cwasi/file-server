@@ -1,0 +1,80 @@
+extends base
+
+mixin navItem(link, text, icon, alt, active)
+    li.side-nav__item(class=`${active ? 'side-nav__item--active' : ''}`)
+        a.side-nav__link(href=`${link}`)
+            img.side-nav__icon(src=`/icon/${icon}` alt=`${alt}`)
+            span #{text}
+
+mixin tableRowUser(documentName)
+    tr.table__row
+        td.table__data #{documentName}
+            td.table__data
+                button.download
+                    a(href=`/document/${documentName}` download) 
+                        img(src='/icon/icon-paper-download.svg', alt='download file icon')
+
+mixin tableRowAdmin(documentName, numberOfEmailsSent, numberOfDownloads)
+    tr.table__row
+        td.table__data #{documentName}
+            td.table__data #{numberOfEmailsSent}
+            td.table__data #{numberOfDownloads}
+
+block content
+    // HEADER
+    include _header
+    main.main
+        nav.sidebar
+            ul.side-nav
+                +navItem('#', 'Download File', 'icon-paper-download.svg', 'download file icon', true )
+                - if (user.role === 'user')
+                    +navItem('#', 'Send Email', 'icon-email.svg', 'email icon')
+                +navItem('#', 'Settings', 'icon-settings.svg', 'settings icon')
+        .content
+            .content__title__container
+                img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                p.content__title Download
+            form.search__form(action='#')
+                .search__form__group
+                    input.search__form__input#search__input(type='text', placeholder='Search file')
+                    button.btn.btn__primary.btn__search.btn__search search
+            .content__result__container
+                p
+                    span= files.length
+                    |  Documents
+                -if (user.role==='admin')    
+                    .add-file-btn--container 
+                        button.btn.btn__primary Add a file
+
+            table.table
+                tbody
+                    - if (user.role === 'admin')
+                        tr.table__row
+                            th.table__head Document Name
+                            th.table__head Number of emails sent
+                            th.table__head Number of downloads 
+                        +tableRowAdmin('wedding Cards', 6, 10)
+                    - else
+                        tr.table__row
+                            th.table__head Document Name
+                            th.table__head   
+                        each file in files
+                            +tableRowUser(`${file.title}`)
+
+        #popup.popup
+            .popup__content
+                .popup__header
+                h5.heading-5.popup__title Add a file
+                .popup__close
+                    img(src='/assets/icon/icon-close.svg', alt='icon close')
+                form.form.form__add-fill(action='#')
+                .form__group
+                    input#myFile(type='file', name='filename')
+                .form__group
+                    label.form__label(for='title') Title
+                    input#title.form__input(type='text', placeholder='title')
+                .form__group
+                    label.form__label(for='Description') Description
+                    textarea#description.form__textarea(name='description', cols='30', rows='5', placeholder='Description')
+                .form__group
+                    button.btn.btn__primary Upload
