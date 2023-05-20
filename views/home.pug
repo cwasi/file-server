@@ -26,8 +26,12 @@ block content
         include _sideNav
         .content
             .content__title__container
-                img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
-                p.content__title Download
+                - if (user.role === 'user')
+                    img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    p.content__title Download
+                -else 
+                    img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    p.content__title Dashboard
             - if (user.role === 'admin')
                 form.mb2-4.search__form__admin(action='#')
                     .search__form__group

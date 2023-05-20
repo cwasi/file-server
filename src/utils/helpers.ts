@@ -41,12 +41,18 @@ export const signToken = (id: string) => {
   });
 };
 //
-export const createAndSendToken = (user: any, statusCode: number, res: any) => {
+export const createAndSendToken = (
+  user: any,
+  statusCode: number,
+  res: any,
+  req: any
+) => {
   const token = signToken(user.id);
   const JWT_COOKIE_EXPIRES_IN: any = process.env.JWT_COOKIE_EXPIRES_IN;
   const cookieOption: any = {
     expires: new Date(Date.now() + JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   };
 
   // secure cookie http in production

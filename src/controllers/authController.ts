@@ -14,7 +14,6 @@ import {
   correctPasswordResetToken,
   comparePasswords,
 } from './../utils/helpers';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 const User = db.User;
 // MIDDLWARES
@@ -53,16 +52,16 @@ export const protect = catchAsync(async (req: any, res: any, next: any) => {
   if (changePasswordAfter(decoded.iat, currentUser)) {
     next(
       new AppError('user recenty changed password!. Please log in again', 401)
-      );
-    }
-    
-    // STEP: GRANT ACCESS TO PROTECT ROUTE
-    req.user = currentUser;
-    res.locals.user = currentUser;
+    );
+  }
+
+  // STEP: GRANT ACCESS TO PROTECT ROUTE
+  req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 
-export const restictTo = (role: string) => {
+export const restrictTo = (role: string) => {
   return (req: any, res: any, next: any) => {
     if (!role.includes(req.user.role)) {
       return next(
@@ -171,7 +170,7 @@ export const signin = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   // STEP: send token
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, res, req);
 });
 
 export const forgotPassword = async (req: any, res: any, next: any) => {
@@ -239,7 +238,7 @@ export const resetPassword = async (req: any, res: any, next: any) => {
   await user.save();
 
   // STEP:  log the user in, send jwt
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, res, req);
 };
 
 export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
@@ -264,7 +263,7 @@ export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
   await token.save();
 
   // STEP:  log the user in, send jwt
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, res,req);
 });
 
 export const updateMe = (req: any, res: any, next: any) => {

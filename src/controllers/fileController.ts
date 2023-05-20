@@ -5,8 +5,6 @@ import db from './../models';
 import AppError from './../utils/appError';
 
 const File = db.File;
-const Download = db.Download;
-const Email = db.Email;
 
 const multerStorage = multer.diskStorage({
   destination: (req: any, file: any, cb: any) => {
@@ -26,16 +24,12 @@ export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
     return next(new AppError('Please upload a file', 401));
   }
 
-  console.log('🍍🍍🍍🍍', req.file);
-
   const duplicatFileName = await File.findOne({
     where: { title: req.file.originalname },
   });
 
   if (duplicatFileName) {
-    return next(
-      new AppError('File name already exist. Please try another file name', 401)
-    );
+    return next(new AppError('File exist. Please try another file name', 401));
   }
 
   const fileObj = {
@@ -80,7 +74,7 @@ export const numOfdownloadAndEmails = catchAsync(
   async (req: any, res: any, next: any) => {
     // Get the ids
     let files;
-    
+
     if (req.params.file) {
       files = await File.findAll({
         where: { slug: { [Op.startsWith]: req.params.file } },

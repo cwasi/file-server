@@ -1,5 +1,5 @@
 import express from 'express';
-
+import { protect, restrictTo } from './../controllers/authController';
 import {
   countNumberOfFileDownload,
   downloadFile,
@@ -12,7 +12,7 @@ const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
-  .get(downloadFile)
+  .get(protect, restrictTo('user'),downloadFile)
   .get(countNumberOfFileDownload, getAllDownloads);
 
 

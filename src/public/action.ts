@@ -85,7 +85,7 @@ export const signup = async (
       localStorage.setItem('email', `${email}`);
       showAlert('success', 'signed up successfully');
       window.setTimeout(() => {
-        location.assign('/sendVerificationLink');
+        location.assign('/verify-account');
       }, 1500);
     }
   } catch (err: any) {
@@ -143,6 +143,8 @@ export const uploadFile = async (data: any) => {
       showAlert('success', 'successfull');
     }
   } catch (err: any) {
+  
+    showAlert('💥💥💥💥💥 error', err);
     showAlert('error', err.response.data.message);
   }
 };
@@ -186,7 +188,7 @@ export const sendFile = async (recipient: string, file: string) => {
     if (res.data.status === 'success') {
       showAlert('success', 'File sent');
     }
-  } catch (err:any) {
+  } catch (err: any) {
     showAlert('error', err.response.data.message);
   }
 };

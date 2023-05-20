@@ -12,7 +12,7 @@ import {
   getSendEmailPage,
   getAddFilePage,
 } from './../controllers/viewController';
-import { protect, restictTo } from './../controllers/authController';
+import { protect, restrictTo } from './../controllers/authController';
 
 const router = express.Router();
 
@@ -22,12 +22,12 @@ router.get('/signup', getSignupPage);
 router.get('/auth/password_reset/new/:token', getResetPasswordPage);
 router.get('/forgot_password', getforgotPasswordPage);
 router.get('/sendResetPasswordLink', getSendResetPasswordLinkPage);
-router.get('/sendVerificationLink', getSendVerificationPage);
+router.get('/verify-account', getSendVerificationPage);
 router.get('/auth/verify/:hash', verifyAccount);
 
 // router.use(protect);
 router.get('/home', protect, getHomePage);
-router.get('/add-file', protect, restictTo('admin'), getAddFilePage);
-router.get('/send_email', protect, restictTo('user'), getSendEmailPage);
+router.get('/add-file', protect, restrictTo('admin'), getAddFilePage);
+router.get('/send_email', protect, restrictTo('user'), getSendEmailPage);
 
 export default router;

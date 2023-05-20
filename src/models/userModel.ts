@@ -96,7 +96,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         validate: {
           validatePasswords(value: string) {
             if (!(value === this.password)) {
-              throw new Error('Password are not the same');
+              throw new Error('Passwords are not the same');
             }
           },
         },

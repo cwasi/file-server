@@ -1,10 +1,16 @@
 
 nav.sidebar
     ul.side-nav
-        li.side-nav__item.side-nav__item--active
-            a.side-nav__link(href='/home')
-                img.side-nav__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
-                span Download File
+        - if (user.role === 'user')
+            li.side-nav__item.side-nav__item--active
+                a.side-nav__link(href='/home')
+                    img.side-nav__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    span Download File
+        - else 
+            li.side-nav__item.side-nav__item--active
+                a.side-nav__link(href='/home')
+                    img.side-nav__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    span Dashboard
         - if (user.role === 'user')
             li.side-nav__item
                 a.side-nav__link(href='/send_email')

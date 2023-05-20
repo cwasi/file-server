@@ -1,10 +1,9 @@
 import catchAsync from '../utils/catchAsync';
 import db from '../models';
 import pug from 'pug';
-import sendEmail from './../utils/email';
 import nodemailer from 'nodemailer';
 import AppError from './../utils/appError';
-import path from 'path';
+
 
 export const sendFile = catchAsync(async (req: any, res: any, next: any) => {
   const { SentFileTo, document } = req.body;

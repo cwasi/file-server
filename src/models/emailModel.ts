@@ -34,7 +34,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'Please provide a recipient',
+            msg: 'Please provide a recipient email',
           },
         },
       },

@@ -80,6 +80,9 @@ body {
 .mb2-4 {
   margin-bottom: 2.4rem; }
 
+.mb-29 {
+  margin-bottom: 2.9rem; }
+
 a {
   text-decoration: none; }
 
@@ -255,14 +258,13 @@ a {
   font-family: inherit;
   width: 100%; }
   .table__row:first-child {
-    background-color: #f5f3f9;
     border-bottom: 1px solid #d2d1d5; }
   .table__row:not(:last-child) {
     border-bottom: 1px solid #d2d1d5; }
   .table__row:not(:first-child):hover {
     background-color: #f5f3f9; }
-  .table__row .table__data:last-child {
-    text-align: right; }
+  .table__row .table__data:not(:first-child) {
+    text-align: center; }
   .table__head, .table__data {
     border: none;
     text-align: left;
@@ -271,7 +273,8 @@ a {
     color: #898690; }
   .table__head {
     padding: 2.4rem 0 1.9rem 3.2rem;
-    margin: 10rem; }
+    margin: 10rem;
+    background-color: #f5f3f9; }
   .table__data {
     padding: 2.4rem 3.2rem 2.4rem 3.2rem;
     font-weight: 500;
@@ -450,7 +453,8 @@ a {
 
 .main {
   padding: 0 14.9rem;
-  min-height: 100%;
+  padding-bottom: 2.9rem;
+  height: 90rem;
   display: grid;
   grid-template-columns: 32.6rem 1fr;
   gap: 2.8rem; }

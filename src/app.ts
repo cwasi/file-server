@@ -43,14 +43,14 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-console.log('🚀🚀🚀🚀', process.env.NODE_ENV);
+// console.log('🚀🚀🚀🚀', process.env.NODE_ENV);
 
 // Test middleware
-app.use((req, res, next) => {
-  console.log('MIDDLEWARE');
-  console.log('🦄🦄🦄🦄🦄', req.cookies);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log('MIDDLEWARE');
+//   console.log('🦄🦄🦄🦄🦄', req.cookies);
+//   next();
+// });
 
 // app.get('/', (req, res, next) => {
 //   res.send('FILE SERVER');
