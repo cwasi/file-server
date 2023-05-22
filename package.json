@@ -7,8 +7,8 @@
     "start:ts": "npx tsc --watch",
     "start:dev": "nodemon dist/server.js",
     "start": "concurrently npm:start:*",
-    "prod": " NODE_ENV=production nodemon /dist/server.js",
-    "deploy:prod": " nodemon /dist/server.js",
+    "prod": " NODE_ENV=production nodemon dist/server.js",
+    "deploy:prod": " nodemon dist/server.js",
     "remove:dist": "rimraf dist",
     "watch:parcel": "parcel dist/public/index.js --dist-dir dist/bin/",
     "sass": "node-sass ./assets/sass/main.scss ./assets/css/style.css -w"
