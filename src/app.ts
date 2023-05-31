@@ -29,7 +29,7 @@ app.use(cors())
 app.options('*', cors());
 
 // Serving static files
-app.use(express.static(path.join(__dirname,'bin')));
+app.use(express.static(path.join(__dirname, '/legacy')));
 app.use(express.static(path.join('assets')));
 app.use(express.static(path.join('public')));
 
@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// console.log('🚀🚀🚀🚀', process.env.NODE_ENV);
+console.log('🚀🚀🚀🚀', process.env.NODE_ENV);
 
 // Test middleware
 // app.use((req, res, next) => {
