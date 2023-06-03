@@ -484,6 +484,16 @@ a {
 .link {
   text-decoration: none; }
 
+.error_main {
+  min-height: 100%; }
+
+.error_main,
+.error {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
 .sign-up__layout {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
