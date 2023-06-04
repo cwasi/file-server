@@ -23,13 +23,13 @@ app.enable('trust proxy');
 
 // Set up template engine PUG
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname,'/views'));
+app.set('views', path.join(__dirname, '../views'));
 
-app.use(cors())
+app.use(cors());
 app.options('*', cors());
 
 // Serving static files
-app.use(express.static(path.join(__dirname, '/legacy')));
+app.use(express.static(path.join(__dirname, '/bin')));
 app.use(express.static(path.join('assets')));
 app.use(express.static(path.join('public')));
 
