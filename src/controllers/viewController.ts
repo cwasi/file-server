@@ -8,7 +8,7 @@ import axios from 'axios';
 import { title } from 'process';
 
 export const getWelcomePage = (req: any, res: any, next: any) => {
-  res.status(200).render('Welcome', {
+  res.status(200).render('welcome', {
     title: 'Welcome',
   });
 };
