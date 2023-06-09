@@ -23,15 +23,23 @@ block content
     // HEADER
     include _header
     main.main
-        include _sideNav
+        nav.sidebar
+            ul.side-nav
+                +navItem('/home', 'Download File', 'icon-paper-download.svg', 'download file icon', true )
+                - if (user.role === 'user')
+                    +navItem('/send_email', 'Send Email', 'icon-email.svg', 'email icon')
+                - if (user.role === 'admin')
+                    +navItem('/add-file', 'Add File', 'icon-paper-download.svg', 'email icon')
+                +navItem('#', 'Settings', 'icon-settings.svg', 'settings icon')
+
         .content
             .content__title__container
                 - if (user.role === 'user')
-                    img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
-                    p.content__title Download
+                    //- img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    h6.heading-6 Download File
                 -else 
-                    img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
-                    p.content__title Dashboard
+                    //- img.content__title__icon(src='/icon/icon-paper-download.svg', alt='download file icon')
+                    h5.heading-6 Dashboard
             - if (user.role === 'admin')
                 form.mb2-4.search__form__admin(action='#')
                     .search__form__group
@@ -46,23 +54,23 @@ block content
                 p
                     span.num_of_doc #{files.length}
                     |  Documents
+            .table__container
+                table.table
 
-            table.table
-
-                - if (user.role === 'admin')
-                    thead                    
-                        tr.table__row
-                            th.table__head Document Name
-                            th.table__head Number of emails sent
-                            th.table__head Number of downloads 
-                    tbody 
-                        each file in downloadsAndEmails
-                            +tableRowAdmin(`${file.title}`, `${file.numberOfEmailSent}`, `${file.numberOfFileDownloads}`)
-                - else
-                    thead 
-                        tr.table__row
-                            th.table__head Document Name
-                            th.table__head   
-                    tbody 
-                        each file in files
-                            +tableRowUser(`${file.title}`)
+                    - if (user.role === 'admin')
+                        thead                    
+                            tr.table__row 
+                                th.table__head Document Name
+                                th.table__head Number of emails sent
+                                th.table__head Number of downloads 
+                        tbody
+                            each file in downloadsAndEmails
+                                +tableRowAdmin(`${file.title}`, `${file.numberOfEmailSent}`, `${file.numberOfFileDownloads}`)
+                    - else
+                        thead 
+                            tr.table__row
+                                th.table__head Document Name
+                                th.table__head   
+                        tbody 
+                            each file in files
+                                +tableRowUser(`${file.title}`)

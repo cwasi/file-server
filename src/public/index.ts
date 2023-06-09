@@ -32,11 +32,11 @@ if (signinForm) {
   signinForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const emailInput = document.getElementById('email')! as HTMLInputElement;
-    const email = emailInput.value;
     const passwordInput = document.getElementById(
       'password'
     )! as HTMLInputElement;
-    const password = passwordInput.value;
+    const email = emailInput.value.toLowerCase().trim();
+    const password = passwordInput.value.toLowerCase().trim();
     signin(email, password);
   });
 }
@@ -53,12 +53,17 @@ if (signupForm) {
       'confirm_password'
     )! as HTMLInputElement;
 
-    const name = nameInput.value;
-    const email = emailInput.value;
-    const password = passwordInput.value;
-    const confirmPassword = confirmPasswordInput.value;
+    const name = nameInput.value.toLowerCase().trim();
+    const email = emailInput.value.toLowerCase().trim();
+    const password = passwordInput.value.toLowerCase().trim();
+    const confirmPassword = confirmPasswordInput.value.toLowerCase().trim();
 
     signup(name, email, password, confirmPassword);
+    nameInput.value =
+      emailInput.value =
+      passwordInput.value =
+      confirmPasswordInput.value =
+        '';
   });
 }
 
@@ -71,7 +76,7 @@ if (searchForm) {
       'search__input'
     )! as HTMLInputElement;
 
-    const searchValue = searchInput.value.trim();
+    const searchValue = searchInput.value.toLowerCase().trim();
     const doc = await searchFile(searchValue, false);
     renderFiles(doc, false);
   });
@@ -88,8 +93,8 @@ if (AddFileForm) {
       'uploadFile'
     )! as HTMLInputElement;
 
-    const titleValue = titleInput.value;
-    const descriptionValue = descriptionInput.value;
+    const titleValue = capFirstLetter(titleInput.value);
+    const descriptionValue = capFirstLetter(descriptionInput.value);
     const fileValue: any = fileInput.files;
 
     const form = new FormData();
@@ -98,6 +103,7 @@ if (AddFileForm) {
     form.append('description', descriptionValue);
 
     uploadFile(form);
+    titleInput.value = descriptionInput.value = fileInput.value = '';
   });
 }
 
@@ -111,8 +117,10 @@ if (passwordResetForm) {
       'passwordConfirm'
     )! as HTMLInputElement;
 
-    const passwordValue = passwordInput.value.trim();
-    const passwordConfirmValue = passwordConfirmInput.value.trim();
+    const passwordValue = passwordInput.value.toLowerCase().trim();
+    const passwordConfirmValue = passwordConfirmInput.value
+      .toLowerCase()
+      .trim();
     const token: any = window.location.pathname.split('/').pop();
     passwordReset(passwordValue, passwordConfirmValue, token);
   });
@@ -127,8 +135,9 @@ if (forgorPasswordForm) {
   forgorPasswordForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const emailInput = document.getElementById('email')! as HTMLInputElement;
-    const email = emailInput.value;
+    const email = emailInput.value.toLowerCase().trim();
     forgotPassword(email);
+    emailInput.value = '';
   });
 }
 
@@ -140,7 +149,7 @@ if (adminSeachForm) {
       'search__input'
     )! as HTMLInputElement;
 
-    const searchValue = searchInput.value;
+    const searchValue = searchInput.value.toLowerCase().trim();
     const doc = await searchFile(searchValue, isAdmin);
     renderFiles(doc, isAdmin);
   });
@@ -149,13 +158,15 @@ if (emailForm) {
   emailForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const emailTo = document.getElementById('email_to')! as HTMLInputElement;
+    const emailToInput = document.getElementById(
+      'email_to'
+    )! as HTMLInputElement;
     const searchFileInput = document.getElementById(
       'filename'
     )! as HTMLInputElement;
 
-    const emailToValue = emailTo.value;
-    const searchValue = searchFileInput.value;
+    const emailToValue = emailToInput.value.toLowerCase().trim();
+    const searchValue = searchFileInput.value.toLowerCase().trim();
 
     sendFile(emailToValue, searchValue);
   });
@@ -201,4 +212,7 @@ function renderFiles(doc: any, role: boolean) {
       tbody.insertAdjacentHTML('beforeend', html);
     });
   }
+}
+function capFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase().trim() + str.slice(1).toLowerCase();
 }

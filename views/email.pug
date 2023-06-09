@@ -1,5 +1,11 @@
 extends base
 
+mixin navItem(link, text, icon, alt, active)
+    li.side-nav__item(class=`${active ? 'side-nav__item--active' : ''}`)
+        a.side-nav__link(href=`${link}`)
+            img.side-nav__icon(src=`/icon/${icon}` alt=`${alt}`)
+            span #{text}
+
 mixin selectOption(value)
     option(value=`${value.title}`) #{value.slug}
 
@@ -8,7 +14,13 @@ block content
     // HEADER
     include _header
     main.main
-        include _sideNav
+        nav.sidebar 
+            ul.side-nav
+                +navItem('/home', 'Download File', 'icon-paper-download.svg', 'download file icon' )
+                - if (user.role === 'user')
+                    +navItem('/send_email', 'Send Email', 'icon-email.svg', 'email icon',true)
+                +navItem('#', 'Settings', 'icon-settings.svg', 'settings icon')
+
         .content
             form.form.form__email(action='#')
                 .form__group
