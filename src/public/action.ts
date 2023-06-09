@@ -64,15 +64,18 @@ export const signup = async (
   name: string,
   email: string,
   password: string,
-  confirmPassword: string
+  confirmPassword: string,
+  role: string
 ) => {
   try {
     if (!(password == confirmPassword)) {
       return showAlert('error', 'Passwords are not the same');
     }
+
+    const url = role === 'admin' ? '/auth/admin_signup' : '/auth/signup';
     const res = await axios({
       method: 'POST',
-      url: '/auth/signup',
+      url,
       data: {
         name,
         email,
@@ -143,7 +146,6 @@ export const uploadFile = async (data: any) => {
       showAlert('success', 'successfull');
     }
   } catch (err: any) {
-  
     showAlert('💥💥💥💥💥 error', err);
     showAlert('error', err.response.data.message);
   }

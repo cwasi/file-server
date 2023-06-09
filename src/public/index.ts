@@ -57,8 +57,9 @@ if (signupForm) {
     const email = emailInput.value.toLowerCase().trim();
     const password = passwordInput.value.toLowerCase().trim();
     const confirmPassword = confirmPasswordInput.value.toLowerCase().trim();
-
-    signup(name, email, password, confirmPassword);
+    const role = window.location.pathname.split('_')[0].slice(1);
+    
+    signup(name, email, password, confirmPassword, role);
     nameInput.value =
       emailInput.value =
       passwordInput.value =
