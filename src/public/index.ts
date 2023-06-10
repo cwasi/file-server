@@ -8,6 +8,7 @@ import {
   passwordReset,
   sendFile,
 } from './action.js';
+import capFirstLetter from '../utils/capFirstLetter';
 
 const signupForm = document.querySelector('.signup__form')! as HTMLFormElement;
 const signinForm = document.querySelector('.signin__form')! as HTMLFormElement;
@@ -58,7 +59,7 @@ if (signupForm) {
     const password = passwordInput.value.toLowerCase().trim();
     const confirmPassword = confirmPasswordInput.value.toLowerCase().trim();
     const role = window.location.pathname.split('_')[0].slice(1);
-    
+
     signup(name, email, password, confirmPassword, role);
     nameInput.value =
       emailInput.value =
@@ -82,21 +83,29 @@ if (searchForm) {
     renderFiles(doc, false);
   });
 }
+const fileInput = document.getElementById('uploadFile')! as HTMLInputElement;
+const titleInput = document.getElementById('title')! as HTMLInputElement;
+
+if (fileInput) {
+  fileInput.addEventListener('change', (e) => {
+    const fileValue: any = fileInput.files;
+    titleInput.value =
+      fileValue[0]?.name === undefined ? '' : capFirstLetter(fileValue[0].name);
+  });
+}
 
 if (AddFileForm) {
   AddFileForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const titleInput = document.getElementById('title')! as HTMLInputElement;
     const descriptionInput = document.getElementById(
       'description'
-    )! as HTMLInputElement;
-    const fileInput = document.getElementById(
-      'uploadFile'
     )! as HTMLInputElement;
 
     const titleValue = capFirstLetter(titleInput.value);
     const descriptionValue = capFirstLetter(descriptionInput.value);
     const fileValue: any = fileInput.files;
+
+    fileValue[0].name.toLowerCase();
 
     const form = new FormData();
     form.append('file', fileValue[0]);
@@ -162,14 +171,14 @@ if (emailForm) {
     const emailToInput = document.getElementById(
       'email_to'
     )! as HTMLInputElement;
-    const searchFileInput = document.getElementById(
+    const selectFileInput = document.getElementById(
       'filename'
     )! as HTMLInputElement;
 
     const emailToValue = emailToInput.value.toLowerCase().trim();
-    const searchValue = searchFileInput.value.toLowerCase().trim();
+    const selectFileValue = selectFileInput.value;
 
-    sendFile(emailToValue, searchValue);
+    sendFile(emailToValue, selectFileValue);
   });
 }
 
@@ -213,7 +222,4 @@ function renderFiles(doc: any, role: boolean) {
       tbody.insertAdjacentHTML('beforeend', html);
     });
   }
-}
-function capFirstLetter(str: string) {
-  return str.charAt(0).toUpperCase().trim() + str.slice(1).toLowerCase();
 }

@@ -1,6 +1,7 @@
 'use strict';
 import { Model } from 'sequelize';
 import slugify from 'slugify';
+import capFirstLetter from '../utils/capFirstLetter';
 
 interface FileAttributes {
   id: string;
@@ -68,7 +69,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
   );
 
   File.beforeSave(async (File: any) => {
-    File.slug = slugify(File.title.split('.')[0], { lower: true });
+    const actualString = File.title.split('.');
+    actualString.pop();
+    File.slug = capFirstLetter(actualString.join('.'));
   });
   return File;
 };
