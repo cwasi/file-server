@@ -9,21 +9,21 @@ block content
                         h1.heading-4.heading-4--w-400.mb-16 Sign in to
                         .logo--box
                             img(src='/file-server-logo.png', alt='file server log')
-                    //- p.text-16 Please enter your detials.
-                
+                    p.text-16 Please enter your detials.
+
                 form.form.signin__form
                     .form__group
                         label.form__label(for='email') Email
-                        input#email.form__input(type='text', placeholder='Email', autocomplete='false', required,='', minlength='8')
+                        input#email.form__input(type='text', placeholder='Email', autocomplete='false', required, minlength='8')
                     .form__group
                         label.form__label(for='password') Password
-                        input#password.form__input(type='password', placeholder='Password', required,='', minlength='8')
+                        input#password.form__input(type='password', placeholder='Password', required, minlength='8')
                     .form__group
                         a(href="/forgot_password").text-16.text-color-primary-75.text-16__w-500.align-left
                             | Forgot password
                     .form__group
-                        button.btn.btn__primary.display-flex-center
+                        button.btn.btn__primary.display-flex-center#submit      
                             img(src='/icon/icon-sign-in.svg', alt='sign in icon').icon.mr-8
                             p Sign in
         .sign-up__img--box
-            img(src="/icon/undraw_file_manager_re_ms.svg", alt="undraw file manager svg").img     
+            img(src="/img/files bag.jpg", alt="file in a files bag").img       

@@ -13,13 +13,14 @@ export const signin = async (email: string, password: string) => {
     });
 
     if (res.data.status === 'success') {
-      showAlert('success', 'Signed in successfully!');
+      showAlert('success', 'Signed in');
       window.setTimeout(() => {
         location.assign('/home');
       }, 1500);
     }
   } catch (err: any) {
     showAlert('error', err.response.data.message);
+    return 'error';
   }
 };
 
@@ -36,11 +37,11 @@ export const signOut = async () => {
   }
 };
 
-export const searchFile = async (value: string, role: boolean) => {
+export const searchFile = async (value: string, isAdmin: boolean) => {
   try {
     let res;
 
-    if (role) {
+    if (isAdmin) {
       res = await axios({
         method: 'GET',
         url: `/api/file/num-of/downloads/email-sent/search/${value}`,
@@ -57,6 +58,7 @@ export const searchFile = async (value: string, role: boolean) => {
     }
   } catch (err) {
     showAlert('error', 'File does not exist');
+    return "error";
   }
 };
 
@@ -69,7 +71,8 @@ export const signup = async (
 ) => {
   try {
     if (!(password == confirmPassword)) {
-      return showAlert('error', 'Passwords are not the same');
+      showAlert('error', 'Passwords are not the same');
+      return 'error';
     }
 
     const url = role === 'admin' ? '/auth/admin_signup' : '/auth/signup';
@@ -86,13 +89,14 @@ export const signup = async (
 
     if (res.data.status === 'success') {
       localStorage.setItem('email', `${email}`);
-      showAlert('success', 'signed up successfully');
+      showAlert('success', 'Signed up');
       window.setTimeout(() => {
         location.assign('/verify-account');
       }, 1500);
     }
   } catch (err: any) {
     showAlert('error', err.response.data.message);
+    return 'error';
   }
 };
 
@@ -107,14 +111,16 @@ export const forgotPassword = async (email: string) => {
     });
 
     if (res.data.status === 'success') {
-      showAlert('success', 'Link sent successfully');
+      showAlert('success', 'Instructions sent');
 
       window.setTimeout(() => {
-        location.assign('/');
+        location.assign('/signin');
       }, 1500);
+      return 'success';
     }
   } catch (err: any) {
     showAlert('error', 'User does not exist.');
+    return 'error';
   }
 };
 
@@ -127,7 +133,7 @@ export const downloadFile = async (filePath: string) => {
     });
 
     if (res.data.status === 'success') {
-      showAlert('success', 'successful');
+      showAlert('success', 'File downloaded');
     }
   } catch (err: any) {
     showAlert('error', err.response.data.message);
@@ -143,11 +149,12 @@ export const uploadFile = async (data: any) => {
     });
 
     if (res.data.status === 'success') {
-      showAlert('success', 'successfull');
+      showAlert('success', 'File uploaded');
+      return 'success';
     }
   } catch (err: any) {
-    showAlert('💥💥💥💥💥 error', err);
     showAlert('error', err.response.data.message);
+    return 'error';
   }
 };
 
@@ -158,7 +165,8 @@ export const passwordReset = async (
 ) => {
   try {
     if (!(password === passwordConfirm)) {
-      return showAlert('error', 'Passwords are not the same');
+      showAlert('error', 'Passwords are not the same');
+      return 'error';
     }
     const res = await axios({
       method: 'PATCH',
@@ -169,14 +177,18 @@ export const passwordReset = async (
       },
     });
     if (res.data.status === 'success') {
-      showAlert('success', 'successfull');
+      showAlert('success', 'Password changed');
+      window.setTimeout(() => {
+        location.assign('/signin');
+      }, 1500);
     }
   } catch (err: any) {
     showAlert('error', err.response.data.message);
+    return 'error';
   }
 };
 
-export const sendFile = async (recipient: string, file: string) => {
+export const sendEmail = async (recipient: string, file: string) => {
   try {
     const res = await axios({
       method: 'POST',
@@ -189,8 +201,10 @@ export const sendFile = async (recipient: string, file: string) => {
 
     if (res.data.status === 'success') {
       showAlert('success', 'File sent');
+      return 'success';
     }
   } catch (err: any) {
     showAlert('error', err.response.data.message);
+    return 'error';
   }
 };

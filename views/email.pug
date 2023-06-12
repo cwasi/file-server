@@ -28,12 +28,12 @@ block content
                     input#email_from.form__input(type='email', placeholder='From' value=`${user.email}` disabled)
                 .form__group
                     label.form__label(for='to') To
-                    input#email_to.form__input(type='email', placeholder='To')
+                    input#email_to.form__input(type='email', placeholder='To' required)
                 .form__group
                     label Select file
-                    select.form__input#filename(name='cars')
+                    select.form__input#filename(name='cars' required)
                         option Select  file
                         each option in options
                             +selectOption(option)
                 .form__group
-                    button.btn.btn__primary Send
+                    button.btn.btn__primary#submit Send

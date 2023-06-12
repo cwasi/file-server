@@ -7,8 +7,7 @@
   box-sizing: border-box; }
 
 html {
-  font-size: 62.5%;
-  cursor: default; }
+  font-size: 62.5%; }
 
 body {
   height: 100vh; }
@@ -43,7 +42,8 @@ body {
   font-size: 2rem; }
 
 .paragraph {
-  font-size: 1.6rem; }
+  font-size: 1.6rem;
+  line-height: 2.2rem; }
 
 .text-18 {
   font-size: 1.8rem; }
@@ -110,9 +110,10 @@ a {
   gap: 2.4rem; }
   .form__email, .form__add-fill {
     width: 100%; }
+  .form__add-file button,
   .form__email button {
     align-self: flex-end;
-    width: 10rem; }
+    width: max-content; }
   .form__label {
     font-size: 1.6rem;
     font-weight: inherit; }
@@ -121,7 +122,7 @@ a {
     flex-direction: column;
     gap: 0.8rem; }
   .form__textarea, .form__input {
-    padding: 1.2rem 0 1.2rem 1.6rem;
+    padding: 1.2rem 1.6rem;
     border-radius: 0.5rem;
     font-size: 1.6rem;
     font-family: inherit;
@@ -136,7 +137,7 @@ a {
 
 .btn {
   width: 100%;
-  padding: 1.2rem 0rem;
+  padding: 1.2rem 2.5rem;
   color: white;
   font-family: inherit;
   font-size: 1.6rem;
@@ -144,7 +145,10 @@ a {
   border-radius: 0.5rem;
   text-align: center;
   outline: none;
-  cursor: pointer; }
+  cursor: pointer;
+  transition: all 300ms ease-in-out; }
+  .btn:hover {
+    box-shadow: 0 0.8rem 0.5rem -0.5rem rgba(0, 0, 0, 0.3); }
   .btn__primary {
     background-color: #7f56da;
     border: none; }
@@ -155,6 +159,8 @@ a {
       align-items: center;
       justify-content: center;
       gap: 0.8rem; }
+    .btn__primary:hover {
+      background-color: #8056daef; }
   .btn__secondary {
     color: #7f56da;
     background-color: transparent;
@@ -167,6 +173,8 @@ a {
       align-items: center;
       justify-content: center;
       gap: 0.8rem; }
+    .btn__secondary:hover {
+      border: 0.1rem solid #8056daef; }
   .btn__group {
     width: 100%;
     display: flex;
@@ -217,9 +225,9 @@ a {
 
 .content {
   min-height: 100%;
-  padding: 4.2rem 3.6rem;
+  padding: 4.2rem 3.6rem 0 3.6rem;
   display: grid;
-  grid-template-rows: repeat(3, max-content) 1fr; }
+  grid-template-rows: repeat(4, max-content); }
   .content__result__container {
     margin-bottom: 2.4rem; }
   .content__title__container {
@@ -251,37 +259,51 @@ a {
     display: flex;
     gap: 2.4rem; }
   .search__form__group button {
-    width: 9.1rem; }
+    width: max-content; }
 
 .add-file-btn--container {
   width: 10rem; }
 
-.table {
+.table__container {
+  border: 0.1rem solid #f5f3f9;
+  border-radius: 1rem;
+  overflow-y: auto; }
+
+.admin__table,
+.user__table {
   border-collapse: collapse;
   font-family: inherit;
   width: 100%; }
-  .table__container {
-    border: 0.1rem solid #f5f3f9;
-    border-radius: 1rem;
-    overflow-y: auto; }
-  .table__row:first-child, .table__row:not(:last-child) {
+  .admin__table__row:not(:last-child),
+  .user__table__row:not(:last-child) {
     border-bottom: 1px solid #d2d1d5; }
-  .table__row:not(:first-child):hover {
+  .admin__table__row:hover,
+  .user__table__row:hover {
     background-color: #f5f3f9; }
-  .table__row .table__data:not(:first-child) {
-    text-align: center; }
-  .table__head, .table__data {
-    padding: 2rem 0 2rem 2.5rem;
+  .admin__table__head, .admin__table__data,
+  .user__table__head,
+  .user__table__data {
     text-align: left;
     font-weight: 500;
     font-size: 1.4rem;
     color: #898690; }
-  .table__head {
-    background-color: #f5f3f9; }
-  .table__data {
+  .admin__table__head,
+  .user__table__head {
+    background-color: #f5f3f9;
+    padding: 2rem 1.5rem; }
+  .admin__table__data,
+  .user__table__data {
+    padding: 1.5rem;
     font-weight: 500;
     font-size: 1.6rem;
     color: #130d21; }
+
+.user__table__row .user__table__data:last-child {
+  text-align: center; }
+
+.admin__table__row .admin__table__head:not(:first-child),
+.admin__table__row .admin__table__data:not(:first-child) {
+  text-align: center; }
 
 .download-btn {
   padding: 0.1rem;
@@ -291,9 +313,6 @@ a {
 
 .download-btn img {
   display: flex; }
-
-thead {
-  border-radius: 1rem; }
 
 .alert {
   position: fixed;
@@ -425,10 +444,25 @@ thead {
   background: #7f56da;
   pointer-events: auto; }
 
+.loader {
+  pointer-events: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 0.3rem solid transparent;
+  border-top-color: #fff;
+  animation: spin 1s ease infinite; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0turn); }
+  100% {
+    transform: rotate(1turn); } }
+
 .book__layout {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  min-height: 100%; }
+  grid-template-columns: repeat(2, 50%);
+  height: 100vh; }
 
 .header {
   padding: 4.2rem 14.9rem 2.9rem 14.9rem;
@@ -512,12 +546,13 @@ thead {
     margin-bottom: 4.8rem; }
   .sign-up__img--box {
     width: 100%;
-    height: 100%; }
+    height: 100vh; }
 
 .img {
   width: 100%;
   height: 100%;
-  object-fit: contain; }
+  display: flex;
+  object-fit: cover; }
 
 .message {
   display: flex;

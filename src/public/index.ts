@@ -6,7 +6,7 @@ import {
   forgotPassword,
   uploadFile,
   passwordReset,
-  sendFile,
+  sendEmail,
 } from './action.js';
 import capFirstLetter from '../utils/capFirstLetter';
 
@@ -19,31 +19,43 @@ const forgorPasswordForm = document.querySelector(
   '.form__forgot-password'
 )! as HTMLFormElement;
 const emailForm = document.querySelector('.form__email')! as HTMLFormElement;
-const AddFileForm = document.querySelector(
+const uploadFileForm = document.querySelector(
   '.form__add-file'
-)! as HTMLFormElement;
-const adminSeachForm = document.querySelector(
-  '.search__form__admin'
 )! as HTMLFormElement;
 const signOutBtn = document.querySelector('.sign-out')! as HTMLButtonElement;
 const searchForm = document.querySelector('.search__form')!;
 const messageEmail = document.querySelector('.message__email')!;
 
+const showLoader = (el: HTMLElement) => {
+  const loader = `<div class="loader"><div>`;
+  el.innerHTML = loader;
+};
+const hideLoader = (el: HTMLElement, innerHtml: string) => {
+  el.innerHTML = innerHtml;
+};
+
 if (signinForm) {
-  signinForm.addEventListener('submit', (e) => {
+  signinForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const emailInput = document.getElementById('email')! as HTMLInputElement;
     const passwordInput = document.getElementById(
       'password'
     )! as HTMLInputElement;
+    const btnSubmit = document.getElementById('submit')! as HTMLButtonElement;
+
     const email = emailInput.value.toLowerCase().trim();
     const password = passwordInput.value.toLowerCase().trim();
-    signin(email, password);
+    const btnInnerHTML = btnSubmit.innerHTML;
+    showLoader(btnSubmit);
+    const res = await signin(email, password);
+    if (res === 'error') {
+      hideLoader(btnSubmit, btnInnerHTML);
+    }
   });
 }
 
 if (signupForm) {
-  signupForm.addEventListener('submit', (e) => {
+  signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const nameInput = document.getElementById('name')! as HTMLInputElement;
     const emailInput = document.getElementById('email')! as HTMLInputElement;
@@ -53,19 +65,20 @@ if (signupForm) {
     const confirmPasswordInput = document.getElementById(
       'confirm_password'
     )! as HTMLInputElement;
+    const btnSubmit = document.getElementById('submit')! as HTMLButtonElement;
 
     const name = nameInput.value.toLowerCase().trim();
     const email = emailInput.value.toLowerCase().trim();
     const password = passwordInput.value.toLowerCase().trim();
     const confirmPassword = confirmPasswordInput.value.toLowerCase().trim();
     const role = window.location.pathname.split('_')[0].slice(1);
+    const btnInnerHTML = btnSubmit.innerHTML;
 
-    signup(name, email, password, confirmPassword, role);
-    nameInput.value =
-      emailInput.value =
-      passwordInput.value =
-      confirmPasswordInput.value =
-        '';
+    showLoader(btnSubmit);
+    const res = await signup(name, email, password, confirmPassword, role);
+    if (res === 'error') {
+      hideLoader(btnSubmit, btnInnerHTML);
+    }
   });
 }
 
@@ -77,10 +90,18 @@ if (searchForm) {
     const searchInput = document.getElementById(
       'search__input'
     )! as HTMLInputElement;
+    const btnSubmit = document.getElementById('submit')! as HTMLButtonElement;
 
-    const searchValue = searchInput.value.toLowerCase().trim();
-    const doc = await searchFile(searchValue, false);
-    renderFiles(doc, false);
+    const role = searchForm.getAttribute('data-role');
+    const isAdmin = role === 'admin' ? true : false;
+
+    const searchValue = capFirstLetter(searchInput.value);
+    showLoader(btnSubmit);
+    const doc = await searchFile(searchValue, isAdmin);
+    if (doc) {
+      hideLoader(btnSubmit, 'Search');
+      renderFiles(doc, isAdmin);
+    }
   });
 }
 const fileInput = document.getElementById('uploadFile')! as HTMLInputElement;
@@ -94,12 +115,13 @@ if (fileInput) {
   });
 }
 
-if (AddFileForm) {
-  AddFileForm.addEventListener('submit', (e) => {
+if (uploadFileForm) {
+  uploadFileForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const descriptionInput = document.getElementById(
       'description'
     )! as HTMLInputElement;
+    const btnSubmit = document.getElementById('submit')! as HTMLButtonElement;
 
     const titleValue = capFirstLetter(titleInput.value);
     const descriptionValue = capFirstLetter(descriptionInput.value);
@@ -111,14 +133,17 @@ if (AddFileForm) {
     form.append('file', fileValue[0]);
     form.append('title', titleValue);
     form.append('description', descriptionValue);
-
-    uploadFile(form);
-    titleInput.value = descriptionInput.value = fileInput.value = '';
+    showLoader(btnSubmit);
+    const res = await uploadFile(form);
+    if (res) {
+      titleInput.value = descriptionInput.value = fileInput.value = '';
+      hideLoader(btnSubmit, 'Upload');
+    }
   });
 }
 
 if (passwordResetForm) {
-  passwordResetForm.addEventListener('submit', (e) => {
+  passwordResetForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const passwordInput = document.getElementById(
       'password'
@@ -126,13 +151,18 @@ if (passwordResetForm) {
     const passwordConfirmInput = document.getElementById(
       'passwordConfirm'
     )! as HTMLInputElement;
+    const btnSubmit = document.getElementById('submit')! as HTMLButtonElement;
 
     const passwordValue = passwordInput.value.toLowerCase().trim();
     const passwordConfirmValue = passwordConfirmInput.value
       .toLowerCase()
       .trim();
     const token: any = window.location.pathname.split('/').pop();
-    passwordReset(passwordValue, passwordConfirmValue, token);
+    showLoader(btnSubmit);
+    const res = await passwordReset(passwordValue, passwordConfirmValue, token);
+    if (res) {
+      hideLoader(btnSubmit, 'Set new password');
+    }
   });
 }
 
@@ -142,30 +172,24 @@ if (messageEmail) {
 }
 
 if (forgorPasswordForm) {
-  forgorPasswordForm.addEventListener('submit', (e) => {
+  forgorPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const emailInput = document.getElementById('email')! as HTMLInputElement;
     const email = emailInput.value.toLowerCase().trim();
-    forgotPassword(email);
-    emailInput.value = '';
+    const btnSubmit = document.getElementById('submit')! as HTMLButtonElement;
+
+    showLoader(btnSubmit);
+    const res = await forgotPassword(email);
+    if (res) {
+      emailInput.value = '';
+      hideLoader(btnSubmit, 'Send Instructions');
+    }
   });
 }
 
-if (adminSeachForm) {
-  adminSeachForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const isAdmin = true;
-    const searchInput = document.getElementById(
-      'search__input'
-    )! as HTMLInputElement;
 
-    const searchValue = searchInput.value.toLowerCase().trim();
-    const doc = await searchFile(searchValue, isAdmin);
-    renderFiles(doc, isAdmin);
-  });
-}
 if (emailForm) {
-  emailForm.addEventListener('submit', (e) => {
+  emailForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const emailToInput = document.getElementById(
@@ -174,11 +198,16 @@ if (emailForm) {
     const selectFileInput = document.getElementById(
       'filename'
     )! as HTMLInputElement;
+    const btnSubmit = document.getElementById('submit')! as HTMLButtonElement;
 
     const emailToValue = emailToInput.value.toLowerCase().trim();
     const selectFileValue = selectFileInput.value;
 
-    sendFile(emailToValue, selectFileValue);
+    showLoader(btnSubmit);
+    const res = await sendEmail(emailToValue, selectFileValue);
+    if (res) {
+      hideLoader(btnSubmit, 'Send');
+    }
   });
 }
 
@@ -193,10 +222,10 @@ function renderFiles(doc: any, role: boolean) {
 
     downloadsAndEmails.forEach((el: any) => {
       const html: string = `
-        <tr class="table__row">
-              <td class="table__data">${el.title}</td>
-              <td class="table__data">${el.numberOfEmailSent}</td>
-              <td class="table__data">${el.numberOfFileDownloads}</td>
+        <tr class="admin__table__row">
+              <td class="admin__table__data">${el.title}</td>
+              <td class="admin__table__data">${el.numberOfEmailSent}</td>
+              <td class="admin__table__data">${el.numberOfFileDownloads}</td>
             </tr>`;
       tbody.insertAdjacentHTML('beforeend', html);
     });
@@ -208,9 +237,9 @@ function renderFiles(doc: any, role: boolean) {
 
     files.forEach((el: any) => {
       const html: string = `
-    <tr class="table__row">
-          <td class="table__data">${el.title}</td>
-          <td class="table__data">
+    <tr class="user__table__row">
+          <td class="user__table__data">${el.title}</td>
+          <td class="user__table__data">
             <a href="/api/file/download/${el.title}">
                 <img
                   src="/icon/icon-paper-download.svg"
