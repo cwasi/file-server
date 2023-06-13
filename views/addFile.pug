@@ -23,21 +23,29 @@ block content
     // HEADER
     include _header
     main.main
-        include _sideNav
+        nav.sidebar
+            ul.side-nav
+                +navItem('/home', 'Dashboard', 'icon-paper-download.svg', 'download file icon', )
+                - if (user.role === 'user')
+                    +navItem('/send_email', 'Send Email', 'icon-email.svg', 'email icon')
+                - if (user.role === 'admin')
+                    +navItem('/add-file', 'Add File', 'icon-paper-download.svg', 'email icon', true)
+                +navItem('#', 'Settings', 'icon-settings.svg', 'settings icon')
+
         .content
 
             //- (action=`api/file/upload-file`, method="post", enctype='multipart/form-data')
-       
+
             .popup__header
-                h5.heading-5.popup__title Add a file
+                h6.heading-6.popup__title Add File
             form.form.form__add-file
                 .form__group
                     input#uploadFile(type='file',  required name='file')
                 .form__group
                     label.form__label(for='title') Title
-                    input#title.form__input(type='text', required placeholder='title' name="title")
+                    input#title.form__input(type='text', required placeholder='Title' name="title" disabled)
                 .form__group
                     label.form__label(for='description') Description
                     textarea#description.form__textarea(name='description', required cols='30', rows='5', placeholder='Description')
                 .form__group
-                    button.btn.btn__primary Upload
+                    button.btn.btn__primary#submit Upload

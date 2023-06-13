@@ -1,5 +1,11 @@
 extends base
 
+mixin navItem(link, text, icon, alt, active)
+    li.side-nav__item(class=`${active ? 'side-nav__item--active' : ''}`)
+        a.side-nav__link(href=`${link}`)
+            img.side-nav__icon(src=`/icon/${icon}` alt=`${alt}`)
+            span #{text}
+
 mixin selectOption(value)
     option(value=`${value.title}`) #{value.slug}
 
@@ -8,7 +14,13 @@ block content
     // HEADER
     include _header
     main.main
-        include _sideNav
+        nav.sidebar 
+            ul.side-nav
+                +navItem('/home', 'Download File', 'icon-paper-download.svg', 'download file icon' )
+                - if (user.role === 'user')
+                    +navItem('/send_email', 'Send Email', 'icon-email.svg', 'email icon',true)
+                +navItem('#', 'Settings', 'icon-settings.svg', 'settings icon')
+
         .content
             form.form.form__email(action='#')
                 .form__group
@@ -16,12 +28,12 @@ block content
                     input#email_from.form__input(type='email', placeholder='From' value=`${user.email}` disabled)
                 .form__group
                     label.form__label(for='to') To
-                    input#email_to.form__input(type='email', placeholder='To')
+                    input#email_to.form__input(type='email', placeholder='To' required)
                 .form__group
                     label Select file
-                    select.form__input#filename(name='cars')
+                    select.form__input#filename(name='cars' required)
                         option Select  file
                         each option in options
                             +selectOption(option)
                 .form__group
-                    button.btn.btn__primary Send
+                    button.btn.btn__primary#submit Send

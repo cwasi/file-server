@@ -14,6 +14,7 @@ export const sendFile = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   const file = await db.File.findOne({ where: { title: document } });
+
   if (!file) {
     return next(new AppError('Document dose not exist', 401));
   }

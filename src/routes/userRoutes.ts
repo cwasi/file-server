@@ -8,6 +8,7 @@ import {
   signin,
   signOut,
   verifyEmail,
+  adminRole,
 } from '../controllers/authController';
 
 
@@ -15,6 +16,7 @@ import {
 const router = express.Router();
 
 router.post('/signup', signup);
+router.post('/admin_signup',adminRole, signup);
 router.post('/signin', signin);
 router.get('/signout', signOut);
 router.post('/forgotPassword', forgotPassword);

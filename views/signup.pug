@@ -6,28 +6,26 @@ block content
             .sign-up__container
                 .sign-up__text--content
                     .display-flex-center-gap-2
-                        h1.heading-4.heading-4--w-400.mb-16 Sign up to
-                        .logo--box
-                            img(src='/file-server-logo.png', alt='file server log')
-                    //- p.text-16 Please enter your detials.
+                        h1.heading-4.heading-4--w-400.mb-16 Sign up
+                    p.text-16 Please enter your detials.
 
                 form.form.signup__form(action='#')
                     .form__group
                         label.form__label(for='name') Name
-                        input.form__input#name(type='text', placeholder='Name')
+                        input.form__input#name(type='text', placeholder='Name' required)
                     .form__group
                         label.form__label(for='email') Email
-                        input.form__input#email(type='text', placeholder='Email')
+                        input.form__input#email(type='text', placeholder='Email' required)
                     .form__group
                         label.form__label(for='password') Password
-                        input.form__input#password(type='password', placeholder='Password')
+                        input.form__input#password(type='password', placeholder='Password' required)
                     .form__group
                         label.form__label(for='password')
                             | Confirm Password
-                        input.form__input#confirm_password(type='password', placeholder='Confirm Password')
+                        input.form__input#confirm_password(type='password', placeholder='Confirm Password' required)
                     .form__group
-                        button.btn.btn__primary
-                            .icon
+                        button.btn.btn__primary.display-flex-center#submit
+                            img(src='/icon/icon-sign-in.svg', alt='sign in icon').icon.mr-8
                             p Sign in
         .sign-up__img--box 
-            img(src="/icon/undraw_file_manager_re_ms.svg", alt="undraw file manager svg").img
+            img(src="/img/files bag.jpg", alt="file in a files bag").img     

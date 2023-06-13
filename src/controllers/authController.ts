@@ -108,22 +108,34 @@ export const signOut = (req: any, res: any) => {
   res.status(200).json({ status: 'success' });
 };
 
+export const adminRole = catchAsync(async (req: any, res: any, next: any) => {
+  req.role = 'admin';
+  next();
+});
+
 // ROUTES HANDLERS
 export const signup = catchAsync(async (req: any, res: any, next: any) => {
-  const newUser = await db.User.create({
+  let newUser;
+  newUser = db.User.build({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
 
+  if (req.role) newUser.role = req.role;
+
+  await newUser.save();
   const hashVerificationCode = crypto.randomBytes(32).toString('hex');
   const token = await db.Token.create({
     UserId: newUser.id,
     token: hashVerificationCode,
   });
 
-  const url = `${req.protocol}://${req.get('host')}/auth/verify/${token.token}`;
+  const host =
+    process.env.NODE_ENV === 'production' ? process.env.HOST : req.get('host');
+
+  const url = `${req.protocol}://${host}/auth/verify/${token.token}`;
 
   await new sendEmail(newUser, url).sendWelcome();
 
@@ -189,9 +201,10 @@ export const forgotPassword = async (req: any, res: any, next: any) => {
   await user.save();
 
   // STEP:  send it to use's  email
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/auth/password_reset/new/${resetToken}`;
+  const host =
+    process.env.NODE_ENV === 'production' ? process.env.HOST : req.get('host');
+
+  const resetURL = `${req.protocol}://${host}/auth/password_reset/new/${resetToken}`;
 
   try {
     await new sendEmail(user, resetURL).passwordReset();
@@ -263,7 +276,7 @@ export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
   await token.save();
 
   // STEP:  log the user in, send jwt
-  createAndSendToken(user, 200, res,req);
+  createAndSendToken(user, 200, res, req);
 });
 
 export const updateMe = (req: any, res: any, next: any) => {

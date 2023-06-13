@@ -2,12 +2,20 @@ extends base
 
 block content
 
+    .welcome__header
+        .logo__box
+            img(src="/icon/lizz-file-server-icon.png", alt="file in a files bag").logo  
     main.welcome
+
         .welcome__container
             .welcome__content
-                h1.heading-4.heading-4--w-400.mb-16 Welcome to  
-                .logo--box
+                h1.heading-4.heading-4--w-400.mb-16.text-center 
+                    | Experience 
+                    span.primary-bold.text effortless 
+                    | file sharing with our platform.
+                p.paragraph-wp.text-center Access and download document with our digital platform, scale effortlessly, empower remote access, and connect businesses with users.
+                //- .logo--box
                     img(src='/file-server-logo.png', alt='file server log')
             .welcome__signin-btn
-                a.btn.btn__secondary.link(href='/signin') sign in
-                a.btn.btn__primary.link(href='/signup') sign up
+                a.btn.btn__secondary.btn__secondary-r.link(href='/signin') Sign in
+                a.btn.btn__primary.btn__primary-r.link(href='/signup') Get Started

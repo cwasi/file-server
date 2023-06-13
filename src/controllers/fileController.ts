@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import catchAsync from '../utils/catchAsync';
 import db from './../models';
 import AppError from './../utils/appError';
+import capFirstLetter from './../utils/capFirstLetter';
 
 const File = db.File;
 
@@ -25,7 +26,7 @@ export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   const duplicatFileName = await File.findOne({
-    where: { title: req.file.originalname },
+    where: { title: capFirstLetter(req.file.originalname) },
   });
 
   if (duplicatFileName) {
@@ -33,7 +34,7 @@ export const saveFile = catchAsync(async (req: any, res: any, next: any) => {
   }
 
   const fileObj = {
-    title: req.file.originalname,
+    title: capFirstLetter(req.file.originalname),
     description: req.body.description,
   };
 
