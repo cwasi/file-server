@@ -239,6 +239,7 @@ function renderFiles(doc: any, role: boolean) {
       const html: string = `
     <tr class="user__table__row">
           <td class="user__table__data">${el.title}</td>
+          <td class="user__table__data">${el.description}</td>
           <td class="user__table__data">
             <a href="/api/file/download/${el.title}">
                 <img
