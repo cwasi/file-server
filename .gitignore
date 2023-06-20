@@ -3,7 +3,7 @@ app
 package-lock.json
 node_modules
 assets/pages
-assets/sass
+assets/css
 .env
 .cache
 .parcel-cache
