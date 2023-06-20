@@ -9,12 +9,13 @@
     "start:dev": "nodemon dist/server.js",
     "start": "concurrently npm:start:*",
     "prod": " NODE_ENV=production nodemon dist/server.js",
-    "build": "npm-run-all build:ts build:parcel deploy:prod",
+    "build": "npm-run-all build:ts build:sass build:parcel deploy:prod",
     "deploy:prod": "NODE_ENV=production nodemon ./dist/server.js",
     "remove:dist": "rimraf dist",
     "watch:parcel": "parcel dist/public/index.js --dist-dir dist/bin/",
     "build:parcel": "parcel build dist/public/index.js",
-    "sass": "node-sass ./assets/sass/main.scss ./assets/css/style.css -w"
+    "sass": "node-sass ./assets/sass/main.scss ./assets/css/style.css -w",
+    "build:sass": "node-sass ./assets/sass/main.scss ./assets/css/style.css  --output-style compressed"
   },
   "keywords": [],
   "author": "",

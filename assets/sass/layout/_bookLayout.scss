@@ -1,0 +1,7 @@
+.book__layout {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  height: 100vh;
+
+  // display: flex;
+}

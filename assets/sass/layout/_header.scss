@@ -1,0 +1,32 @@
+.header {
+  padding: 4.2rem 14.9rem 2.9rem 14.9rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.action-container {
+  display: flex;
+}
+
+.user__photo-box {
+  width: 5.1rem;
+  height: 5.1rem;
+  border-radius: 50rem;
+  border: 0.15rem solid $color-primary;
+}
+
+.user {
+  &__photo {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50rem;
+  }
+  &__name {
+    margin-left: 1.5rem;
+
+    font-size: 1.6rem;
+    font-weight: 500;
+  }
+}

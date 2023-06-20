@@ -1,0 +1,78 @@
+.otp {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+:where(.otp__container, .form__otp, .input-field, .otp__header) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.otp__container {
+  background: #fff;
+  padding: 3rem 6.5rem;
+  border-radius: 1.2rem;
+  row-gap: 2rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  & .otp__header {
+    height: 6.5rem;
+    width: 6.5rem;
+    background: #7f56da;
+    color: #fff;
+    font-size: 2.5rem;
+    border-radius: 50%;
+  }
+  & h4 {
+    font-size: 1.25rem;
+    color: #333;
+    font-weight: 500;
+  }
+}
+.input-field input {
+  font-family: inherit;
+  font-weight: inherit;
+  height: 4.5rem;
+  width: 4.2rem;
+  border-radius: 0.6rem;
+  outline: none;
+  font-size: 1.125rem;
+  text-align: center;
+  border: 0.1rem solid #BDA8EB;
+}
+.input-field input:focus {
+  box-shadow: 0 0.1rem 0 rgba(0, 0, 0, 0.1);
+}
+.input-field input::-webkit-inner-spin-button,
+.input-field input::-webkit-outer-spin-button {
+  display: none;
+}
+.form__otp .input-field {
+  flex-direction: row;
+  column-gap: 1rem;
+}
+.form__otp .btn__verify {
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 1.6rem;
+  margin-top: 2.5rem;
+  width: 100%;
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  padding: 1.2rem 0;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  pointer-events: none;
+  // background: #6e93f7;
+  transition: all 0.2s ease;
+  & .btn__verify:hover {
+    background: #b59ee8;
+  }
+}
+
+.form__otp .btn__verify.active {
+  background: #7f56da;
+  pointer-events: auto;
+}
